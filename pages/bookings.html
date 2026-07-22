@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings | ServiQuick</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        .table-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1; min-width: 200px; }
+        .filter-select { padding: 10px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; flex: 1; min-width: 150px; }
+        
+        /* Modal Styles */
+        .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter: blur(3px); align-items: center; justify-content: center; }
+        .modal-content { background:white; width:90%; max-width:400px; padding:25px; border-radius:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+        .modal-header { margin-bottom: 15px; }
+        
+        /* ✨ BAGONG UI PARA SA SEARCHABLE LIST ✨ */
+        .tech-search-box { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; margin-bottom: 5px; box-sizing: border-box; }
+        .tech-list-container { max-height: 150px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px; padding: 5px; background: #fafafa; margin-bottom: 15px; }
+        .tech-item { padding: 8px 10px; border-bottom: 1px solid #eee; cursor: pointer; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .tech-item:hover { background: #eef2ff; }
+        .tech-item.selected { background: #dbeafe; border-left: 4px solid #2563eb; font-weight: bold; }
+        
+        /* Buttons */
+        .btn-assign { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-confirm { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 8px; }
+        .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-danger { background: #dc3545; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 8px; }
+        .btn-cancel { background: #f8f9fa; color: #333; border: 1px solid #ddd; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="brand">ServiQuick</span>
+            <p class="panel">Admin Panel</p>
+        </div>
+       <nav class="menu" id="admin-menu">
+            <a href="admin-dashboard.html">📊 Dashboard</a> 
+            <a href="bookings.html">📅 Bookings</a> 
+            <a href="services.html">🛠 Services</a> 
+            <a href="track-technicians.html">📍 Track Tech</a> 
+            <a href="admin-users.html">👥 Users</a>
+            <a href="admin-messages.html">💬 Inbox</a>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+        </nav>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let currentUrl = window.location.pathname.split('/').pop();
+                let links = document.querySelectorAll('#admin-menu a');
+                
+                links.forEach(link => {
+                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
+                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
+                    if (currentUrl === '') currentUrl = 'admin-dashboard.html';
+                    
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                    }
+                });
+            });
+        </script>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <h2>Bookings</h2>
+            <p>Manage customer service bookings</p>
+        </div>
+
+        <div class="table-controls">
+            <input type="text" id="search-customer" class="search-input" placeholder="Search customer name...">
+            <select id="filter-status" class="filter-select">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="accepted">Accepted</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Technician</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-table-body">
+                    <tr><td colspan="6" style="text-align:center;">Loading bookings...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div id="assignModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 style="margin: 0 0 5px 0;">Manage Booking</h3>
+            <p id="modal-service-name" style="color: #666; font-size: 14px; margin: 0;"></p>
+        </div>
+        
+        <form id="assignForm">
+            <input type="hidden" id="modal-booking-id">
+            <input type="hidden" id="selected-tech-id" required>
+            
+            <label style="font-size: 13px; font-weight: 600;">Assign Specialist:</label>
+            <input type="text" id="tech-search-input" class="tech-search-box" placeholder="🔍 Type name to search...">
+            
+            <div id="tech-list-box" class="tech-list-container">
+                <div style="padding: 10px; color: gray; text-align: center; font-size: 13px;">Loading specialists...</div>
+            </div>
+
+            <button type="submit" id="btn-confirm-assign" class="btn-confirm" disabled>Confirm Assignment</button>
+            <button type="button" class="btn-danger" onclick="cancelBooking()">🚨 Cancel This Booking</button>
+            <button type="button" class="btn-cancel" onclick="closeModal()">Close</button>
+        </form>
+    </div>
+</div>
+
+<script src="../assets/js/bookings.js"></script>
+</body>
+</html>

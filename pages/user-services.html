@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | ServiQuick</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* MODAL CORE STYLING */
+        #bookingModal .modal-content, 
+        #addressModal .modal-content {
+            background-color: #fff;
+            padding: 0;
+            max-width: 850px;
+            width: 95%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+        }
+
+        /* LANDSCAPE GRID FOR BOOKING */
+        .booking-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            padding: 25px;
+        }
+
+        .modal-header-section, .addr-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+
+        /* PAYMENT CARDS INTERACTIVE STYLING */
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .payment-card {
+            cursor: pointer;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+            background: #fff;
+        }
+
+        .payment-card:hover {
+            border-color: #ee4d2d;
+            background: #fff9f8;
+        }
+
+        .payment-card.active {
+            border: 2px solid #ee4d2d !important;
+            background: #fff5f2;
+        }
+
+        .payment-card h4 { margin: 0; font-size: 14px; color: #333; }
+        .payment-card p { margin: 4px 0 0; font-size: 10px; color: #888; text-transform: uppercase; }
+
+        /* ADDRESS MODAL SPECIFIC */
+        .addr-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .addr-group { border-bottom: 1px solid #f0f0f0; padding: 10px 0; margin-bottom: 5px; }
+        .addr-label { color: #999; font-size: 11px; font-weight: 700; text-transform: uppercase; display: block; }
+        .addr-input, .addr-select {
+            width: 100%; border: none; outline: none; font-size: 15px;
+            padding: 5px 0; background: transparent; color: #333; font-family: inherit;
+        }
+
+        .modal-footer, .addr-footer {
+            padding: 15px 25px;
+            background: #fcfcfc;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .addr-btn {
+            padding: 12px 25px; border-radius: 6px; font-weight: 600;
+            cursor: pointer; border: none; font-size: 14px; transition: 0.3s;
+        }
+
+        .addr-submit { background-color: #d3d3d3; color: #fff; cursor: not-allowed; }
+        .addr-submit.enabled { background-color: #ee4d2d !important; color: #fff !important; cursor: pointer; }
+        .btn-cancel { background: #eee; color: #666; }
+
+        /* ✨ MOBILE RESPONSIVE FIX ✨ */
+        @media (max-width: 768px) {
+            .booking-grid { grid-template-columns: 1fr; padding: 15px; }
+            .addr-body { grid-template-columns: 1fr; padding: 15px; }
+            .payment-options { grid-template-columns: 1fr; }
+            .modal-header-section { padding: 15px; }
+            .modal-footer, .addr-footer { flex-direction: column; padding: 15px; }
+            .addr-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header-section">
+            <h2 style="margin: 0; color: #333; font-weight: 700;">Booking Summary</h2>
+            <p style="color: #666; font-size: 13px; margin: 5px 0 0;">Review your service details and choose a schedule.</p>
+        </div>
+
+        <div class="booking-grid">
+            <div class="booking-col">
+                <div style="background: #fff; border: 1px solid #e0e0e0; padding: 18px; border-radius: 10px; margin-bottom: 20px;">
+                    <div style="margin-bottom: 15px;">
+                        <span style="color: #bbb; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Selected Service</span>
+                        <h3 id="selectedServiceName" style="margin: 5px 0 0; color: #333; font-size: 1.2rem;">---</h3>
+                    </div>
+                    <div style="border-top: 1px dashed #ddd; padding-top: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <span style="color: #bbb; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Total Amount</span>
+                        <span id="selectedServicePrice" style="font-size: 1.5rem; font-weight: 900; color: #ee4d2d; line-height: 1;">₱0.00</span>
+                    </div>
+                </div>
+
+                <label style="font-weight: 700; font-size: 12px; color: #555; text-transform: uppercase;">📅 1. Select Date</label>
+                <input type="date" id="bookingDate" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0 20px; box-sizing: border-box;">
+
+                <label style="font-weight: 700; font-size: 12px; color: #555; text-transform: uppercase;">⏰ 2. Available Slots</label>
+                <div id="timeSlots" class="slots" style="margin-top: 10px; min-height: 60px;"></div>
+            </div>
+
+            <div class="booking-col">
+                <label style="font-weight: 700; font-size: 12px; color: #555; text-transform: uppercase;">📍 3. Service Address</label>
+                <div class="address-box" style="background: #fafafa; padding: 15px; border-radius: 10px; border: 1px solid #eee; margin: 10px 0 25px;">
+                    <button type="button" onclick="openAddressModal()" style="background: #333; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 12px;">Change Address</button>
+                    <p id="selectedAddress" style="margin: 0; font-size: 13px; color: #666; line-height: 1.5;">No address selected</p>
+                </div>
+
+                <label style="font-weight: 700; font-size: 12px; color: #555; text-transform: uppercase;">💳 4. Payment Method</label>
+                <div class="payment-options">
+                    <div class="payment-card active" data-value="cash" onclick="selectPayment(this)">
+                        <h4>Cash on Service</h4>
+                        <p>Pay after work</p>
+                    </div>
+                    <div class="payment-card" data-value="gcash" onclick="selectPayment(this)">
+                        <h4>GCash (Online)</h4>
+                        <p>Secure Payment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button onclick="closeModal()" class="addr-btn btn-cancel">Cancel</button>
+            <button id="confirmBooking" class="addr-btn" style="background: #ee4d2d; color: white;">Confirm Booking</button>
+        </div>
+    </div>
+</div>
+
+<div id="addressModal" class="modal">
+  <div class="modal-content">
+    <div class="addr-header">
+        <span onclick="closeAddressModal()" style="cursor:pointer; font-size: 24px; color:#ee4d2d; margin-right:15px;">&larr;</span>
+        <h3 style="display:inline; margin:0;">Add Service Address</h3>
+        <span id="addr-loader" style="display:none; margin-left:10px;">Loading...</span>
+    </div>
+
+    <div class="addr-body">
+        <div class="addr-column">
+            <span class="addr-section-title">Contact Information</span>
+            <div class="addr-group">
+                <span class="addr-label">Full Name</span>
+                <input type="text" id="addr_name" class="addr-input" placeholder="Example...Juan Dela Cruz">
+            </div>
+            <div class="addr-group">
+                <span class="addr-label">Phone Number</span>
+                <input type="number" id="addr_phone" class="addr-input" placeholder="Example...09xxxxxxxxx">
+            </div>
+            <div class="addr-group">
+                <span class="addr-label">Postal Code</span>
+                <input type="number" id="addr_postal" class="addr-input" placeholder="Example...2213">
+            </div>
+        </div>
+
+        <div class="addr-column">
+            <span class="addr-section-title">Location Details</span>
+            <div style="display: flex; gap: 15px; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                <div style="flex:1;"><span class="addr-label">Region</span><div class="addr-input" style="color:#777;">Region III</div></div>
+                <div style="flex:1;"><span class="addr-label">Province</span><div class="addr-input" style="color:#777;">Zambales</div></div>
+            </div>
+            <div class="addr-group">
+                <span class="addr-label">City / Municipality</span>
+                <select id="addr_city" class="addr-select">
+                    <option value="" selected disabled>Select City</option>
+                </select>
+            </div>
+            <div class="addr-group">
+                <span class="addr-label">Barangay</span>
+                <select id="addr_brgy" class="addr-select" disabled>
+                    <option value="" selected disabled>Select Barangay</option>
+                </select>
+            </div>
+            <div class="addr-group">
+                <span class="addr-label">Street / House No.</span>
+                <input type="text" id="addr_street" class="addr-input" placeholder="House No., Street Name">
+            </div>
+        </div>
+    </div>
+
+    <div class="addr-footer">
+        <button class="addr-btn btn-cancel" onclick="closeAddressModal()">Cancel</button>
+        <button id="addr_submit_btn" class="addr-btn addr-submit" onclick="saveAddress()" disabled>Save Address</button>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+    <aside class="sidebar">
+    <div class="sidebar-header">
+        <span class="brand">ServiQuick</span>
+        <p class="panel">Customer Portal</p>
+    </div>
+
+    <nav class="menu" id="user-menu">
+        <a href="user-dashboard.html">🏠 Dashboard</a>
+        <a href="user-bookings.html">📅 My Bookings</a>
+        <a href="user-services.html">🛠 Book Service</a>
+        <a href="user-track-tech.html">📍 Track Tech</a>
+        
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+        <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+    </nav>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentUrl = window.location.pathname.split('/').pop();
+            let links = document.querySelectorAll('#user-menu a');
+            
+            links.forEach(link => {
+                link.classList.remove('active'); // Alisin ang blue sa lahat muna
+                // Kung walang nakuha (nasa root folder), default sa dashboard
+                if (currentUrl === '') currentUrl = 'user-dashboard.html';
+                
+                if (link.getAttribute('href') === currentUrl) {
+                    link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                }
+            });
+        });
+    </script>
+</aside>
+
+    <main class="main">
+        <div class="header">
+            <h2>Available Services</h2>
+            <p>Select a service to book</p>
+        </div>
+        <div id="services-list" class="services-grid"></div>
+    </main>
+</div>
+
+<script src="../assets/js/user-services.js"></script>
+
+</body>
+</html>

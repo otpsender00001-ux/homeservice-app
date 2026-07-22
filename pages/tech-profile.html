@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technician Profile | ServiQuick</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ✨ MOBILE RESPONSIVE FIX ✨ */
+        .info-group input, .info-group select, .info-group textarea {
+            box-sizing: border-box;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .personal-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="brand">ServiQuick</span>
+            <p class="panel">Technician Panel</p>
+        </div>
+       <nav class="menu" id="tech-menu">
+            <a href="tech-dashboard.html">📊 Dashboard</a> 
+            <a href="tech-jobs.html">🛠 Jobs</a> 
+            <a href="tech-profile.html">👤 Profile</a>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+        </nav>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let currentUrl = window.location.pathname.split('/').pop();
+                let links = document.querySelectorAll('#tech-menu a');
+                
+                links.forEach(link => {
+                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
+                    // Kung walang nakuhang currentUrl (halimbawa, nasa root folder lang), i-set as default ang dashboard
+                    if (currentUrl === '') currentUrl = 'tech-dashboard.html';
+                    
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                    }
+                });
+            });
+        </script>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <h2>Technician Profile</h2>
+            <p>Complete your personal and professional details</p>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-card avatar-section">
+                <div class="avatar-large"><img id="avatar-preview-img" src="../assets/images/default-avatar.png" alt="👤" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"></div>
+                <h3 id="display-name">Jobert Dela Cruz</h3>
+                <p id="display-specialization">Aircon Specialist</p>
+                <div class="status-badge">✓ Verified Technician</div>
+                
+                <div style="text-align: left; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <p style="font-size: 13px; color: #6b7280; margin-bottom: 8px;">
+                        <strong>Email:</strong> <span id="display-email">Loading...</span>
+                    </p>
+                    <p style="font-size: 13px; color: #6b7280; margin-bottom: 8px;">
+                        <strong>Phone:</strong> <span id="display-phone">Loading...</span>
+                    </p>
+                   <p style="font-size: 13px; color: #6b7280;">
+    <strong>Rating:</strong> <span id="display-rating">⭐ 0.0 (0 reviews)</span>
+</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <form id="techProfileForm" enctype="multipart/form-data">
+                    
+                    <div class="section-title">👤 Personal Information</div>
+                    
+                    <div class="info-group" style="margin-bottom: 15px;">
+                        <label>Upload Profile Picture</label>
+                        <input type="file" id="tech_image" name="profile_image" accept="image/*" onchange="previewImage(event)">
+                    </div>
+
+                    <div class="personal-info-grid">
+                        <div class="info-group">
+                            <label>Full Name</label>
+                            <input type="text" id="tech_name" name="full_name" value="" required>
+                        </div>
+                        <div class="info-group">
+                            <label>Gender</label>
+                            <select id="tech_gender" name="gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="info-group">
+                            <label>Birth Date</label>
+                            <input type="date" id="tech_bday" name="bday" value="">
+                        </div>
+                        <div class="info-group">
+                            <label>Contact Number</label>
+                            <input type="text" id="tech_phone" name="phone" value="">
+                        </div>
+                    </div>
+
+                    <div class="section-title">🛠 Professional Details</div>
+                    <div class="info-group">
+                        <label>Specialization (Type or Select)</label>
+                        <input list="specializations" id="tech_specialization" name="specialization" placeholder="e.g. Electrician" value="">
+                        <datalist id="specializations">
+                            <option value="Aircon Specialist">
+                            <option value="Electrician">
+                            <option value="Plumber">
+                            <option value="Home Appliance Repair">
+                            <option value="Carpenter">
+                            <option value="IT & Gadget Technician">
+                        </datalist>
+                    </div>
+
+                    <div class="info-group">
+                        <label>Service Bio / Expertise</label>
+                        <textarea id="tech_bio" name="bio" rows="3"></textarea>
+                    </div>
+
+                    <div class="info-group">
+                        <label>Service Area / Home Address</label>
+                        <input type="text" id="tech_address" name="address" value="" placeholder="Street, Barangay, City">
+                    </div>
+
+                    <button type="submit" id="saveBtn" class="btn-save">Save All Changes</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="../assets/js/tech-profile.js"></script>
+
+</body>
+</html>

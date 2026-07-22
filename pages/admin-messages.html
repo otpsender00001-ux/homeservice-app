@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Inbox | ServiQuick Admin</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        .inbox-container { display: flex; height: 75vh; background: #fff; border-radius: 12px; border: 1px solid #eee; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        
+        /* Left Side: Contacts List */
+        .contacts-sidebar { width: 300px; background: #f9f9f9; border-right: 1px solid #eee; overflow-y: auto; }
+        .contact-card { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; }
+        .contact-card:hover { background: #f1f1f1; }
+        .contact-card.active { background: #e3f2fd; border-left: 4px solid #0084ff; }
+        .contact-name { font-weight: bold; color: #333; font-size: 15px; }
+        .contact-role { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-top: 5px; display: inline-block; padding: 3px 8px; border-radius: 10px; }
+        .role-user { background: #e8f5e9; color: #28a745; }
+        .role-technician { background: #fff3cd; color: #ff9800; }
+
+        /* Right Side: Chat Window */
+        .chat-area { flex: 1; display: flex; flex-direction: column; background: #ffffff; }
+        .chat-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #ffffff; }
+        
+        .msg { max-width: 70%; padding: 10px 15px; font-size: 14px; line-height: 1.4; word-wrap: break-word; display: inline-block; }
+        .msg.mine { background: #0084ff; color: white; align-self: flex-end; border-radius: 18px 18px 2px 18px; }
+        .msg.theirs { background: #e4e6eb; color: black; align-self: flex-start; border-radius: 18px 18px 18px 2px; }
+
+        .chat-input-area { padding: 15px 20px; border-top: 1px solid #eee; display: flex; gap: 10px; background: #fafafa; align-items: center; }
+        .chat-input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
+        .chat-input:focus { border-color: #0084ff; }
+        .btn-send { background: #0084ff; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; white-space: nowrap; }
+        .btn-send:hover { background: #0069d9; }
+        
+        .empty-state { flex: 1; display: flex; align-items: center; justify-content: center; color: #999; font-weight: bold; font-size: 18px; flex-direction: column; gap: 10px; text-align: center; padding: 20px; }
+
+        /* ✨ MOBILE RESPONSIVE FIX FOR INBOX ✨ */
+        @media (max-width: 768px) {
+            .inbox-container { flex-direction: column; height: 85vh; }
+            .contacts-sidebar { width: 100%; height: 35%; max-height: 250px; border-right: none; border-bottom: 2px solid #ddd; overflow-y: auto; }
+            .chat-area { height: 65%; flex: auto; }
+            .chat-header { padding: 12px 15px; }
+            .chat-box { padding: 12px 15px; }
+            .chat-input-area { padding: 10px 15px; }
+            .btn-send { padding: 10px 15px; } /* Mas maliit na button sa phone */
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header"><span class="brand">ServiQuick</span><p class="panel">Admin Panel</p></div>
+       <nav class="menu" id="admin-menu">
+            <a href="admin-dashboard.html">📊 Dashboard</a> 
+            <a href="bookings.html">📅 Bookings</a> 
+            <a href="services.html">🛠 Services</a> 
+            <a href="track-technicians.html">📍 Track Tech</a> 
+            <a href="admin-users.html">👥 Users</a>
+            <a href="admin-messages.html">💬 Inbox</a>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+        </nav>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let currentUrl = window.location.pathname.split('/').pop();
+                let links = document.querySelectorAll('#admin-menu a');
+                
+                links.forEach(link => {
+                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
+                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
+                    if (currentUrl === '') currentUrl = 'admin-dashboard.html';
+                    
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                    }
+                });
+            });
+        </script>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <div>
+                <h2>Support Inbox</h2>
+                <p>Reply to User and Technician inquiries here.</p>
+            </div>
+        </div>
+
+        <div class="inbox-container">
+            <div class="contacts-sidebar" id="contacts-list">
+                <div style="padding: 20px; text-align: center; color: #666;">Loading contacts...</div>
+            </div>
+
+            <div class="chat-area" id="chat-area-container">
+                <div class="empty-state">
+                    <span style="font-size: 40px;">💬</span>
+                    Select a conversation to start chatting
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="../assets/js/admin-messages.js"></script>
+</body>
+</html>

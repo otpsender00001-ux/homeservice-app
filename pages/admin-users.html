@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users | ServiQuick</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-input { flex: 1; min-width: 200px; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        .filter-select { flex: 1; min-width: 150px; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        .modal { display:none; position:fixed; z-index:100; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal-content { background:white; width:90%; max-width:400px; padding:20px; border-radius:12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group select, .form-group input { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="brand">ServiQuick</span>
+            <p class="panel">Admin Panel</p>
+        </div>
+        <nav class="menu" id="admin-menu">
+            <a href="admin-dashboard.html">📊 Dashboard</a> 
+            <a href="bookings.html">📅 Bookings</a> 
+            <a href="services.html">🛠 Services</a> 
+            <a href="track-technicians.html">📍 Track Tech</a> 
+            <a href="admin-users.html">👥 Users</a>
+            <a href="admin-messages.html">💬 Inbox</a>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+        </nav>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let currentUrl = window.location.pathname.split('/').pop();
+                let links = document.querySelectorAll('#admin-menu a');
+                
+                links.forEach(link => {
+                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
+                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
+                    if (currentUrl === '') currentUrl = 'admin-dashboard.html';
+                    
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                    }
+                });
+            });
+        </script>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <h2>User Management</h2>
+            <p>Manage customers and technicians</p>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="search-user" class="search-input" placeholder="Search by name or email...">
+            <select id="filter-role" class="filter-select">
+                <option value="all">All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="user">Customer</option>
+                <option value="technician">Technician</option>
+            </select>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email / Phone</th>
+                        <th>Role</th>
+                        <th>Specialization</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <tr><td colspan="6" style="text-align:center;">Loading users...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div id="userModal" class="modal">
+    <div class="modal-content">
+        <h3>Edit User Details</h3>
+        <form id="userForm">
+            <input type="hidden" id="edit-user-id">
+            <div class="form-group">
+                <label>Status</label>
+                <select id="edit-status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select id="edit-role" onchange="toggleSpecField()">
+                    <option value="user">Customer</option>
+                    <option value="technician">Technician</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group" id="spec-field" style="display:none;">
+                <label>Technician Specialization</label>
+                <select id="edit-spec">
+                    </select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px; flex-wrap: wrap;">
+                <button type="submit" class="btn btn-dark" style="flex:1; min-width: 120px; padding:10px; border-radius:8px;">Update User</button>
+                <button type="button" onclick="closeModal()" style="flex:1; min-width: 120px; background:#eee; border:none; border-radius:8px;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../assets/js/admin-users.js"></script>
+</body>
+</html>

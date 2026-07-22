@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Technicians | ServiQuick</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* 2. DAGDAG: Design para sa Map Container */
+        #map { 
+            height: 500px; 
+            width: 100%; 
+            border-radius: 15px; 
+            margin-top: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1; /* Para hindi matakpan ng sidebar */
+        }
+        .search-box {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box; /* Dagdag para hindi lumagpas */
+        }
+
+        /* ✨ MOBILE RESPONSIVE FIX ✨ */
+        @media (max-width: 768px) {
+            #map { height: 350px; } /* Pinaliit ang map height sa phone */
+            .tech-panel { flex-direction: column; text-align: center; gap: 10px; }
+            .tech-panel > div:first-child { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="brand">ServiQuick</span>
+            <p class="panel">Admin Panel</p>
+        </div>
+        <nav class="menu" id="admin-menu">
+            <a href="admin-dashboard.html">📊 Dashboard</a> 
+            <a href="bookings.html">📅 Bookings</a> 
+            <a href="services.html">🛠 Services</a> 
+            <a href="track-technicians.html">📍 Track Tech</a> 
+            <a href="admin-users.html">👥 Users</a>
+            <a href="admin-messages.html">💬 Inbox</a>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+        </nav>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let currentUrl = window.location.pathname.split('/').pop();
+                let links = document.querySelectorAll('#admin-menu a');
+                
+                links.forEach(link => {
+                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
+                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
+                    if (currentUrl === '') currentUrl = 'admin-dashboard.html';
+                    
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                    }
+                });
+            });
+        </script>
+    </aside>
+
+    <main class="main">
+        <div class="header">
+            <h2>Technician Tracking</h2>
+            <p>Monitor technician location in real-time</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="search-tech" class="search-input" placeholder="Search technician name...">
+        </div>
+
+       <div style="position:relative;">
+    <div id="map"></div>
+
+    <!-- 📍 My Location Button -->
+    <button id="my-location-btn">📍</button>
+</div>
+
+        <div class="tech-panel" style="margin-top:20px;">
+            <div style="display:flex;align-items:center;gap:20px">
+                <div class="avatar">👤</div>
+                <div>
+                    <h3 style="font-weight:900" id="display-name">Select a Technician</h3>
+                    <p id="display-spec">On-map tracking active</p>
+                </div>
+            </div>
+            <div>
+                <span class="badge badge-green">Live System</span>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/js/track.js"></script>
+
+</body>
+</html>

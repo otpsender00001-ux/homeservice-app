@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | ServiQuick</title>
+
+<link rel="stylesheet" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+    .modal-overlay {
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+        align-items: center;
+        justify-content: center;
+    }
+    .modal-box {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        position: relative;
+        box-sizing: border-box; /* Added to keep padding inside width */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #888;
+        cursor: pointer;
+    }
+    .close-modal:hover {
+        color: #333;
+    }
+    .forgot-link {
+        display: block;
+        text-align: right;
+        font-size: 13px;
+        color: #007bff;
+        text-decoration: none;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    .forgot-link:hover {
+        text-decoration: underline;
+    }
+    
+    /* Ensuring inner cards adjust properly */
+    .auth-card {
+        width: 90%;
+        max-width: 420px;
+        box-sizing: border-box;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+    <script>
+const params = new URLSearchParams(window.location.search);
+const error = params.get("error");
+const success = params.get("success");
+
+if(error || success){
+let message = "";
+
+if(error === "user_not_found") message = "Account not found.";
+if(error === "wrong_password") message = "Incorrect password.";
+
+if(success === "registered") message = "Account created successfully! Please login.";
+
+const div = document.createElement("div");
+div.className = error ? "alert alert-error" : "alert alert-success";
+div.textContent = message;
+
+document.querySelector(".auth-card").prepend(div);
+}
+</script>
+
+<div class="auth-title">Welcome Back 👋</div>
+<div class="auth-sub">Login to your ServiQuick account</div>
+
+<form action="../backend/auth/login.php" method="POST">
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="email" placeholder="Enter your email" required>
+</div>
+
+<div class="form-group password-group" style="margin-bottom: 5px;">
+<label>Password</label>
+<input type="password" name="password" placeholder="Enter your password" required>
+<span class="password-toggle">👁</span>
+</div>
+
+<a href="#" id="openForgotModal" class="forgot-link">Forgot Password?</a>
+
+<button type="submit" class="btn btn-blue" style="width:100%;height:40px;margin-top:5px;">
+Login
+</button>
+
+</form>
+
+<div class="auth-footer">
+Don't have an account? 
+<a href="register.html">Register</a>
+</div>
+
+</div>
+
+</div>
+
+<div id="forgotModal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="close-modal" id="closeForgotModal">&times;</span>
+        <h3 style="margin-top: 0; color: #333; text-align: center;">Reset Password</h3>
+        <p style="font-size: 14px; color: #666; text-align: center; margin-bottom: 20px;">
+            Enter your registered email address and we'll send you a link to reset your password.
+        </p>
+        
+        <form id="forgotFormModal">
+            <div class="form-group">
+                <input type="email" id="resetEmail" placeholder="Enter your email" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            </div>
+            <button type="submit" id="resetSubmitBtn" class="btn btn-blue" style="width:100%; height:40px; margin-top:10px;">
+                Send Reset Link
+            </button>
+        </form>
+        
+        <div id="resetMessage" style="margin-top: 15px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+    </div>
+</div>
+
+<script src="../assets/js/auth.js"></script>
+
+<script>
+    const modal = document.getElementById("forgotModal");
+    const openBtn = document.getElementById("openForgotModal");
+    const closeBtn = document.getElementById("closeForgotModal");
+
+    // Open Modal
+    openBtn.onclick = function(e) {
+        e.preventDefault();
+        modal.style.display = "flex"; // Use flex to center it based on our CSS
+        document.getElementById('resetMessage').innerText = ""; // Clear old message
+        document.getElementById('resetEmail').value = ""; // Clear input
+    }
+
+    // Close Modal via 'X' button
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Close Modal when clicking outside the box
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Handle Forgot Password Form Submission
+    document.getElementById('forgotFormModal').onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('resetEmail').value;
+        const msgDiv = document.getElementById('resetMessage');
+        const submitBtn = document.getElementById('resetSubmitBtn');
+
+        submitBtn.innerText = "Sending...";
+        submitBtn.disabled = true;
+        msgDiv.innerText = "";
+
+        try {
+            const res = await fetch('../backend/auth/forgot_password.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `email=${encodeURIComponent(email)}`
+            });
+            
+            const data = await res.json();
+            
+            // Display Green if success, Red if error
+            msgDiv.style.color = data.status === 'success' ? '#28a745' : '#dc3545';
+            msgDiv.innerText = data.message;
+        } catch (error) {
+            msgDiv.style.color = '#dc3545';
+            msgDiv.innerText = "Server connection error. Please try again...";
+        } finally {
+            submitBtn.innerText = "Send Reset Link";
+            submitBtn.disabled = false;
+        }
+    };
+</script>
+
+</body>
+</html>
