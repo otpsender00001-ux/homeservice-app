@@ -1,21 +1,21 @@
 FROM php:8.2-apache
 
-# Siguraduhing prefork lang ang naka-enable na MPM module
-RUN a2dismod mpm_event mpm_worker || true \
-    && a2enmod mpm_prefork rewrite
+# Step 1: Burahin muna ang LAHAT ng MPM symlinks/configs para walang mag-conflict
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf
 
-# Install kinakailangang PHP extensions
+# Step 2: I-enable LANG ang mpm_prefork at rewrite
+RUN a2enmod mpm_prefork rewrite
+
+# Step 3: Install PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Kopyahin ang project files
+# Step 4: Kopyahin ang project files at permission settings
 COPY . /var/www/html/
-
-# Ayusin ang file permissions
 RUN chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html
 
-# I-configure ang Apache para makinig sa dynamic PORT ng Railway (defaulting to 8080)
+# Step 5: Dynamic PORT configuration para sa Railway
 ENV PORT=8080
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
