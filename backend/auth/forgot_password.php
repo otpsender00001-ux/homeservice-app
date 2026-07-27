@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->SMTPAuth   = true;
             
             // REPLACE WITH YOUR GMAIL AND APP PASSWORD
-            $mail->Username   = 'YOUR_GMAIL@gmail.com'; 
-            $mail->Password   = 'YOUR_16_DIGIT_APP_PASSWORD'; 
+            $mail->Username   = 'homeservices.noreply@gmail.com'; 
+            $mail->Password   = 'pxxhrjtostgmzfyi'; 
             
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;

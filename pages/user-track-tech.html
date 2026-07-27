@@ -6,7 +6,6 @@
 <title>Track Technician | ServiQuick</title>
 
 <link rel="stylesheet" href="../assets/css/style.css">
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
@@ -20,6 +19,20 @@
     width: 100%;
 }
 
+/* ✨ SHOPEE-STYLE MOTORCYCLE & TECH MARKER ANIMATION */
+.tech-marker-icon {
+    background: #ee4d2d;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    color: white;
+    font-size: 16px;
+    transition: all 0.5s ease-in-out;
+}
+
 /* Bottom card */
 .tech-card {
     position: absolute;
@@ -27,9 +40,9 @@
     left: 0;
     right: 0;
     background: #fff;
-    padding: 15px 20px;
+    padding: 20px;
     border-radius: 20px 20px 0 0;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.15);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -44,36 +57,46 @@
 }
 
 .tech-avatar {
-    width: 50px;
-    height: 50px;
-    background: #eee;
+    width: 55px;
+    height: 55px;
+    background: #fff5f2;
+    border: 2px solid #ee4d2d;
+    color: #ee4d2d;
     border-radius: 50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .call-btn {
-    background: #2563eb;
+    background: #ee4d2d;
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
+    padding: 12px 25px;
+    border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
+    box-shadow: 0 4px 12px rgba(238, 77, 45, 0.3);
+    transition: 0.2s;
+}
+
+.call-btn:hover {
+    background: #d73d1a;
 }
 
 .locate-btn {
     position: absolute;
-    bottom: 100px;
-    right: 15px;
+    bottom: 110px;
+    right: 20px;
     background: #fff;
-    padding: 10px 14px;
+    padding: 12px;
     border-radius: 50%;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     cursor: pointer;
     z-index: 1000;
+    font-size: 18px;
 }
 
 /* ✨ MOBILE RESPONSIVE FIX ✨ */
@@ -81,7 +104,7 @@
     .map-container { height: 85vh; }
     .tech-card { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
     .call-btn { width: 100%; box-sizing: border-box; }
-    .locate-btn { bottom: 160px; } /* Itaas para hindi matakpan ng taller na tech-card */
+    .locate-btn { bottom: 180px; } 
 }
 </style>
 </head>
@@ -112,12 +135,11 @@
             let links = document.querySelectorAll('#user-menu a');
             
             links.forEach(link => {
-                link.classList.remove('active'); // Alisin ang blue sa lahat muna
-                // Kung walang nakuha (nasa root folder), default sa dashboard
+                link.classList.remove('active'); 
                 if (currentUrl === '') currentUrl = 'user-dashboard.html';
                 
                 if (link.getAttribute('href') === currentUrl) {
-                    link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                    link.classList.add('active'); 
                 }
             });
         });
@@ -128,17 +150,18 @@
 
 <div id="map"></div>
 
-<div class="locate-btn" id="my-location-btn">📍</div>
+<div class="locate-btn" id="my-location-btn" title="Center to My Location">📍</div>
 
-<div class="tech-card">
+<div class="tech-card" id="techDetailsCard">
     <div class="tech-info">
-        <div class="tech-avatar">👤</div>
-        <div>
-            <h3 id="eta" style="margin: 0;">Checking status...</h3>
-            <p id="tech-name" style="margin: 5px 0 0; color: #666; font-size: 13px;">Verifying active service...</p>
+        <div class="tech-avatar" id="techAvatarIcon">🛵</div>
+        <div style="text-align: left;">
+            <h3 id="eta" style="margin: 0; color: #111; font-size: 16px;">Checking status...</h3>
+            <p id="tech-name" style="margin: 4px 0 0; color: #666; font-size: 13px;">Verifying active service...</p>
+            <p id="tech-phone-display" style="margin: 2px 0 0; color: #ee4d2d; font-size: 12px; font-weight: 600; display: none;"></p>
         </div>
     </div>
-    <button class="call-btn">Call</button>
+    <button class="call-btn" id="callTechBtn" onclick="callTechnician()" style="display: none;">Call Rider</button>
 </div>
 
 </main>

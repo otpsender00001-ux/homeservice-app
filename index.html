@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -48,25 +49,22 @@
     <section id="services" class="py-20">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <h2 class="text-3xl font-bold mb-12">Our Popular Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="text-4xl mb-4 text-blue-500">❄️</div>
-                    <h3 class="text-xl font-bold mb-2">AC Repair</h3>
-                    <p class="text-gray-500 mb-4">Keep your home cool with our expert technicians.</p>
-                    <a href="./pages/login.html" class="text-blue-600 font-semibold">Book Now →</a>
+            
+            <!-- Real Data Container -->
+            <div id="dynamic-services" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="col-span-1 md:col-span-3 text-center text-gray-500 py-10">
+                    Loading services...
                 </div>
-                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="text-4xl mb-4 text-blue-500">🧹</div>
-                    <h3 class="text-xl font-bold mb-2">House Cleaning</h3>
-                    <p class="text-gray-500 mb-4">Professional cleaning for a sparkling home.</p>
-                    <a href="./pages/login.html" class="text-blue-600 font-semibold">Book Now →</a>
-                </div>
-                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="text-4xl mb-4 text-blue-500">📱</div>
-                    <h3 class="text-xl font-bold mb-2">Gadget Repair</h3>
-                    <p class="text-gray-500 mb-4">Fast fixes for your phones and laptops.</p>
-                    <a href="./pages/login.html" class="text-blue-600 font-semibold">Book Now →</a>
-                </div>
+            </div>
+
+            <!-- Pagination Buttons -->
+            <div id="pagination-controls" class="flex justify-center mt-12 space-x-4" style="display: none;">
+                <button id="prev-btn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    ← Previous
+                </button>
+                <button id="next-btn" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    More Services →
+                </button>
             </div>
         </div>
     </section>
@@ -84,9 +82,6 @@
                     <li>✅ 24/7 Customer Support</li>
                 </ul>
             </div>
-            <div class="flex-1 w-full h-64 bg-blue-200 rounded-3xl flex items-center justify-center text-blue-500 text-lg italic">
-                [ServiQuick Expert Image]
-            </div>
         </div>
     </section>
 
@@ -94,5 +89,93 @@
         <p class="opacity-50 text-sm">© 2024 ServiQuick. All rights reserved.</p>
     </footer>
 
+    <script>
+        let currentOffset = 0;
+        const limit = 6;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLandingServices(currentOffset);
+
+            document.getElementById('prev-btn').addEventListener('click', () => {
+                if (currentOffset >= limit) {
+                    currentOffset -= limit;
+                    loadLandingServices(currentOffset);
+                }
+            });
+
+            document.getElementById('next-btn').addEventListener('click', () => {
+                currentOffset += limit;
+                loadLandingServices(currentOffset);
+            });
+        });
+
+        async function loadLandingServices(offset) {
+            const container = document.getElementById('dynamic-services');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const controls = document.getElementById('pagination-controls');
+
+            container.innerHTML = '<div class="col-span-1 md:col-span-3 text-center text-gray-500 py-10">Fetching services...</div>';
+
+            try {
+                // Fetching real data safely
+                const res = await fetch(`./backend/services/get_services.php?limit=${limit}&offset=${offset}`);
+                if (!res.ok) throw new Error('Network response error');
+                
+                const services = await res.json();
+                container.innerHTML = ''; 
+
+                if (services.length === 0 && offset === 0) {
+                    container.innerHTML = '<p class="col-span-1 md:col-span-3 text-center text-gray-500">No services available right now.</p>';
+                    controls.style.display = 'none';
+                    return;
+                }
+
+                controls.style.display = 'flex';
+
+                services.forEach(s => {
+                    // SECURED DATA
+                    const safeName = escapeHTML(s.service_name);
+                    const safeDesc = escapeHTML(s.description);
+                    const safeImage = s.image ? `./uploads/services/${escapeHTML(s.image)}` : './assets/images/default.png';
+                    const price = parseFloat(s.price).toLocaleString(undefined, {minimumFractionDigits: 2});
+
+                    const card = `
+                        <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col text-left h-full">
+                            <img src="${safeImage}" alt="${safeName}" class="w-full h-48 object-cover rounded-xl mb-4" onerror="this.src='./assets/images/default.png'">
+                            <h3 class="text-xl font-bold mb-2">${safeName}</h3>
+                            <p class="text-gray-500 mb-6 flex-grow line-clamp-2">${safeDesc}</p>
+                            <div class="flex justify-between items-center mt-auto border-t border-gray-100 pt-4">
+                                <span class="text-xl font-bold text-gray-900">₱${price}</span>
+                                <a href="./pages/login.html" class="text-blue-600 bg-blue-50 px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition">Book Now →</a>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+
+                prevBtn.disabled = offset === 0;
+                nextBtn.disabled = services.length < limit;
+
+            } catch (error) {
+                console.error("Error loading services:", error);
+                container.innerHTML = '<p class="col-span-1 md:col-span-3 text-center text-red-500">Failed to load services. Please try again later.</p>';
+            }
+        }
+
+        // SECURITY FUNCTION to prevent Virus/XSS from database text
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+    </script>
 </body>
 </html>

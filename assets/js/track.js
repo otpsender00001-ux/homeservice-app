@@ -8,13 +8,14 @@ let watchId = null;
 
 // 🧭 ROUTING
 let routeLine = null;
+let allTechsCache = []; // Cache para sa modal list
 
 document.addEventListener('DOMContentLoaded', function() {
     initMap();
 
     // 🔥 SEARCH LOGIC: Automatic Focus kapag nag-search
     document.getElementById('search-tech').addEventListener('input', function() {
-        fetchTechnicianLocations(true); // 'true' means galing sa search input
+        fetchTechnicianLocations(true); 
     });
 
     const locateBtn = document.getElementById('my-location-btn');
@@ -51,33 +52,37 @@ async function fetchTechnicianLocations(isManualSearch = false) {
     try {
         const response = await fetch('../backend/users/get_users.php?role=technician');
         const techs = await response.json();
+        allTechsCache = techs; // I-save sa cache para sa Modal list
+
+        // Update active count badge sa button
+        const activeTechs = techs.filter(t => t.lat !== null && t.lng !== null);
+        const countBadge = document.getElementById('active-tech-count');
+        if(countBadge) countBadge.innerText = activeTechs.length;
 
         techs.forEach(t => {
-            // 🛡️ PRO FIX: Kapag may laman ang lat at lng, i-display. Kung null na (dahil job completed), i-remove!
             if (t.lat !== null && t.lng !== null) {
                 const newPos = [parseFloat(t.lat), parseFloat(t.lng)];
                 const isMatching = t.full_name.toLowerCase().includes(searchQuery);
                 
-                // Status check
                 const isLive = (t.status === 'in-transit' || t.status === 'in_progress');
-                const markerColor = isLive ? '#ff4500' : '#28a745';
+                const markerColor = isLive ? '#ee4d2d' : '#28a745';
 
                 if (technicianMarkers[t.id]) {
                     // 1. UPDATE EXISTING: I-update ang pwesto
                     technicianMarkers[t.id].setLatLng(newPos);
                     
-                    // Update ang kulay at pulse
                     const iconDiv = technicianMarkers[t.id].getElement()?.querySelector('.tech-ping-circle');
                     if(iconDiv) {
                         iconDiv.style.backgroundColor = markerColor;
                         isLive ? iconDiv.classList.add('pulse-active') : iconDiv.classList.remove('pulse-active');
                     }
                 } else {
-                    // 2. CREATE NEW: Gawa ng marker kung wala pa
+                    // 2. CREATE NEW: Shopee-style Motorcycle Marker
                     const techIcon = L.divIcon({
                         className: 'custom-tech-wrapper',
-                        html: `<div class="tech-ping-circle ${isLive ? 'pulse-active' : ''}" style="background-color: ${markerColor};"></div>`,
-                        iconSize: [20, 20]
+                        html: `<div class="tech-ping-circle ${isLive ? 'pulse-active' : ''}" style="background-color: ${markerColor}; width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 16px;">🛵</div>`,
+                        iconSize: [36, 36],
+                        iconAnchor: [18, 18]
                     });
 
                     const marker = L.marker(newPos, { icon: techIcon }).addTo(map);
@@ -91,24 +96,21 @@ async function fetchTechnicianLocations(isManualSearch = false) {
                     technicianMarkers[t.id] = marker;
                 }
 
-                // 🔥 SMART VISIBILITY LOGIC:
                 const markerElement = technicianMarkers[t.id].getElement();
                 if (markerElement) {
                     if (searchQuery === "" || isMatching) {
-                        markerElement.style.display = "block"; // Pakita
+                        markerElement.style.display = "block"; 
                     } else {
-                        markerElement.style.display = "none";  // Tago pero andyan pa rin
+                        markerElement.style.display = "none";  
                     }
                 }
 
-                // 🔥 AUTO-FOCUS: Kung nag-ma-match sa search
                 if (isManualSearch && searchQuery !== "" && isMatching) {
                     map.flyTo(newPos, 18, { animate: true, duration: 1.5 });
                     technicianMarkers[t.id].openPopup();
                     updateDetailPanel(t);
                 }
             } else {
-                // 🛡️ PRO FIX: Kapag tinapos na ang job, magiging null sa DB ang location kaya papasok siya dito at buburahin ng Admin map yung marker.
                 if (technicianMarkers[t.id]) {
                     map.removeLayer(technicianMarkers[t.id]);
                     delete technicianMarkers[t.id];
@@ -123,14 +125,17 @@ async function fetchTechnicianLocations(isManualSearch = false) {
 function updateDetailPanel(t) {
     const displayName = document.getElementById('display-name');
     const displaySpec = document.getElementById('display-spec');
+    const panelAvatar = document.getElementById('panel-avatar-icon');
+    
     if (displayName) displayName.innerText = t.full_name;
     if (displaySpec) displaySpec.innerText = t.specialization || 'On-duty Technician';
+    if (panelAvatar) panelAvatar.innerText = t.full_name ? t.full_name.charAt(0).toUpperCase() : '👤';
 }
 
 function createPopupContent(t) {
     const isLive = (t.status === 'in-transit' || t.status === 'in_progress');
     const statusText = isLive ? 'ON THE WAY' : 'AVAILABLE';
-    const statusColor = isLive ? '#ff4500' : '#28a745';
+    const statusColor = isLive ? '#ee4d2d' : '#28a745';
     
     return `
         <div style="font-family: 'Inter', sans-serif; padding:5px; min-width:140px;">
@@ -185,8 +190,84 @@ async function drawRoute(start, end) {
 
         if (data.routes && data.routes.length > 0) {
             const coords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
-            routeLine = L.polyline(coords, { color: '#2563eb', weight: 5, opacity: 0.7, dashArray: '5, 10' }).addTo(map);
+            // ✨ SHOPEE STYLE DASHED ORANGE ROUTING LINE PARA SA ADMIN DIN
+            routeLine = L.polyline(coords, { 
+                color: '#ee4d2d', 
+                weight: 6, 
+                opacity: 0.8, 
+                dashArray: '8, 12',
+                lineCap: 'round'
+            }).addTo(map);
             map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
         }
     } catch (err) { console.error("Routing failed:", err); }
+}
+
+/* =========================
+🛵 MODAL & TECH CARDS SELECTOR
+========================= */
+
+function openTechModal() {
+    const overlay = document.getElementById('techModalOverlay');
+    const container = document.getElementById('tech-cards-container');
+    container.innerHTML = '';
+
+    // Salain ang mga may active location lang
+    const activeTechs = allTechsCache.filter(t => t.lat !== null && t.lng !== null);
+
+    if (activeTechs.length === 0) {
+        container.innerHTML = `<p style="text-align: center; color: #888; padding: 20px;">No technicians currently active on map.</p>`;
+    } else {
+        activeTechs.forEach(t => {
+            const initial = t.full_name ? t.full_name.charAt(0).toUpperCase() : 'T';
+            const card = document.createElement('div');
+            card.className = 'tech-card-item';
+            card.innerHTML = `
+                <div class="tech-card-info">
+                    <div class="tech-card-avatar">${initial}</div>
+                    <div>
+                        <h4 style="margin: 0; color: #111; font-size: 15px;">${t.full_name}</h4>
+                        <p style="margin: 3px 0 0; color: #666; font-size: 12px;">${t.specialization || 'Technician'} • <span style="color: #ee4d2d; font-weight: 600;">Active</span></p>
+                    </div>
+                </div>
+                <span style="color: #ee4d2d; font-size: 14px; font-weight: bold;">Track &rarr;</span>
+            `;
+
+            // Kapag pinindot ang card ni technician:
+            card.onclick = () => {
+                selectAndTrackTech(t);
+                closeTechModal();
+            };
+
+            container.appendChild(card);
+        });
+    }
+
+    overlay.style.display = 'flex';
+}
+
+function closeTechModal(event) {
+    if (!event || event.target.id === 'techModalOverlay' || event.target.tagName === 'BUTTON') {
+        document.getElementById('techModalOverlay').style.display = 'none';
+    }
+}
+
+function selectAndTrackTech(t) {
+    const latLng = [parseFloat(t.lat), parseFloat(t.lng)];
+    
+    // 1. Isara/I-hide ang ibang hindi kasali kung gusto, o i-fly lang directly sa kanya
+    map.flyTo(latLng, 18, { animate: true, duration: 1.5 });
+
+    // 2. Buksan ang popup ng marker niya kung meron na
+    if (technicianMarkers[t.id]) {
+        technicianMarkers[t.id].openPopup();
+    }
+
+    // 3. I-update ang panel sa baba
+    updateDetailPanel(t);
+
+    // 4. Kung may user location na naka-set, iguhit agad ang route mula admin patungo sa tech
+    if (userMarker) {
+        drawRoute(userMarker.getLatLng(), latLng);
+    }
 }

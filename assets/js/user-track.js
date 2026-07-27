@@ -67,8 +67,13 @@ async function fetchBooking() {
             // UPDATE UI TEXT
             const etaElem = document.getElementById('eta');
             const techNameElem = document.getElementById('tech-name');
+            const phoneElem = document.getElementById('tech-phone-display');
+            const callBtn = document.getElementById('callTechBtn');
+
             if (etaElem) etaElem.innerText = "No Active Service";
             if (techNameElem) techNameElem.innerText = "Tracking is offline.";
+            if (phoneElem) phoneElem.style.display = 'none';
+            if (callBtn) callBtn.style.display = 'none';
             
             // GRAY-OUT ANG MAPA
             const mapContainer = document.getElementById('map');
@@ -99,28 +104,45 @@ function updateTech(data) {
     const techPos = [parseFloat(data.tech_lat), parseFloat(data.tech_lng)];
     const techInitial = data.tech_name ? data.tech_name.charAt(0).toUpperCase() : 'T';
 
+    // ✨ SHOPEE-STYLE MOTORCYCLE MARKER
     if (!techMarker) {
         const customIcon = L.divIcon({
-            className: 'tech-circle-icon',
-            html: `<span>${techInitial}</span>`,
-            iconSize: [35, 35],
-            iconAnchor: [17, 17]
+            className: 'custom-tech-icon',
+            html: `<div style="background: #ee4d2d; border: 2px solid #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 16px;">🛵</div>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 18]
         });
 
         techMarker = L.marker(techPos, { icon: customIcon }).addTo(map);
-        techMarker.bindTooltip(`
-            <div style="text-align:center; line-height: 1.2;">
-                <strong style="display:block;">${data.tech_name}</strong>
-                <span style="font-size:10px; color:rgba(255,255,255,0.8);">${data.service}</span>
-            </div>`, { permanent: true, direction: 'top', className: 'tech-label', offset: [0, -15] }).openTooltip();
     } else {
         techMarker.setLatLng(techPos);
     }
 
     map.panTo(techPos, { animate: true, duration: 1.0 });
 
+    // ✨ UPDATE TECH INFO CARD AT BOTTOM (Shopee Style Rider Info)
     if(document.getElementById('tech-name')) {
-        document.getElementById('tech-name').innerText = `${data.tech_name} • ${data.service}`;
+        document.getElementById('tech-name').innerText = `${data.tech_name || 'Technician'} • ${data.service || 'Service'}`;
+    }
+
+    if(document.getElementById('tech-avatar-icon')) {
+        document.getElementById('tech-avatar-icon').innerText = techInitial;
+    }
+
+    // Kung may phone number ang technician sa data
+    if(data.tech_phone && document.getElementById('tech-phone-display')) {
+        const phoneDisplay = document.getElementById('tech-phone-display');
+        phoneDisplay.innerText = `📞 ${data.tech_phone}`;
+        phoneDisplay.style.display = 'block';
+    }
+
+    // Ipakita ang Call button kung may phone
+    if(document.getElementById('callTechBtn')) {
+        const callBtn = document.getElementById('callTechBtn');
+        callBtn.style.display = 'block';
+        if(data.tech_phone) {
+            callBtn.onclick = () => { window.location.href = `tel:${data.tech_phone}`; };
+        }
     }
 
     if (userMarker) drawRoute();
@@ -159,13 +181,13 @@ function updateUser(pos) {
 }
 
 /* =====================
-🧭 ROUTE LOGIC
+🧭 ROUTE LOGIC (SHOPEE STYLE PATH)
 ===================== */
 async function drawRoute() {
     if (!isTrackingActive || !userMarker || !techMarker) return;
 
-    const start = userMarker.getLatLng();
-    const end = techMarker.getLatLng();
+    const start = userMarker.getLatLng(); // Client Location
+    const end = techMarker.getLatLng();   // Technician Location
     const url = `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
 
     try {
@@ -178,12 +200,26 @@ async function drawRoute() {
             if (routeLine) {
                 routeLine.setLatLngs(coords);
             } else {
-                routeLine = L.polyline(coords, { color: '#ee4d2d', weight: 5, opacity: 0.6, dashArray: '5, 10' }).addTo(map);
+                // ✨ SHOPEE STYLE DASHED ORANGE ROUTING LINE
+                routeLine = L.polyline(coords, { 
+                    color: '#ee4d2d', 
+                    weight: 6, 
+                    opacity: 0.8, 
+                    dashArray: '8, 12',
+                    lineCap: 'round'
+                }).addTo(map);
             }
 
             const duration = Math.round(data.routes[0].duration / 60);
             const etaElem = document.getElementById('eta');
-            if (etaElem) etaElem.innerText = duration > 0 ? `${duration} mins away` : "Arriving now";
+            if (etaElem) {
+                etaElem.innerText = duration > 0 ? `Estimated Arrival: ${duration} mins` : "Rider is arriving now!";
+            }
         }
     } catch (err) { console.error("Routing Error:", err); }
+}
+
+// Fallback call function kung sakaling walang direct action sa HTML
+function callTechnician() {
+    console.log("Calling rider...");
 }

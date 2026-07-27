@@ -6,18 +6,16 @@
     <title>Track Technicians | ServiQuick</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
-        /* 2. DAGDAG: Design para sa Map Container */
         #map { 
             height: 500px; 
             width: 100%; 
             border-radius: 15px; 
             margin-top: 20px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 1; /* Para hindi matakpan ng sidebar */
+            z-index: 1;
         }
         .search-box {
             margin-bottom: 20px;
@@ -29,12 +27,99 @@
             border-radius: 8px;
             border: 1px solid #ddd;
             font-family: 'Inter', sans-serif;
-            box-sizing: border-box; /* Dagdag para hindi lumagpas */
+            box-sizing: border-box;
+        }
+
+        /* ✨ TECH SELECTOR MODAL / OVERLAY BUTTON STYLES ✨ */
+        .tech-selector-trigger {
+            background: #ee4d2d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(238, 77, 45, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+        .tech-selector-trigger:hover {
+            background: #d73d1a;
+        }
+
+        .tech-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+
+        .tech-modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tech-card-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tech-card-item:hover {
+            border-color: #ee4d2d;
+            background: #fff5f2;
+            transform: translateY(-2px);
+        }
+
+        .tech-card-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tech-card-avatar {
+            width: 45px;
+            height: 45px;
+            background: #fff5f2;
+            color: #ee4d2d;
+            border: 2px solid #ee4d2d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* ✨ MOTORCYCLE MARKER ICON DESIGN */
+        .custom-tech-wrapper {
+            background: transparent;
+            border: none;
         }
 
         /* ✨ MOBILE RESPONSIVE FIX ✨ */
         @media (max-width: 768px) {
-            #map { height: 350px; } /* Pinaliit ang map height sa phone */
+            #map { height: 350px; }
             .tech-panel { flex-direction: column; text-align: center; gap: 10px; }
             .tech-panel > div:first-child { flex-direction: column; }
         }
@@ -66,12 +151,11 @@
                 let links = document.querySelectorAll('#admin-menu a');
                 
                 links.forEach(link => {
-                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
-                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
+                    link.classList.remove('active'); 
                     if (currentUrl === '') currentUrl = 'admin-dashboard.html';
                     
                     if (link.getAttribute('href') === currentUrl) {
-                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                        link.classList.add('active'); 
                     }
                 });
             });
@@ -84,20 +168,24 @@
             <p>Monitor technician location in real-time</p>
         </div>
 
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+            <button class="tech-selector-trigger" onclick="openTechModal()">
+                🛵 See On-Duty Technicians (<span id="active-tech-count">0</span>)
+            </button>
+        </div>
+
         <div class="search-box">
             <input type="text" id="search-tech" class="search-input" placeholder="Search technician name...">
         </div>
 
-       <div style="position:relative;">
-    <div id="map"></div>
-
-    <!-- 📍 My Location Button -->
-    <button id="my-location-btn">📍</button>
-</div>
+        <div style="position:relative;">
+            <div id="map"></div>
+            <button id="my-location-btn" title="Center to My Location">📍</button>
+        </div>
 
         <div class="tech-panel" style="margin-top:20px;">
             <div style="display:flex;align-items:center;gap:20px">
-                <div class="avatar">👤</div>
+                <div class="avatar" id="panel-avatar-icon">👤</div>
                 <div>
                     <h3 style="font-weight:900" id="display-name">Select a Technician</h3>
                     <p id="display-spec">On-map tracking active</p>
@@ -108,6 +196,20 @@
             </div>
         </div>
     </main>
+</div>
+
+<!-- ✨ TECHNICIAN SELECTION MODAL POPUP -->
+<div class="tech-modal-overlay" id="techModalOverlay" onclick="closeTechModal(event)">
+    <div class="tech-modal-content" onclick="event.stopPropagation()">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: #111;">🛵 Active Technicians</h3>
+            <button onclick="closeTechModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">&times;</button>
+        </div>
+        <p style="color: #666; font-size: 13px; margin-top: 0;">Click any technician below to instantly focus and track their route on the map.</p>
+        <div id="tech-cards-container">
+            <!-- Dynamic cards will be loaded here -->
+        </div>
+    </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

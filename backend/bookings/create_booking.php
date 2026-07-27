@@ -8,9 +8,20 @@ $service_id = $_POST['service_id'];
 $date = $_POST['date'];
 $time_start = $_POST['time_start'];
 $time_end = $_POST['time_end'];
-$address = $_POST['address']; // Nakuha na ang address
-$phone = $_POST['phone']; // DAGDAG: Kinuha na natin ang phone number
-$total_amount = $_POST['total_amount']; // Nakuha na ang price
+$address = $_POST['address'];
+$phone = $_POST['phone'];
+$total_amount = $_POST['total_amount'];
+
+# 🚫 BLOCK PAST DATE (SERVER SIDE)
+$current_date = date('Y-m-d');
+
+if($date < $current_date){
+    echo json_encode([
+        "status" => "error",
+        "message" => "Bawal mag book ng nakalipas na araw"
+    ]);
+    exit;
+}
 
 # CHECK IF FULL (Limit 3 bookings per slot)
 $check = "

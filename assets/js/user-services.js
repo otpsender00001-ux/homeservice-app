@@ -16,6 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loadServices();
     initAddressAPI();
     setupValidationAndRestrictions();
+
+    // 👉 FRONTEND FIX: Para hindi na ma-click ang nakalipas na araw sa kalendaryo
+    const dateInput = document.getElementById("bookingDate");
+    if (dateInput) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.setAttribute('min', `${yyyy}-${mm}-${dd}`);
+    }
 });
 
 /* =====================
@@ -107,13 +117,13 @@ function saveAddress() {
     const cityText = document.getElementById('addr_city').options[document.getElementById('addr_city').selectedIndex].text;
     const brgyText = document.getElementById('addr_brgy').options[document.getElementById('addr_brgy').selectedIndex].text;
     
-    // DAGDAG: Kunin ang phone number na tina-type ni user sa Address Modal
     finalPhone = document.getElementById('addr_phone').value.trim(); 
 
     finalAddress = `${street}, Brgy. ${brgyText}, ${cityText}, Zambales, ${postal}`;
     document.getElementById("selectedAddress").innerText = finalAddress;
     closeAddressModal();
 }
+
 /* =====================
 🚀 MODAL & BOOKING LOGIC
 ===================== */
@@ -183,10 +193,7 @@ document.getElementById("confirmBooking").onclick = async () => {
     formData.append("time_start", selectedSlot.time_start);
     formData.append("time_end", selectedSlot.time_end);
     formData.append("address", finalAddress);
-    
-    // 👉 DAGDAG NA LINYA PARA HINDI MAG-SERVER ERROR!
     formData.append("phone", finalPhone); 
-    
     formData.append("payment_method", selectedPayment);
     formData.append("total_amount", selectedServicePrice);
 
@@ -219,16 +226,35 @@ async function loadServices() {
         container.innerHTML = "";
         data.forEach(s => {
             const price = parseFloat(s.price);
+            
+            // 👉 SHOPEE-STYLE BOOKINGS COUNT (Kung walang laman, 0 ang ilalagay)
+            const totalBooked = s.total_booked ? s.total_booked : 0;
+
             container.innerHTML += `
-                <div class="service-card">
+                <div class="service-card" style="display: flex; flex-direction: column;">
                     <img src="../uploads/services/${s.image ?? 'default.png'}" 
                          style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;"
                          onerror="this.src='../assets/images/default.png'">
+                    
                     <h3>${s.service_name}</h3>
-                    <p>${s.description}</p>
-                    <div class="service-footer">
-                        <span>₱${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
-                        <button onclick="bookService(${s.id}, '${s.service_name}', ${price})">Book</button>
+
+                    <!-- ✨ SHOPEE-STYLE SOLD/BOOKINGS BADGE -->
+                    <div style="font-size: 13px; color: #f97316; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;">
+                        🔥 ${totalBooked} ${totalBooked == 1 ? 'Booking' : 'Bookings'}
+                    </div>
+
+                    <p style="flex-grow: 1;">${s.description}</p>
+                    
+                    <div class="service-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f3f4f6; padding-top: 12px;">
+                        <span style="font-size: 18px; font-weight: bold;">₱${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                        
+                        <!-- ✨ PINAGANDANG BOOK BUTTON -->
+                        <button onclick="bookService(${s.id}, '${s.service_name}', ${price})" 
+                                style="background: linear-gradient(to right, #2563eb, #3b82f6); color: white; border: none; padding: 8px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px -1px rgba(37, 99, 235, 0.4)';"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(37, 99, 235, 0.2)';">
+                            Book Now
+                        </button>
                     </div>
                 </div>`;
         });
