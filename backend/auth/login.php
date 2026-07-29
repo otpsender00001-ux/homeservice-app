@@ -29,6 +29,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['role'] = $user['role'];
 
+    // ⏳ Delay so the loading animation can play
+    sleep(2);
+
     // Redirect based on role
     if($user['role'] == 'admin'){
         header("Location: ../../pages/admin-dashboard.html");
@@ -37,6 +40,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }else{
         header("Location: ../../pages/user-dashboard.html");
     }
+
     exit; // Laging mag-exit pagkatapos ng header redirect
 }
 ?>

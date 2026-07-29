@@ -1,0 +1,340 @@
+/* =========================
+   Login Card
+========================= */
+
+.auth-card{
+    width:90%;
+    max-width:460px;
+    padding:80px 40px 55px;
+    border-radius:18px;
+    position: relative;
+}
+
+/* Title */
+
+.auth-title{
+    font-size:36px;
+    font-weight:900;
+    font-family:'Inter',sans-serif;
+    text-align:center;
+    margin-bottom:10px;
+    background:linear-gradient(90deg,#0d6efd,#4f8cff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Subtitle */
+
+.auth-sub{
+    text-align:center;
+    font-size:15px;
+    color:#777;
+    margin-bottom:35px;
+}
+
+/* Form labels */
+
+.form-group label{
+    font-weight:700;
+    margin-bottom:8px;
+    display:block;
+    color:#333;
+}
+
+/* Inputs */
+
+.form-group input{
+    height:48px;
+    padding:0 45px 0 15px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    transition:.25s;
+    font-size:14px;
+}
+
+.form-group input:focus{
+    outline:none;
+    border-color:#0d6efd;
+    box-shadow:0 0 0 3px rgba(13,110,253,.15);
+}
+
+/* Extra spacing after subtitle */
+
+.form-group:first-child{
+    margin-top:20px;
+}
+
+/* Login button */
+
+.btn{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.3px;
+}
+
+/* Footer */
+
+.auth-footer{
+    text-align:center;
+    margin-top:22px;
+    font-size:13px;
+    color:#777;
+}
+
+.auth-footer a{
+    font-weight:700;
+    text-decoration:none;
+}
+
+.auth-footer a:hover{
+    text-decoration:underline;
+}
+
+.password-wrapper{
+    position:relative;
+}
+
+.password-wrapper input{
+    width:100%;
+    padding-right:45px;
+}
+
+.password-toggle{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:18px;
+    user-select:none;
+    color:#888;
+}
+
+.password-toggle:hover{
+    color:#0d6efd;
+}
+
+.back-btn{
+    position:absolute;
+    top:20px;
+    right:20px;
+
+    padding:8px 18px;
+    border-radius:8px;
+
+    background:#fff;
+    color:#222;
+
+    text-decoration:none;
+    font-weight:700;
+    font-size:14px;
+
+    border:1px solid #ddd;
+
+    transition:.25s;
+}
+
+.back-btn:hover{
+    background:#dc3545;
+    color:#fff;
+    border-color:#dc3545;
+}
+.forgot-link{
+    margin-top:8px;
+    margin-bottom:18px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.modal-box{
+    border-radius:18px;
+    padding:35px;
+}
+
+.modal-box h3{
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.modal-box p{
+    line-height:1.6;
+}
+
+#toast{
+
+    position:fixed;
+
+    top:30px;
+    right:30px;
+
+    min-width:320px;
+
+    padding:18px;
+
+    border-radius:10px;
+
+    color:white;
+
+    font-weight:600;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateX(80px);
+
+    transition:.35s;
+
+    z-index:9999;
+
+}
+
+#toast.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateX(0);
+
+}
+
+#toast.success{
+
+    background:#16a34a;
+
+}
+
+#toast.error{
+
+    background:#dc2626;
+
+}
+
+/* ===========================
+   LOGIN LOADING SCREEN
+=========================== */
+
+#loadingOverlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(255,255,255,.96);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+
+}
+
+.loader-card{
+
+    width:360px;
+
+    text-align:center;
+
+    animation:loaderFade .4s ease;
+
+}
+
+.loader-card img{
+
+    width:90px;
+
+    margin-bottom:20px;
+
+}
+
+.loader-card h2{
+
+    font-size:34px;
+
+    font-weight:900;
+
+    color:#0d6efd;
+
+    margin-bottom:10px;
+
+}
+
+.loader-card p{
+
+    color:#777;
+
+    margin-bottom:25px;
+
+    font-size:15px;
+
+}
+
+.progress-bar{
+
+    width:100%;
+
+    height:10px;
+
+    background:#e5e7eb;
+
+    border-radius:100px;
+
+    overflow:hidden;
+
+}
+
+.progress-fill{
+
+    width:0;
+
+    height:100%;
+
+    background:linear-gradient(90deg,#0d6efd,#4f8cff);
+
+    animation:loadingBar 2s linear forwards;
+
+}
+
+@keyframes loadingBar{
+
+    from{
+
+        width:0%;
+
+    }
+
+    to{
+
+        width:100%;
+
+    }
+
+}
+
+@keyframes loaderFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}

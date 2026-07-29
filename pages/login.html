@@ -7,8 +7,9 @@
 <title>Login | ServiQuick</title>
 
 <link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/login.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
     .modal-overlay {
         display: none; /* Hidden by default */
@@ -77,27 +78,9 @@
 <div class="auth-container">
 
 <div class="auth-card">
-
-    <script>
-const params = new URLSearchParams(window.location.search);
-const error = params.get("error");
-const success = params.get("success");
-
-if(error || success){
-let message = "";
-
-if(error === "user_not_found") message = "Account not found.";
-if(error === "wrong_password") message = "Incorrect password.";
-
-if(success === "registered") message = "Account created successfully! Please login.";
-
-const div = document.createElement("div");
-div.className = error ? "alert alert-error" : "alert alert-success";
-div.textContent = message;
-
-document.querySelector(".auth-card").prepend(div);
-}
-</script>
+<a href="../index.html" class="back-btn">
+Back
+</a>
 
 <div class="auth-title">Welcome Back 👋</div>
 <div class="auth-sub">Login to your ServiQuick account</div>
@@ -109,10 +92,25 @@ document.querySelector(".auth-card").prepend(div);
 <input type="email" name="email" placeholder="Enter your email" required>
 </div>
 
-<div class="form-group password-group" style="margin-bottom: 5px;">
+<div class="form-group">
+
 <label>Password</label>
-<input type="password" name="password" placeholder="Enter your password" required>
-<span class="password-toggle">👁</span>
+
+<div class="password-wrapper">
+
+    <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required>
+
+    <span class="password-toggle" id="togglePassword">
+        <i class="fa-solid fa-eye"></i>
+    </span>
+
+</div>
+
 </div>
 
 <a href="#" id="openForgotModal" class="forgot-link">Forgot Password?</a>
@@ -153,65 +151,31 @@ Don't have an account?
     </div>
 </div>
 
+
+
+<div id="toast"></div>
+<div id="loadingOverlay">
+
+    <div class="loader-card">
+
+        <!-- Replace with your logo -->
+        <img src="../assets/images/logo.png" alt="ServiQuick Logo">
+
+        <h2>ServiQuick</h2>
+
+        <p>Logging you in...</p>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script src="../assets/js/auth.js"></script>
-
-<script>
-    const modal = document.getElementById("forgotModal");
-    const openBtn = document.getElementById("openForgotModal");
-    const closeBtn = document.getElementById("closeForgotModal");
-
-    // Open Modal
-    openBtn.onclick = function(e) {
-        e.preventDefault();
-        modal.style.display = "flex"; // Use flex to center it based on our CSS
-        document.getElementById('resetMessage').innerText = ""; // Clear old message
-        document.getElementById('resetEmail').value = ""; // Clear input
-    }
-
-    // Close Modal via 'X' button
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // Close Modal when clicking outside the box
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Handle Forgot Password Form Submission
-    document.getElementById('forgotFormModal').onsubmit = async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('resetEmail').value;
-        const msgDiv = document.getElementById('resetMessage');
-        const submitBtn = document.getElementById('resetSubmitBtn');
-
-        submitBtn.innerText = "Sending...";
-        submitBtn.disabled = true;
-        msgDiv.innerText = "";
-
-        try {
-            const res = await fetch('../backend/auth/forgot_password.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `email=${encodeURIComponent(email)}`
-            });
-            
-            const data = await res.json();
-            
-            // Display Green if success, Red if error
-            msgDiv.style.color = data.status === 'success' ? '#28a745' : '#dc3545';
-            msgDiv.innerText = data.message;
-        } catch (error) {
-            msgDiv.style.color = '#dc3545';
-            msgDiv.innerText = "Server connection error. Please try again...";
-        } finally {
-            submitBtn.innerText = "Send Reset Link";
-            submitBtn.disabled = false;
-        }
-    };
-</script>
 
 </body>
 </html>
