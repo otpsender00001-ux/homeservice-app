@@ -76,14 +76,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let valid = true;
 
-
             const inputs = form.querySelectorAll("input");
 
+            // Remove previous error styles
             inputs.forEach(input => {
                 input.classList.remove("input-error");
             });
 
-            // Empty fields
+            // =========================
+            // EMPTY FIELD VALIDATION
+            // =========================
 
             inputs.forEach(input => {
 
@@ -96,39 +98,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
             });
 
-            // Password match
-
-            if (password && confirmPassword) {
-
-                if (password.value !== confirmPassword.value) {
-
-                    valid = false;
-
-                    password.classList.add("input-error");
-confirmPassword.classList.add("input-error");
-
-// Clear both password fields
-password.value = "";
-confirmPassword.value = "";
-
-// Put the cursor back in the Password field
-password.focus();
-
-// Show toast notification
-showToast("❌ Passwords do not match. Please try again.", "error");
-
-                }
-
-            }
-
+            // Stop immediately if fields are empty
             if (!valid) {
 
                 e.preventDefault();
+
+                showToast("❌ Please fill in all required fields.", "error");
+
                 return;
 
             }
 
-            // Show loading overlay if available
+            // =========================
+            // PASSWORD STRENGTH
+            // =========================
+
+            const passwordRegex =
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#!^()_\-+=])[A-Za-z\d@$!%*?&#!^()_\-+=]{6,}$/;
+
+            if (!passwordRegex.test(password.value)) {
+
+                e.preventDefault();
+
+                password.classList.add("input-error");
+                confirmPassword.classList.add("input-error");
+
+                password.value = "";
+                confirmPassword.value = "";
+
+                password.focus();
+
+                showToast(
+                    "❌ Password must be at least 6 characters and include uppercase, lowercase, a number, and a special character.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            // =========================
+            // PASSWORD MATCH
+            // =========================
+
+            if (password.value !== confirmPassword.value) {
+
+                e.preventDefault();
+
+                password.classList.add("input-error");
+                confirmPassword.classList.add("input-error");
+
+                password.value = "";
+                confirmPassword.value = "";
+
+                password.focus();
+
+                showToast(
+                    "❌ Passwords do not match. Please try again.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            // =========================
+            // SHOW LOADING
+            // =========================
 
             if (loadingOverlay) {
 
@@ -143,7 +179,7 @@ showToast("❌ Passwords do not match. Please try again.", "error");
 });
 
 // =========================
-// SHOW ERROR
+// TOAST NOTIFICATION
 // =========================
 
 function showToast(message, type) {
