@@ -6,6 +6,7 @@
     <title>My Profile | ServiQuick</title>
 
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/user-profile.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
@@ -24,6 +25,276 @@
     </style>
 </head>
 <body>
+
+    <div id="addressModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="addr-header">
+
+            <span onclick="closeAddressModal()"
+                  style="cursor:pointer;font-size:24px;color:#ee4d2d;margin-right:15px;">
+                &larr;
+            </span>
+
+            <h3>Add Service Address</h3>
+
+            <span id="addr-loader"
+                  style="display:none;margin-left:10px;">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="addr-body">
+
+            <!-- LEFT -->
+
+            <div class="addr-column">
+
+                <span class="addr-section-title">
+                    Contact Information
+                </span>
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Address Label (Optional)
+                    </span>
+
+                    <input
+                        type="text"
+                        id="addr_label"
+                        class="addr-input"
+                        placeholder="Example: Home">
+
+                </div>
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Full Name
+                    </span>
+
+                    <input
+                        type="text"
+                        id="addr_name"
+                        class="addr-input"
+                        placeholder="Juan Dela Cruz">
+
+                </div>
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Phone Number
+                    </span>
+
+                    <input
+                        type="text"
+                        id="addr_phone"
+                        class="addr-input"
+                        placeholder="09XXXXXXXXX">
+
+                </div>
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Postal Code
+                    </span>
+
+                    <input
+type="text"
+id="addr_postal"
+class="addr-input"
+placeholder="Postal Code (Optional)">
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="addr-column">
+
+                <span class="addr-section-title">
+                    Location Details
+                </span>
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Province
+                    </span>
+
+                    <select
+                        id="addr_province"
+                        class="addr-select">
+
+                        <option value="">
+                            Select Province
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Region
+                    </span>
+
+                    <input
+                        type="text"
+                        id="addr_region"
+                        class="addr-input"
+                        readonly>
+
+                </div>
+
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Municipality / City
+                    </span>
+
+                    <select
+                        id="addr_city"
+                        class="addr-select"
+                        disabled>
+
+                        <option value="">
+                            Select Municipality
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Barangay
+                    </span>
+
+                    <select
+                        id="addr_brgy"
+                        class="addr-select"
+                        disabled>
+
+                        <option value="">
+                            Select Barangay
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="addr-group">
+
+                    <span class="addr-label">
+                        Street / House No.
+                    </span>
+
+                    <input
+                        type="text"
+                        id="addr_street"
+                        class="addr-input"
+                        placeholder="House No., Street Name">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="addr-footer">
+
+            <button
+                class="addr-btn btn-cancel"
+                onclick="closeAddressModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                id="addr_submit_btn"
+                class="addr-btn addr-submit"
+                onclick="saveAddress()"
+                disabled>
+
+                Save Address
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="addressManagerModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="addr-header">
+
+            <h3>My Saved Address</h3>
+
+            <button
+                type="button"
+                onclick="closeAddressManager()"
+                style="background:none;border:none;font-size:24px;cursor:pointer;">
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="addressList"
+            style="padding:20px;max-height:450px;overflow-y:auto;">
+
+            <div class="empty-address">
+
+                No saved address.
+
+            </div>
+
+        </div>
+
+        <div class="addr-footer">
+
+            <button
+                class="addr-btn btn-cancel"
+                onclick="closeAddressManager()">
+
+                Close
+
+            </button>
+
+            <button
+                class="addr-btn addr-submit enabled"
+                onclick="openAddAddressForm()">
+
+                + Add New Address
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <div class="layout">
 
@@ -91,10 +362,7 @@
                         <span id="display-phone">Loading...</span>
                     </p>
 
-                    <p style="font-size:13px;color:#6b7280;">
-                        <strong>Address:</strong>
-                        <span id="display-address">Loading...</span>
-                    </p>
+                    
 
                 </div>
 
@@ -169,27 +437,35 @@
 
                     </div>
 
-                    <div class="info-group">
+                    <div class="section-title">
+    📍 Address
+</div>
 
-                        <label>Address</label>
+<div class="address-manager-card">
 
-                        <input
-                            type="text"
-                            id="address"
-                            name="address">
+    <div class="address-info">
 
-                    </div>
+        <h4>Manage Your Service Address</h4>
 
-                    <div class="info-group">
+        <p>
+            Add multiple address and choose the one you want
+            whenever you book a service.
+        </p>
 
-                        <label>Bio</label>
+    </div>
 
-                        <textarea
-                            id="bio"
-                            name="bio"
-                            rows="3"></textarea>
+    <button
+        type="button"
+        class="btn-save"
+        onclick="openAddressManager()">
 
-                    </div>
+        Manage Address
+
+    </button>
+
+</div>
+
+</div>
 
                     <button
                         type="submit"
@@ -210,7 +486,10 @@
 
 </div>
 
+
+
 <script src="../assets/js/user-profile.js"></script>
+
 
 </body>
 </html>
