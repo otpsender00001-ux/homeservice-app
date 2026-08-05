@@ -1,0 +1,8 @@
+.badge-red{
+    background:#fee2e2;
+    color:#dc2626;
+    padding:6px 14px;
+    border-radius:999px;
+    display:inline-block;
+    font-weight:800;
+}

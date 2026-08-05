@@ -1,4 +1,5 @@
 let chatInterval = null; 
+let cancelBookingId = null;
 let currentChatBookingId = null;
 let lastMessageCount = 0;
 
@@ -59,13 +60,21 @@ async function loadBookings() {
 
             // Lalabas lang ang Cancel button kapag pending o accepted pa lang ang booking
             if (b.status === 'pending' || b.status === 'accepted') {
-                cancelBtn = `<button onclick="cancelBooking(${b.id})" class="btn-cancel" style="background:#dc3545; color:#fff; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; margin-top:5px; font-size:12px;"><i class="fas fa-times"></i> Cancel Booking</button>`;
+                cancelBtn = `
+<button onclick="openCancelModal(${b.id})"
+class="btn-cancel">
+❌ Cancel Booking
+</button>`;
             }
             
             if (b.status === 'in_progress') {
-                actionButton = `${chatBtn} <br> <a href="user-track-tech.html?id=${b.id}" class="btn-track"><i class="fas fa-map-marker-alt"></i> Track Tech</a>`;
+                actionButton = `
+${chatBtn}
+<a href="user-track-tech.html?id=${b.id}" class="btn-track">
+    <i class="fas fa-map-marker-alt"></i> Track Tech
+</a>`;
             } else if (b.status === 'accepted') {
-                actionButton = `${chatBtn} <br> ${cancelBtn}`;
+                actionButton = `${chatBtn}${cancelBtn}`;
             } else if (b.status === 'pending') {
                 actionButton = cancelBtn; // Cancel button lang ang ipapakita kung pending
             } else if (b.status === 'completed') {
@@ -102,9 +111,9 @@ async function loadBookings() {
                             <i class="fas fa-user-cog"></i> Tech: <b>${techDisplayName}</b>
                         </small>
                     </div>
-                    <div style="text-align: right;">
-                        ${actionButton}
-                    </div>
+                    <div class="booking-actions">
+    ${actionButton}
+</div>
                 </div>
             `;
         });
@@ -118,8 +127,59 @@ async function loadBookings() {
 /* =====================
 ❌ CANCEL BOOKING LOGIC (BAGONG DAGDAG)
 ===================== */
+function openCancelModal(id){
+    cancelBookingId = id;
+    document.getElementById("cancelModal").style.display = "flex";
+}
+
+function closeCancelModal(){
+    cancelBookingId = null;
+    document.getElementById("cancelModal").style.display = "none";
+}
+
+async function confirmCancelBooking() {
+
+    const formData = new FormData();
+    formData.append("booking_id", cancelBookingId);
+
+    try{
+
+        const res = await fetch(
+            "../backend/bookings/cancel_booking.php",
+            {
+                method:"POST",
+                body:formData
+            }
+        );
+
+        const data = await res.json();
+
+        if(data.success){
+
+            closeCancelModal();
+
+            alert("✅ Booking cancelled successfully.");
+
+            loadBookings();
+
+        }else{
+
+            alert(data.error);
+
+        }
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Network Error.");
+
+    }
+
+}
+
 async function cancelBooking(bookingId) {
-    if (!confirm("Are you sure you want to cancel this booking? This action cannot be undone.")) return;
+    
 
     const formData = new FormData();
     formData.append('booking_id', bookingId);

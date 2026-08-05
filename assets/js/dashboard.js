@@ -1,5 +1,42 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     fetchStats();
+
+    const logoutBtn = document.getElementById("logout-btn");
+const logoutModal = document.getElementById("logout-modal");
+
+const cancelLogout = document.getElementById("cancel-logout");
+const confirmLogout = document.getElementById("confirm-logout");
+
+logoutBtn.addEventListener("click", function(e){
+    e.preventDefault();
+
+    console.log("Logout button clicked!");
+
+    logoutModal.classList.add("show");
+});
+
+cancelLogout.addEventListener("click", function(){
+    logoutModal.classList.remove("show");
+});
+
+confirmLogout.addEventListener("click", function () {
+
+    confirmLogout.disabled = true;
+    cancelLogout.disabled = true;
+
+    confirmLogout.innerHTML = `
+        <span class="spinner"></span>
+        Logging out...
+    `;
+
+    setTimeout(() => {
+        window.location.href = "../backend/auth/logout.php";
+    }, 1200);
+});
+
+// Close when clicking outside the popup
+
 
     // Auto-compute kapag binago mo ang number sa textbox
     const laborInput = document.getElementById('labor-percentage');
@@ -112,4 +149,5 @@ function formatDate(dateStr) {
 function capitalize(str) {
     if(!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1).replace('_', ' ');
-}
+}  
+

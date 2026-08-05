@@ -237,6 +237,12 @@
 
 }
 
+#loadingOverlay .loader-card img{
+    width: 300px !important;
+    height: auto;
+    margin-bottom: 20px;
+}
+
 .loader-card{
 
     width:360px;
@@ -247,13 +253,7 @@
 
 }
 
-.loader-card img{
 
-    width:90px;
-
-    margin-bottom:20px;
-
-}
 
 .loader-card h2{
 
@@ -301,6 +301,17 @@
 
     animation:loadingBar 2s linear forwards;
 
+}
+
+.loader-logo{
+    width:120px;
+    height:auto;
+    margin-bottom:15px;
+}
+
+.loader-gif{
+    width:90px;
+    margin-bottom:15px;
 }
 
 @keyframes loadingBar{
