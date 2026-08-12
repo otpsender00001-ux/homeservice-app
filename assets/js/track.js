@@ -11,17 +11,78 @@ let routeLine = null;
 let allTechsCache = []; // Cache para sa modal list
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    // =========================
+    // LOGOUT MODAL
+    // =========================
+
+    const logoutBtn = document.getElementById("logout-btn");
+    const logoutModal = document.getElementById("logout-modal");
+    const cancelLogout = document.getElementById("cancel-logout");
+    const confirmLogout = document.getElementById("confirm-logout");
+
+    if (logoutBtn && logoutModal) {
+
+        logoutBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            console.log("Logout button clicked!");
+
+            logoutModal.classList.add("show");
+        });
+
+        cancelLogout.addEventListener("click", function() {
+            logoutModal.classList.remove("show");
+        });
+
+        confirmLogout.addEventListener("click", function() {
+
+            confirmLogout.disabled = true;
+            cancelLogout.disabled = true;
+
+            confirmLogout.innerHTML = `
+                <span class="spinner"></span>
+                Logging out...
+            `;
+
+            setTimeout(() => {
+                window.location.href = "../backend/auth/logout.php";
+            }, 1200);
+        });
+
+        // Click outside the logout box
+        logoutModal.addEventListener("click", function(e) {
+            if (e.target === logoutModal) {
+                logoutModal.classList.remove("show");
+            }
+        });
+    }
+
+
+    // =========================
+    // TRACKING INITIALIZATION
+    // =========================
+
     initMap();
 
-    // 🔥 SEARCH LOGIC: Automatic Focus kapag nag-search
-    document.getElementById('search-tech').addEventListener('input', function() {
-        fetchTechnicianLocations(true); 
-    });
 
+    // 🔥 SEARCH LOGIC
+    const searchTech = document.getElementById('search-tech');
+
+    if (searchTech) {
+        searchTech.addEventListener('input', function() {
+            fetchTechnicianLocations(true);
+        });
+    }
+
+
+    // 📍 MY LOCATION BUTTON
     const locateBtn = document.getElementById('my-location-btn');
+
     if (locateBtn) {
         locateBtn.addEventListener('click', locateUser);
     }
+
 });
 
 function initMap() {

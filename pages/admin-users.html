@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users | ServiQuick</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/track-tech.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -34,7 +35,9 @@
             <a href="admin-messages.html">💬 Inbox</a>
             
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+            <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
+    🚪 Logout
+</a>
         </nav>
 
         <script>
@@ -122,6 +125,34 @@
             </div>
         </form>
     </div>
+</div>
+
+<!-- Logout Modal -->
+<div id="logout-modal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h2>Logout</h2>
+
+        <p>
+            Are you sure you want to log out of your
+            <strong>ServiQuick</strong> account?
+        </p>
+
+        <div class="logout-buttons">
+
+            <button id="cancel-logout" class="btn-no">
+                No
+            </button>
+
+            <button id="confirm-logout" class="btn-yes">
+                Yes
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script src="../assets/js/admin-users.js"></script>

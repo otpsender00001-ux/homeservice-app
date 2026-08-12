@@ -243,8 +243,9 @@
         
         <a href="user-profile.html">👤 My Profile</a>
         <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-        <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
-    </nav>
+        <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
+    🚪 Logout
+</a>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -271,6 +272,33 @@
         </div>
         <div id="services-list" class="services-grid"></div>
     </main>
+</div>
+
+<div id="logout-modal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h2>Logout</h2>
+
+        <p>
+            Are you sure you want to log out of your
+            <strong>ServiQuick</strong> account?
+        </p>
+
+        <div class="logout-buttons">
+
+            <button id="cancel-logout" class="btn-no">
+                No
+            </button>
+
+            <button id="confirm-logout" class="btn-yes">
+                Yes
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script src="../assets/js/user-services.js"></script>

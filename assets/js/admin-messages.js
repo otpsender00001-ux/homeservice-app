@@ -4,6 +4,51 @@ let chatInterval = null;
 let lastMessageCount = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const logoutBtn = document.getElementById("logout-btn");
+    const logoutModal = document.getElementById("logout-modal");
+
+    const cancelLogout = document.getElementById("cancel-logout");
+    const confirmLogout = document.getElementById("confirm-logout");
+
+    if (logoutBtn && logoutModal) {
+
+        logoutBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            console.log("Logout button clicked!");
+
+            logoutModal.classList.add("show");
+        });
+
+        cancelLogout.addEventListener("click", function() {
+            logoutModal.classList.remove("show");
+        });
+
+        confirmLogout.addEventListener("click", function() {
+
+            confirmLogout.disabled = true;
+            cancelLogout.disabled = true;
+
+            confirmLogout.innerHTML = `
+                <span class="spinner"></span>
+                Logging out...
+            `;
+
+            setTimeout(() => {
+                window.location.href = "../backend/auth/logout.php";
+            }, 1200);
+
+        });
+
+        // Close when clicking outside the modal
+        logoutModal.addEventListener("click", function(e) {
+            if (e.target === logoutModal) {
+                logoutModal.classList.remove("show");
+            }
+        });
+    }
+    
     loadContacts();
     // Auto refresh contacts list every 5 seconds
     setInterval(loadContacts, 5000); 
