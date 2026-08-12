@@ -1,10 +1,15 @@
 let adminChatInterval = null;
 let adminLastMessageCount = 0;
 
+let notifications = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     loadUser();
     loadDashboard();
     setInterval(loadDashboard, 3000);
+    loadNotifications();
+
+    setInterval(loadNotifications, 5000);
 
     // =======================
 // LOGOUT MODAL
@@ -102,13 +107,26 @@ if (confirmLogout) {
 
 async function loadUser() {
     try {
-        const res = await fetch('../backend/users/get_current_user.php');
+        const res = await fetch('../backend/users/get_profile.php');
+
         const user = await res.json();
-        if (user.full_name) {
-            const firstName = user.full_name.split(" ")[0];
-            document.getElementById('welcome-text').innerText = `Hi ${firstName} 👋`;
+
+        console.log("Profile response:", user);
+
+        if (user.status === "success" && user.data && user.data.full_name) {
+
+            const firstName = user.data.full_name.trim().split(" ")[0];
+
+            document.getElementById('welcome-text').innerText =
+                `Hi ${firstName} 👋`;
+
+        } else {
+            console.warn("User name not found:", user);
         }
-    } catch (e) { console.error(e); }
+
+    } catch (e) {
+        console.error("Error loading user:", e);
+    }
 }
 
 async function loadDashboard() {
@@ -193,4 +211,285 @@ async function loadAdminMessages() {
             adminLastMessageCount = messages.length;
         }
     } catch(e) { console.error(e); }
+}
+
+// ========================================
+// LOAD NOTIFICATIONS
+// ========================================
+
+async function loadNotifications() {
+
+    try {
+
+        const response = await fetch(
+            '../backend/notifications/get_notifications.php'
+        );
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+            console.warn('Unable to load notifications.');
+            return;
+        }
+
+
+        notifications = data.notifications || [];
+
+
+        updateNotificationCount();
+
+        renderNotifications();
+
+
+    } catch (error) {
+
+        console.error(
+            'Notification Error:',
+            error
+        );
+
+    }
+}
+
+// ========================================
+// UPDATE RED NOTIFICATION NUMBER
+// ========================================
+
+function updateNotificationCount() {
+
+    const countElement =
+        document.getElementById('notification-count');
+
+
+    if (!countElement) return;
+
+
+    const unreadCount =
+        notifications.filter(
+            notification =>
+                Number(notification.is_read) === 0
+        ).length;
+
+
+    if (unreadCount > 0) {
+
+        countElement.innerText =
+            unreadCount > 99
+                ? '99+'
+                : unreadCount;
+
+        countElement.style.display =
+            'flex';
+
+    } else {
+
+        countElement.style.display =
+            'none';
+
+    }
+}
+
+// ========================================
+// DISPLAY NOTIFICATIONS
+// ========================================
+
+function renderNotifications() {
+
+    const list =
+        document.getElementById(
+            'notification-list'
+        );
+
+
+    if (!list) return;
+
+
+    if (notifications.length === 0) {
+
+        list.innerHTML = `
+            <div class="notification-empty">
+                No notifications
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML = '';
+
+
+    notifications.forEach(notification => {
+
+        const isUnread =
+            Number(notification.is_read) === 0;
+
+
+        const item =
+            document.createElement('div');
+
+
+        item.className =
+            `notification-item
+             ${notification.type}
+             ${isUnread ? 'unread' : ''}`;
+
+
+        item.innerHTML = `
+
+            <div class="notification-title">
+
+                ${notification.type === 'accepted'
+                    ? '🟢'
+                    : '🔴'}
+
+                ${escapeHtml(notification.title)}
+
+            </div>
+
+
+            <div class="notification-message">
+
+                ${escapeHtml(notification.message)}
+
+            </div>
+
+
+            <div class="notification-time">
+
+                ${formatNotificationTime(
+                    notification.created_at
+                )}
+
+            </div>
+
+        `;
+
+
+        item.addEventListener(
+            'click',
+            () => {
+
+                handleNotificationClick(
+                    notification
+                );
+
+            }
+        );
+
+
+        list.appendChild(item);
+
+    });
+}
+
+// ========================================
+// TOGGLE NOTIFICATION PANEL
+// ========================================
+
+function toggleNotifications() {
+
+    const panel =
+        document.getElementById(
+            'notification-panel'
+        );
+
+
+    if (!panel) return;
+
+
+    panel.classList.toggle('show');
+
+}
+
+// ========================================
+// CLICK NOTIFICATION
+// ========================================
+
+async function handleNotificationClick(notification) {
+
+    // Mark as read first
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        'notification_id',
+        notification.id
+    );
+
+
+    try {
+
+        await fetch(
+            '../backend/notifications/mark_as_read.php',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Mark notification error:',
+            error
+        );
+
+    }
+
+
+    // Go to the specific booking
+
+    window.location.href =
+        `user-bookings.html?booking_id=${notification.booking_id}`;
+}
+
+// ========================================
+// FORMAT NOTIFICATION TIME
+// ========================================
+
+function formatNotificationTime(dateString) {
+
+    if (!dateString) return '';
+
+
+    const date =
+        new Date(
+            dateString.replace(' ', 'T')
+        );
+
+
+    if (isNaN(date.getTime())) {
+        return dateString;
+    }
+
+
+    return date.toLocaleString(
+        'en-US',
+        {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+        }
+    );
+}
+
+
+// ========================================
+// SECURITY HELPER
+// ========================================
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement('div');
+
+    div.textContent =
+        value ?? '';
+
+    return div.innerHTML;
 }

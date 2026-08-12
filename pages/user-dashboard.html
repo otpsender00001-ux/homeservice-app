@@ -58,7 +58,7 @@
         <a href="user-profile.html">👤 My Profile</a>
         <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
         <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
-    🚪 Logout
+     Logout
 </a>
     </nav>
 
@@ -83,8 +83,56 @@
 <main class="main">
 
 <div class="header">
-<h2 id="welcome-text">Hi User 👋</h2>
-<p id="sub-text">Loading your service...</p>
+
+    <h2 id="welcome-text">Hi 👋</h2>
+
+    <!-- NOTIFICATION BELL -->
+    <div class="notification-wrapper">
+
+        <button
+            type="button"
+            id="notification-btn"
+            class="notification-btn"
+            onclick="toggleNotifications()"
+        >
+            🔔
+
+            <span
+                id="notification-count"
+                class="notification-count"
+                style="display: none;"
+            >
+                0
+            </span>
+        </button>
+
+
+        <!-- NOTIFICATION DROPDOWN -->
+        <div
+            id="notification-panel"
+            class="notification-panel"
+        >
+
+            <div class="notification-header">
+                <strong>Notifications</strong>
+            </div>
+
+
+            <div
+                id="notification-list"
+                class="notification-list"
+            >
+
+                <div class="notification-empty">
+                    No notifications
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <div class="cards">

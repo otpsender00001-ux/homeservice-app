@@ -554,7 +554,7 @@ async function loadServices() {
 
             <div class="service-bookings">
                 ${totalBooked}
-                ${totalBooked == 1 ? 'Booking' : 'Bookings'}
+                ${totalBooked == 1 ? 'Booking' : 'Completed Jobs'}
             </div>
 
 

@@ -118,7 +118,7 @@ async function loadProfileData() {
             const ratingDisplay = document.getElementById('display-rating');
             if(ratingDisplay) {
                 const stars = parseFloat(data.avg_rating) > 0 ? data.avg_rating : '0.0';
-                ratingDisplay.innerText = `⭐ ${stars} (${data.review_count} reviews)`;
+                ratingDisplay.innerText = ` ${stars} (${data.review_count} reviews)`;
             }
 
             // Kung may profile picture

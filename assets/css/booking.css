@@ -114,3 +114,103 @@
     background:#dc2626;
     transform:translateY(-2px);
 }
+
+/* =========================
+   BOOKING ACTION BUTTONS
+========================= */
+
+.booking-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+}
+
+.btn-accept,
+.btn-cancel-booking {
+    width: 90px;
+    padding: 7px 10px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-accept {
+    background: #28a745;
+}
+
+.btn-accept:hover {
+    background: #218838;
+}
+
+.btn-cancel-booking {
+    background: #dc3545;
+}
+
+.btn-cancel-booking:hover {
+    background: #c82333;
+}
+
+
+/* =========================
+   CANCEL CONFIRMATION MODAL
+========================= */
+
+.cancel-modal-content {
+    background: white;
+    width: 90%;
+    max-width: 380px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.cancel-modal-content h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.cancel-modal-content p {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.cancel-modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-no-cancel,
+.btn-yes-cancel {
+    flex: 1;
+    padding: 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-no-cancel {
+    background: #f1f1f1;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-yes-cancel {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-no-cancel:hover {
+    background: #e5e5e5;
+}
+
+.btn-yes-cancel:hover {
+    background: #c82333;
+}

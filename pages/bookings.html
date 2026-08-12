@@ -50,7 +50,7 @@
             
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
             <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
-    🚪 Logout
+     Logout
 </a>
         </nav>
 
@@ -128,11 +128,93 @@
                 <div style="padding: 10px; color: gray; text-align: center; font-size: 13px;">Loading specialists...</div>
             </div>
 
-            <button type="submit" id="btn-confirm-assign" class="btn-confirm" disabled>Confirm Assignment</button>
-            <button type="button" class="btn-danger" onclick="cancelBooking()">🚨 Cancel This Booking</button>
-            <button type="button" class="btn-cancel" onclick="closeModal()">Close</button>
+            <button
+    type="submit"
+    id="btn-confirm-assign"
+    class="btn-confirm"
+    disabled>
+    Confirm Assignment
+</button>
+
+<button
+    type="button"
+    class="btn-cancel"
+    onclick="closeModal()">
+    Close
+</button>
         </form>
     </div>
+</div>
+
+<!-- =========================
+     CANCEL BOOKING MODAL
+========================= -->
+
+<!-- =========================
+     CANCEL BOOKING MODAL
+========================= -->
+
+<div id="cancelBookingModal" class="modal">
+
+    <div class="cancel-modal-content">
+
+        <h3>Cancel Booking?</h3>
+
+        <p>
+            Are you sure you want to cancel this booking?
+        </p>
+
+        <!-- Cancellation Reason -->
+        <label
+            for="cancel-reason"
+            style="
+                display:block;
+                font-size:13px;
+                font-weight:600;
+                margin-bottom:6px;
+                color:#333;
+            ">
+            Reason for cancellation
+        </label>
+
+        <textarea
+            id="cancel-reason"
+            placeholder="Enter the reason for cancelling this booking..."
+            rows="4"
+            style="
+                width:100%;
+                padding:10px;
+                border:1px solid #ddd;
+                border-radius:8px;
+                resize:vertical;
+                box-sizing:border-box;
+                font-family:inherit;
+                font-size:14px;
+                outline:none;
+                margin-bottom:15px;
+            "
+        ></textarea>
+
+        <div class="cancel-modal-buttons">
+
+            <button
+                type="button"
+                class="btn-no-cancel"
+                onclick="closeCancelModal()">
+                No
+            </button>
+
+            <button
+                type="button"
+                class="btn-yes-cancel"
+                onclick="confirmCancelBooking()">
+                Yes, Cancel
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
 <!-- Logout Modal -->

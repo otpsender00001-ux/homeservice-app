@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Technician Jobs | ServiQuick</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/track-tech.css">
+    <link rel="stylesheet" href="../assets/css/tech-jobs.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         .action-btn { border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 14px; transition: 0.3s; width: 100%; margin-top: 10px; }
@@ -73,7 +73,7 @@
             
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
             <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
-    🚪 Logout
+     Logout
 </a>
         </nav>
 
@@ -131,32 +131,489 @@
     </div>
 </div>
 
-<div id="logout-modal" class="logout-modal">
+<!-- =====================================================
+     JOB COMPLETION MODAL
+===================================================== -->
 
-    <div class="logout-box">
+<!-- =========================================================
+     🔧 SERVICE COMPLETION MODAL
+========================================================= -->
 
-        <h2>Logout</h2>
+<div id="completionModal" class="completion-modal">
 
-        <p>
-            Are you sure you want to log out of your
-            <strong>ServiQuick</strong> account?
-        </p>
+    <div class="completion-content">
 
-        <div class="logout-buttons">
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
-            <button id="cancel-logout" class="btn-no">
-                No
-            </button>
+        <div class="completion-header">
 
-            <button id="confirm-logout" class="btn-yes">
-                Yes
+            <div class="completion-header-text">
+                <h2>🔧 Service Completion Report</h2>
+
+                <p>
+                    Provide the details of the work completed before finishing the job.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="completion-close"
+                onclick="closeCompletionModal()"
+                aria-label="Close"
+            >
+                &times;
             </button>
 
         </div>
 
+
+        <!-- =====================================================
+             FORM
+        ====================================================== -->
+
+        <form id="completionForm">
+
+            <!-- BOOKING ID -->
+            <input
+                type="hidden"
+                id="completion-booking-id"
+                name="booking_id"
+            >
+
+
+            <!-- =================================================
+                 🔍 PROBLEM FOUND
+            ================================================= -->
+
+            <div class="completion-section">
+
+                <div class="completion-section-title">
+                    🔍 Problem Found
+                </div>
+
+                <textarea
+                    id="problem-found"
+                    name="problem_found"
+                    class="completion-textarea"
+                    placeholder="Describe the problem you found..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- =================================================
+                 🛠️ WORK DONE
+            ================================================= -->
+
+            <div class="completion-section">
+
+                <div class="completion-section-title">
+                    🛠️ Work Done
+                </div>
+
+                <textarea
+                    id="work-done"
+                    name="work_done"
+                    class="completion-textarea"
+                    placeholder="Describe what you repaired, cleaned, adjusted, tested, etc..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- =================================================
+                 ⚡ ELECTRICAL COMPONENTS
+            ================================================= -->
+
+            <div class="completion-section">
+
+                <div class="completion-section-title">
+                    ⚡ Electrical Components Checked / Repaired
+                </div>
+
+                <div class="component-grid">
+
+                    <!-- Capacitor -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="electrical_component"
+                            value="Capacitor"
+                        >
+
+                        <span>Capacitor</span>
+
+                    </label>
+
+
+                    <!-- Contactor -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="electrical_component"
+                            value="Contactor"
+                        >
+
+                        <span>Contactor</span>
+
+                    </label>
+
+
+                    <!-- Wiring -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="electrical_component"
+                            value="Wiring"
+                        >
+
+                        <span>Wiring</span>
+
+                    </label>
+
+
+                    <!-- PCB -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="electrical_component"
+                            value="PCB / Control Board"
+                        >
+
+                        <span>PCB / Control Board</span>
+
+                    </label>
+
+
+                    <!-- Thermostat -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="electrical_component"
+                            value="Thermostat"
+                        >
+
+                        <span>Thermostat</span>
+
+                    </label>
+
+
+                    <!-- Other -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="electrical_component"
+                            value="Other Electrical Component"
+                        >
+
+                        <span>Other</span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ⚙️ MECHANICAL COMPONENTS
+            ================================================= -->
+
+            <div class="completion-section">
+
+                <div class="completion-section-title">
+                    ⚙️ Mechanical Components Checked / Repaired
+                </div>
+
+                <div class="component-grid">
+
+                    <!-- Compressor -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="mechanical_component"
+                            value="Compressor"
+                        >
+
+                        <span>Compressor</span>
+
+                    </label>
+
+
+                    <!-- Fan Motor -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="mechanical_component"
+                            value="Fan Motor"
+                        >
+
+                        <span>Fan Motor</span>
+
+                    </label>
+
+
+                    <!-- Blower -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="mechanical_component"
+                            value="Blower Motor"
+                        >
+
+                        <span>Blower Motor</span>
+
+                    </label>
+
+
+                    <!-- Fan Blade -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="mechanical_component"
+                            value="Fan Blade"
+                        >
+
+                        <span>Fan Blade</span>
+
+                    </label>
+
+
+                    <!-- Bearing -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="mechanical_component"
+                            value="Bearing"
+                        >
+
+                        <span>Bearing</span>
+
+                    </label>
+
+
+                    <!-- Other -->
+                    <label class="component-option">
+
+                        <input
+                            type="checkbox"
+                            name="mechanical_component"
+                            value="Other Mechanical Component"
+                        >
+
+                        <span>Other</span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 🔩 REPLACED PARTS
+            ================================================= -->
+
+            <div class="completion-section">
+
+                <div class="completion-section-title">
+                    🔩 Replaced Parts
+                </div>
+
+                <p class="completion-help-text">
+                    Select a common replacement part to automatically use its estimated price.
+                    You can also add a custom part and enter its cost manually.
+                </p>
+
+
+                <!-- =================================================
+                     DYNAMIC PART CONTAINER
+
+                     JS WILL ADD PART ROWS HERE
+                ================================================= -->
+
+                <div id="replacement-items-container">
+
+                    <!--
+                        Example generated by JavaScript:
+
+                        [ Capacitor ▼ ] [ ₱350.00 ] [ 🗑 ]
+
+                    -->
+
+                </div>
+
+
+                <!-- =================================================
+                     ADD PART BUTTON
+                ================================================= -->
+
+                <button
+                    type="button"
+                    class="add-replacement-btn"
+                    id="add-replacement-btn"
+                >
+                    ➕ Add Replaced Part
+                </button>
+
+
+                <!-- =================================================
+                     TOTAL
+                ================================================= -->
+
+                <div class="replacement-total-box">
+
+                    <div class="replacement-total-label">
+                        <span>💰</span>
+                        <span>Total Replacement Cost</span>
+                    </div>
+
+                    <strong>
+                        ₱<span id="replacement-total">0.00</span>
+                    </strong>
+
+                </div>
+
+
+                <!-- =================================================
+                     HIDDEN VALUES FOR PHP
+                ================================================= -->
+
+                <input
+                    type="hidden"
+                    id="replaced-parts"
+                    name="replaced_parts"
+                    value=""
+                >
+
+                <input
+                    type="hidden"
+                    id="replacement-cost"
+                    name="replacement_cost"
+                    value="0"
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 📷 REPAIR PHOTO
+            ================================================= -->
+
+            <div class="completion-section">
+
+                <div class="completion-section-title">
+                    📷 Repair / Completion Photo
+                </div>
+
+                <p class="completion-help-text">
+                    Upload a photo showing the completed repair or replaced component.
+                </p>
+
+
+                <label
+                    for="completion-photo-input"
+                    class="photo-upload-box"
+                    id="photo-upload-box"
+                >
+
+                    <!-- Upload content -->
+
+                    <div
+                        id="photo-upload-content"
+                        class="photo-upload-content"
+                    >
+
+                        <div class="photo-upload-icon">
+                            📷
+                        </div>
+
+                        <div class="photo-upload-text">
+
+                            <strong>
+                                Tap to take or select a photo
+                            </strong>
+
+                            <small>
+                                JPG, PNG or WEBP • Max 5MB
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Preview -->
+
+                    <img
+                        id="completion-photo-preview"
+                        class="completion-photo-preview"
+                        src=""
+                        alt="Repair photo preview"
+                    >
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="completion-photo-input"
+                    name="repair_photo"
+                    accept="image/jpeg,image/png,image/webp"
+                    capture="environment"
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================= -->
+
+            <div class="completion-buttons">
+
+                <button
+                    type="button"
+                    class="completion-btn completion-btn-cancel"
+                    id="cancel-completion-btn"
+                    onclick="closeCompletionModal()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="completion-btn completion-btn-submit"
+                    id="submit-completion-btn"
+                >
+                    ✅ Finish Job
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
 
 </div>
+
+
 
 <script src="../assets/js/tech-jobs.js"></script>
 </body>

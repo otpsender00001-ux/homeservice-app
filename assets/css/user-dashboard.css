@@ -125,3 +125,244 @@
         transform: rotate(360deg);
     }
 }
+
+/* =========================
+   NOTIFICATION BELL
+========================= */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* Bell container */
+
+/* =========================
+   NOTIFICATION BELL
+========================= */
+
+.notification-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-btn {
+    position: relative;
+
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    /* Circle background behind the bell */
+    background: #428e22;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 21px;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.notification-btn:hover {
+    transform: scale(1.05);
+}
+
+/* =========================
+   RED NOTIFICATION NUMBER
+========================= */
+
+.notification-count {
+    position: absolute;
+
+    top: -3px;
+    right: -3px;
+
+    min-width: 19px;
+    height: 19px;
+
+    padding: 0 4px;
+
+    background: #ef4444;
+    color: white;
+
+    border-radius: 50%;
+
+    border: 2px solid white;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 1;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   NOTIFICATION PANEL
+========================= */
+
+.notification-panel {
+    display: none;
+
+    position: absolute;
+
+    top: 55px;
+    right: 0;
+
+    width: 340px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.15);
+
+    border: 1px solid #e5e7eb;
+
+    overflow: hidden;
+
+    z-index: 2000;
+}
+
+
+.notification-panel.show {
+    display: block;
+}
+
+
+/* Header */
+
+.notification-header {
+    padding: 15px;
+
+    border-bottom: 1px solid #eee;
+
+    font-size: 15px;
+}
+
+
+/* Notification list */
+
+.notification-list {
+    max-height: 350px;
+
+    overflow-y: auto;
+}
+
+
+/* Individual notification */
+
+.notification-item {
+    padding: 14px 15px;
+
+    border-bottom: 1px solid #f1f1f1;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.notification-item:hover {
+    background: #f8fafc;
+}
+
+
+/* Unread notification */
+
+.notification-item.unread {
+    background: #eff6ff;
+}
+
+
+/* Notification title */
+
+.notification-title {
+    font-weight: 700;
+
+    font-size: 14px;
+
+    margin-bottom: 4px;
+}
+
+
+/* Notification message */
+
+.notification-message {
+    font-size: 13px;
+
+    color: #666;
+
+    line-height: 1.4;
+}
+
+
+/* Time */
+
+.notification-time {
+    font-size: 11px;
+
+    color: #999;
+
+    margin-top: 6px;
+}
+
+
+/* Accepted */
+
+.notification-item.accepted
+.notification-title {
+    color: #16a34a;
+}
+
+
+/* Cancelled */
+
+.notification-item.cancelled
+.notification-title {
+    color: #dc2626;
+}
+
+
+/* Empty */
+
+.notification-empty {
+    padding: 30px 15px;
+
+    text-align: center;
+
+    color: #999;
+
+    font-size: 13px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .notification-panel {
+        position: fixed;
+
+        top: 70px;
+        right: 15px;
+        left: 15px;
+
+        width: auto;
+    }
+
+}

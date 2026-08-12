@@ -119,9 +119,23 @@ async function fetchBookings() {
         }
 
         data.forEach(booking => {
-            const actionBtn = booking.status === 'pending' 
-                ? `<button class="btn-assign" onclick="openAssignModal(${booking.id}, '${booking.service_name}')">Accept / Cancel</button>` 
-                : `<small style="color:gray">Processed</small>`;
+            const actionBtn = booking.status === 'pending'
+    ? `
+        <div class="booking-actions">
+            <button
+                class="btn-accept"
+                onclick="openAssignModal(${booking.id}, '${booking.service_name}')">
+                Accept
+            </button>
+
+            <button
+                class="btn-cancel-booking"
+                onclick="openCancelModal(${booking.id})">
+                Cancel
+            </button>
+        </div>
+      `
+    : `<small style="color:gray">Processed</small>`;
 
             const row = `
                 <tr>
@@ -190,32 +204,179 @@ function closeModal() {
 }
 
 window.onclick = function(event) {
-    const modal = document.getElementById('assignModal');
-    if (event.target == modal) {
+
+    const assignModal = document.getElementById('assignModal');
+    const cancelModal = document.getElementById('cancelBookingModal');
+
+    if (event.target === assignModal) {
         closeModal();
+    }
+
+    if (event.target === cancelModal) {
+        closeCancelModal();
     }
 }
 
 // ✨ DAGDAG: Function para ma-cancel ang booking
-async function cancelBooking() {
-    if(!confirm("Are you sure you want to CANCEL this booking? This action cannot be undone.")) return;
+// =========================
+// CANCEL BOOKING MODAL
+// =========================
 
-    const bookingId = document.getElementById('modal-booking-id').value;
+let cancelBookingId = null;
+
+function openCancelModal(bookingId) {
+
+    cancelBookingId = bookingId;
+
+    // Clear previous reason
+    const reasonInput = document.getElementById('cancel-reason');
+
+    if (reasonInput) {
+        reasonInput.value = '';
+    }
+
+    // Reset buttons
+    const yesButton = document.querySelector('.btn-yes-cancel');
+    const noButton = document.querySelector('.btn-no-cancel');
+
+    if (yesButton) {
+        yesButton.disabled = false;
+        yesButton.innerText = 'Yes, Cancel';
+    }
+
+    if (noButton) {
+        noButton.disabled = false;
+    }
+
+    document.getElementById('cancelBookingModal').style.display = 'flex';
+}
+
+function closeCancelModal() {
+
+    document.getElementById('cancelBookingModal').style.display = 'none';
+
+    const reasonInput = document.getElementById('cancel-reason');
+
+    if (reasonInput) {
+        reasonInput.value = '';
+    }
+
+    cancelBookingId = null;
+}
+
+async function confirmCancelBooking() {
+
+    if (!cancelBookingId) return;
+
+    const bookingId = cancelBookingId;
+
+    const reasonInput = document.getElementById('cancel-reason');
+    const reason = reasonInput ? reasonInput.value.trim() : '';
+
+    // =========================
+    // CHECK REASON
+    // =========================
+
+    if (!reason) {
+
+        alert("Please enter a reason for cancelling this booking.");
+
+        if (reasonInput) {
+            reasonInput.focus();
+        }
+
+        return;
+    }
+
+
+    // =========================
+    // PREPARE FORM DATA
+    // =========================
+
     const formData = new FormData();
+
     formData.append('booking_id', bookingId);
-    formData.append('action', 'cancel'); // Ipasa natin itong action sa backend
+    formData.append('action', 'cancel');
+    formData.append('reason', reason);
+
+
+    // =========================
+    // DISABLE BUTTONS
+    // =========================
+
+    const yesButton = document.querySelector('.btn-yes-cancel');
+    const noButton = document.querySelector('.btn-no-cancel');
+
+    yesButton.disabled = true;
+    noButton.disabled = true;
+
+    yesButton.innerText = 'Cancelling...';
+
+
+    // =========================
+    // SEND TO BACKEND
+    // =========================
 
     try {
-        const resp = await fetch('../backend/bookings/assign_technician.php', { method: 'POST', body: formData });
+
+        const resp = await fetch(
+            '../backend/bookings/assign_technician.php',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
         const res = await resp.json();
-        if(res.success) {
-            alert("Booking has been cancelled.");
-            closeModal();
-            fetchBookings(); 
-        } else {
-            alert("Failed to cancel booking.");
+
+
+        // =========================
+        // SUCCESS
+        // =========================
+
+        if (res.success) {
+
+            closeCancelModal();
+
+            fetchBookings();
+
         }
-    } catch (error) { console.error('Cancel Error:', error); }
+
+        // =========================
+        // ERROR
+        // =========================
+
+        else {
+
+            alert(
+                res.message ||
+                "Failed to cancel booking."
+            );
+
+            yesButton.disabled = false;
+            noButton.disabled = false;
+
+            yesButton.innerText = 'Yes, Cancel';
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            'Cancel Error:',
+            error
+        );
+
+        alert(
+            "Something went wrong while cancelling the booking."
+        );
+
+        yesButton.disabled = false;
+        noButton.disabled = false;
+
+        yesButton.innerText = 'Yes, Cancel';
+    }
 }
 
 const assignForm = document.getElementById('assignForm');
