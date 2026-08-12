@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize Address API
     initAddressAPI();
 
-    
+    setupProfileValidation();
 
 });
 
@@ -15,6 +15,52 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =====================================================
    PROFILE
 ===================================================== */
+function setupProfileValidation() {
+
+    const nameInput = document.getElementById("full_name");
+    const phoneInput = document.getElementById("phone");
+
+
+    // FULL NAME
+    if (nameInput) {
+
+        nameInput.addEventListener("input", function () {
+
+            this.value = this.value.replace(
+                /[^a-zA-Z\s]/g,
+                ""
+            );
+
+        });
+
+    }
+
+
+    // PHONE
+    if (phoneInput) {
+
+        phoneInput.addEventListener("input", function () {
+
+            // Numbers only
+            this.value = this.value.replace(
+                /[^0-9]/g,
+                ""
+            );
+
+
+            // Maximum 11 digits
+            if (this.value.length > 11) {
+
+                this.value =
+                    this.value.substring(0, 11);
+
+            }
+
+        });
+
+    }
+
+}
 
 async function loadProfileData(){
 
@@ -73,6 +119,38 @@ async function saveProfile(e){
 
     saveBtn.disabled = true;
     saveBtn.innerText = "Saving...";
+
+    const fullName =
+    document.getElementById("full_name").value.trim();
+
+const phone =
+    document.getElementById("phone").value.trim();
+
+
+if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+
+    alert(
+        "Full name must contain letters and spaces only."
+    );
+
+    saveBtn.disabled = false;
+    saveBtn.innerText = "Save All Changes";
+
+    return;
+}
+
+
+if (!/^09[0-9]{9}$/.test(phone)) {
+
+    alert(
+        "Phone number must start with 09 and contain exactly 11 digits."
+    );
+
+    saveBtn.disabled = false;
+    saveBtn.innerText = "Save All Changes";
+
+    return;
+}
 
     const formData = new FormData(document.getElementById("profileForm"));
 

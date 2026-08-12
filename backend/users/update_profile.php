@@ -25,6 +25,57 @@ $bio       = trim($_POST['bio'] ?? '');
 
 
 // =============================
+// PROFILE VALIDATION
+// =============================
+
+// Full name
+if ($full_name === '') {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Full name is required."
+    ]);
+
+    exit;
+}
+
+
+// Letters and spaces only
+if (!preg_match("/^[a-zA-Z\s]+$/", $full_name)) {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Full name must contain letters and spaces only."
+    ]);
+
+    exit;
+}
+
+
+// Phone
+if ($phone === '') {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Phone number is required."
+    ]);
+
+    exit;
+}
+
+
+// Exactly 11 digits and starts with 09
+if (!preg_match("/^09[0-9]{9}$/", $phone)) {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Phone number must start with 09 and contain exactly 11 digits."
+    ]);
+
+    exit;
+}
+
+// =============================
 // PROFILE IMAGE UPLOAD
 // =============================
 

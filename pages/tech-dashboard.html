@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technician Dashboard | ServiQuick</title>
 <link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/tech-dashboard.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
     /* --- FLOATING ADMIN CHAT BUTTON --- */
@@ -60,7 +61,9 @@
             <a href="tech-profile.html">👤 Profile</a>
             
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+            <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
+     Logout
+</a>
         </nav>
 
         <script>
@@ -143,6 +146,45 @@
             <button type="submit" class="btn-send">Send</button>
         </form>
     </div>
+</div>
+
+<!-- =======================
+     LOGOUT MODAL
+======================= -->
+
+<div id="logout-modal" class="logout-modal">
+
+    <div class="logout-box">
+
+
+        <h2>Logout?</h2>
+
+        <p>
+            Are you sure you want to log out of your ServiQuick account?
+        </p>
+
+        <div class="logout-buttons">
+
+            <button
+                type="button"
+                id="cancel-logout"
+                class="btn-no"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="confirm-logout"
+                class="btn-yes"
+            >
+                Yes
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script src="../assets/js/tech-dashboard.js"></script>

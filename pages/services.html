@@ -1,126 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services | ServiQuick</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .btn-add { background: #000; color: #fff; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
-        .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items: center; justify-content: center; }
-        .modal-content { background:white; width:90%; max-width:450px; padding:25px; border-radius:12px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; box-sizing: border-box; }
-        
-        /* ✨ DAGDAG NA CSS PARA SA DEACTIVATED SERVICES ✨ */
-        .service-card { transition: 0.3s; }
-        .service-card.inactive { opacity: 0.5; filter: grayscale(100%); background-color: #f9f9f9; }
 
-        /* ✨ MOBILE RESPONSIVE FIX ✨ */
-        @media (max-width: 768px) {
-            .header { display: flex; flex-direction: column; align-items: flex-start; gap: 15px; }
-            .btn-add { width: 100%; text-align: center; margin-bottom: 0; }
-        }
-    </style>
+    <title>Services | ServiQuick</title>
+
+    <!-- GLOBAL CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- SERVICES PAGE CSS -->
+    <link rel="stylesheet" href="../assets/css/services.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
 <div class="layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
     <aside class="sidebar">
+
         <div class="sidebar-header">
             <span class="brand">ServiQuick</span>
             <p class="panel">Admin Panel</p>
         </div>
+
         <nav class="menu" id="admin-menu">
-            <a href="admin-dashboard.html">📊 Dashboard</a> 
-            <a href="bookings.html">📅 Bookings</a> 
-            <a href="services.html">🛠 Services</a> 
-            <a href="track-technicians.html">📍 Track Tech</a> 
+
+            <a href="admin-dashboard.html">📊 Dashboard</a>
+
+            <a href="bookings.html">📅 Bookings</a>
+
+            <a href="services.html">🛠 Services</a>
+
+            <a href="track-technicians.html">📍 Track Tech</a>
+
             <a href="admin-users.html">👥 Users</a>
+
             <a href="admin-messages.html">💬 Inbox</a>
-            
-            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <a href="../backend/auth/logout.php" onclick="return confirm('Are you sure you want to logout?');" style="color: #ef4444; font-weight: bold;">🚪 Logout</a>
+
+            <hr style="border:0; border-top:1px solid #ddd; margin:15px 0;">
+
+            <a
+                href="../backend/auth/logout.php"
+                onclick="return confirm('Are you sure you want to logout?');"
+                style="color:#ef4444; font-weight:bold;"
+            >
+                🚪 Logout
+            </a>
+
         </nav>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                let currentUrl = window.location.pathname.split('/').pop();
-                let links = document.querySelectorAll('#admin-menu a');
-                
-                links.forEach(link => {
-                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
-                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
-                    if (currentUrl === '') currentUrl = 'admin-dashboard.html';
-                    
-                    if (link.getAttribute('href') === currentUrl) {
-                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
-                    }
-                });
-            });
-        </script>
     </aside>
 
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
     <main class="main">
+
         <div class="header">
+
             <div>
                 <h2>Services</h2>
                 <p>Manage available home services</p>
             </div>
-            <button class="btn-add" onclick="openServiceModal()">+ Add New Service</button>
+
+            <button
+                type="button"
+                class="btn-add"
+                onclick="openServiceModal()"
+            >
+                + Add New Service
+            </button>
+
         </div>
 
-        <div class="service-grid" id="services-container">
+
+        <!-- SERVICES -->
+
+        <div
+            class="service-grid"
+            id="services-container"
+        >
             <p>Loading services...</p>
         </div>
+
     </main>
+
 </div>
 
-<div id="serviceModal" class="modal">
-    <div class="modal-content">
-        <h3 id="modal-title">Add Service</h3>
-        <form id="serviceForm" style="margin-top:20px">
-            <input type="hidden" id="service-id">
-            
-            <div class="form-group">
-                <label>Service Name</label>
-                <input type="text" id="service-name" placeholder="e.g. Aircon Cleaning" required>
+
+
+<!-- =====================================================
+     ADD / EDIT SERVICE MODAL
+===================================================== -->
+
+<div id="serviceModal" class="service-modal">
+
+    <div class="service-modal-content">
+
+
+        <!-- =========================
+             MODAL HEADER
+        ========================== -->
+
+        <div class="service-modal-header">
+
+            <div>
+                <h3 id="modal-title">Add New Service</h3>
+
+                <p>
+                    Create or update the information of this home service.
+                </p>
             </div>
 
-            <div class="form-group">
-                <label>Service Photo</label>
-                <input type="file" id="service-image" accept="image/*">
+            <button
+                type="button"
+                class="service-modal-close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             FORM
+        ========================== -->
+
+        <form id="serviceForm">
+
+            <input
+                type="hidden"
+                id="service-id"
+            >
+
+
+            <!-- =========================
+                 MODAL BODY
+            ========================== -->
+
+            <div class="service-modal-body">
+
+
+                <!-- LEFT SIDE -->
+
+                <div class="service-form-section">
+
+                    <h4 class="service-form-section-title">
+                        Service Information
+                    </h4>
+
+
+                    <!-- SERVICE NAME -->
+
+                    <div class="form-group">
+
+                        <label for="service-name">
+                            Service Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="service-name"
+                            placeholder="e.g. Aircon Cleaning"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group">
+
+                        <label for="service-desc">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="service-desc"
+                            rows="4"
+                            placeholder="Describe the service..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="form-group">
+
+                        <label for="service-price">
+                            Price
+                        </label>
+
+                        <div class="price-input-wrapper">
+
+                            <span>₱</span>
+
+                            <input
+                                type="number"
+                                id="service-price"
+                                placeholder="750"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="service-form-section">
+
+                    <h4 class="service-form-section-title">
+                        Service Settings
+                    </h4>
+
+
+                    <!-- IMAGE -->
+
+                    <div class="form-group">
+
+                        <label for="service-image">
+                            Service Photo
+                        </label>
+
+                        <div class="service-image-upload">
+
+                            <div class="service-image-icon">
+                                🖼️
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Upload service photo
+                                </strong>
+
+                                <p>
+                                    JPG, PNG or WEBP
+                                </p>
+
+                            </div>
+
+                            <input
+                                type="file"
+                                id="service-image"
+                                accept="image/*"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label for="service-status">
+                            Status
+                        </label>
+
+                        <select id="service-status">
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="inactive">
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- STATUS INFO -->
+
+                    <div class="service-status-info">
+
+                        <div class="service-status-info-title">
+                            Service Availability
+                        </div>
+
+                        <div class="service-status-info-text">
+
+                            Active services are available for customers
+                            to book. Inactive services will not be available
+                            for new bookings.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <label>Description</label>
-                <textarea id="service-desc" rows="3" placeholder="Describe the service..." required></textarea>
+
+
+            <!-- =========================
+                 MODAL FOOTER
+            ========================== -->
+
+            <div class="service-modal-footer">
+
+                <button
+                    type="button"
+                    class="service-modal-btn service-cancel-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="service-modal-btn service-save-btn"
+                >
+                    Save Service
+                </button>
+
             </div>
 
-            <div class="form-group">
-                <label>Price (₱)</label>
-                <input type="number" id="service-price" placeholder="750" required>
-            </div>
-
-            <div class="form-group">
-                <label>Status</label>
-                <select id="service-status">
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
-
-            <div style="display:flex; gap:10px; margin-top:20px; flex-wrap: wrap;">
-                <button type="submit" class="btn btn-dark" style="flex:1; min-width: 120px; padding:12px; border-radius:8px">Save Service</button>
-                <button type="button" onclick="closeModal()" style="flex:1; min-width: 120px; background:#eee; border:none; border-radius:8px; cursor:pointer">Cancel</button>
-            </div>
         </form>
+
     </div>
+
 </div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
 
 <script src="../assets/js/services.js"></script>
+
 </body>
 </html>

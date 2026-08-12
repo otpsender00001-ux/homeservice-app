@@ -1,0 +1,1009 @@
+/* =========================================================
+   SERVICES PAGE
+========================================================= */
+
+
+/* =========================
+   SERVICE GRID
+========================= */
+
+.service-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(300px, 1fr));
+
+    gap: 24px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================
+   ADD SERVICE BUTTON
+========================= */
+
+.btn-add {
+    background: #111827;
+
+    color: #fff;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    transition: all 0.2s ease;
+}
+
+.btn-add:hover {
+    background: #000;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ADMIN SERVICE CARD
+========================================================= */
+
+.service-card {
+    background: #fff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #d1d5db;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.09);
+}
+
+
+/* =========================
+   SERVICE IMAGE
+========================= */
+
+.service-card-image {
+    width: 100%;
+
+    height: 190px;
+
+    object-fit: cover;
+
+    display: block;
+
+    background: #f3f4f6;
+}
+
+
+/* =========================
+   SERVICE CARD BODY
+========================= */
+
+.service-card-body {
+    padding: 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+}
+
+
+/* =========================
+   SERVICE ICON
+========================= */
+
+.service-card-icon {
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 15px;
+
+    background: #dbeafe;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 25px;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================
+   SERVICE TITLE
+========================= */
+
+.service-card-title {
+    margin: 0 0 6px;
+
+    color: #111827;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+
+/* =========================
+   INACTIVE LABEL
+========================= */
+
+.service-inactive-label {
+    display: inline-block;
+
+    margin-left: 6px;
+
+    padding: 3px 7px;
+
+    border-radius: 5px;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    vertical-align: middle;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.service-card-description {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 3;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   PRICE
+========================= */
+
+.service-card-price {
+    margin-top: 18px;
+
+    color: #111827;
+
+    font-size: 21px;
+
+    font-weight: 900;
+}
+
+
+/* =========================
+   CARD ACTIONS
+========================= */
+
+.service-card-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+
+/* =========================
+   ACTION BUTTON
+========================= */
+
+.service-action-btn {
+    border: none;
+
+    padding: 10px 15px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.service-action-btn:hover {
+    transform: translateY(-1px);
+}
+
+
+/* EDIT */
+
+.service-edit-btn {
+    background: #111827;
+
+    color: #fff;
+}
+
+.service-edit-btn:hover {
+    background: #000;
+}
+
+
+/* DEACTIVATE */
+
+.service-deactivate-btn {
+    background: #f3f4f6;
+
+    color: #374151;
+}
+
+.service-deactivate-btn:hover {
+    background: #e5e7eb;
+}
+
+
+/* DELETE */
+
+.service-delete-btn {
+    background: #fee2e2;
+
+    color: #dc2626;
+}
+
+.service-delete-btn:hover {
+    background: #fecaca;
+}
+
+
+/* ACTIVATE */
+
+.service-activate-btn {
+    width: 100%;
+
+    background: #dcfce7;
+
+    color: #15803d;
+}
+
+.service-activate-btn:hover {
+    background: #bbf7d0;
+}
+
+
+/* =========================
+   INACTIVE CARD
+========================= */
+
+.service-card.inactive {
+    opacity: 0.65;
+
+    filter: grayscale(70%);
+}
+
+.service-card.inactive:hover {
+    transform: none;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+
+/* =========================================================
+   SERVICE MODAL
+   IMPORTANT:
+   Everything is scoped under #serviceModal
+   so style.css cannot mess with it.
+========================================================= */
+
+#serviceModal.service-modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.60);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 99999;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   MODAL CONTENT
+========================= */
+
+#serviceModal .service-modal-content {
+
+    width: 100%;
+
+    max-width: 820px;
+
+    max-height: 90vh;
+
+    background: #fff;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.22);
+
+    animation: serviceModalOpen 0.22s ease;
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes serviceModalOpen {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(15px)
+            scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+#serviceModal .service-modal-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 25px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background: #fff;
+}
+
+
+#serviceModal .service-modal-header h3 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 21px;
+
+    font-weight: 900;
+}
+
+
+#serviceModal .service-modal-header p {
+
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+#serviceModal .service-modal-close {
+
+    width: 36px;
+
+    height: 36px;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f3f4f6;
+
+    color: #6b7280;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: 0.2s ease;
+}
+
+#serviceModal .service-modal-close:hover {
+
+    background: #e5e7eb;
+
+    color: #111827;
+}
+
+
+/* =========================================================
+   MODAL BODY
+========================================================= */
+
+#serviceModal .service-modal-body {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+    padding: 22px 25px;
+
+    max-height: 58vh;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   FORM SECTION
+========================= */
+
+#serviceModal .service-form-section {
+
+    padding: 18px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    background: #fff;
+}
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+#serviceModal .service-form-section-title {
+
+    margin: 0 0 18px;
+
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    color: #111827;
+
+    font-size: 13px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+#serviceModal .form-group {
+
+    margin-bottom: 16px;
+}
+
+#serviceModal .form-group:last-child {
+
+    margin-bottom: 0;
+}
+
+
+/* =========================
+   LABEL
+========================= */
+
+#serviceModal .form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+#serviceModal .form-group input,
+#serviceModal .form-group textarea,
+#serviceModal .form-group select {
+
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background: #fff;
+
+    color: #111827;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================
+   INPUT FOCUS
+========================= */
+
+#serviceModal .form-group input:focus,
+#serviceModal .form-group textarea:focus,
+#serviceModal .form-group select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =========================
+   TEXTAREA
+========================= */
+
+#serviceModal .form-group textarea {
+
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+#serviceModal .price-input-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    transition: 0.2s ease;
+}
+
+#serviceModal .price-input-wrapper:focus-within {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+#serviceModal .price-input-wrapper span {
+
+    padding-left: 12px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+#serviceModal .price-input-wrapper input {
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    border-radius: 0 !important;
+}
+
+
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
+
+#serviceModal .service-image-upload {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    border: 1px dashed #d1d5db;
+
+    border-radius: 10px;
+
+    background: #f9fafb;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+#serviceModal .service-image-upload:hover {
+
+    border-color: #2563eb;
+
+    background: #eff6ff;
+}
+
+
+#serviceModal .service-image-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #dbeafe;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+
+#serviceModal .service-image-upload strong {
+
+    display: block;
+
+    color: #374151;
+
+    font-size: 12px;
+}
+
+
+#serviceModal .service-image-upload p {
+
+    margin: 3px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+#serviceModal .service-image-upload input[type="file"] {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    opacity: 0;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   STATUS INFO
+========================================================= */
+
+#serviceModal .service-status-info {
+
+    margin-top: 20px;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    border: 1px solid #dbeafe;
+}
+
+
+#serviceModal .service-status-info-title {
+
+    margin-bottom: 4px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+#serviceModal .service-status-info-text {
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+#serviceModal .service-modal-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 16px 25px;
+
+    border-top: 1px solid #e5e7eb;
+
+    background: #f9fafb;
+}
+
+
+/* =========================
+   MODAL BUTTON
+========================= */
+
+#serviceModal .service-modal-btn {
+
+    min-width: 130px;
+
+    padding: 11px 20px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+#serviceModal .service-save-btn {
+
+    background: #2563eb;
+
+    color: #fff;
+}
+
+#serviceModal .service-save-btn:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   CANCEL
+========================= */
+
+#serviceModal .service-cancel-btn {
+
+    background: #e5e7eb;
+
+    color: #374151;
+}
+
+#serviceModal .service-cancel-btn:hover {
+
+    background: #d1d5db;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .service-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+    }
+
+
+    #serviceModal.service-modal {
+
+        padding: 12px;
+    }
+
+
+    #serviceModal .service-modal-content {
+
+        max-height: 94vh;
+
+        border-radius: 14px;
+    }
+
+
+    #serviceModal .service-modal-body {
+
+        grid-template-columns: 1fr;
+
+        max-height: 65vh;
+
+        padding: 15px;
+    }
+
+
+    #serviceModal .service-modal-header {
+
+        padding: 17px;
+    }
+
+
+    #serviceModal .service-modal-footer {
+
+        flex-direction: column-reverse;
+
+        padding: 15px;
+    }
+
+
+    #serviceModal .service-modal-btn {
+
+        width: 100%;
+    }
+
+
+    .service-card-actions {
+
+        flex-direction: column;
+    }
+
+
+    .service-action-btn {
+
+        width: 100%;
+    }
+}

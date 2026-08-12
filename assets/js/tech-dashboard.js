@@ -5,6 +5,70 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial Load: Daily/Today ang default
     fetchTechStats('daily');
 
+    // =======================
+// LOGOUT MODAL
+// =======================
+
+const logoutBtn =
+    document.getElementById("logout-btn");
+
+const logoutModal =
+    document.getElementById("logout-modal");
+
+const cancelLogout =
+    document.getElementById("cancel-logout");
+
+const confirmLogout =
+    document.getElementById("confirm-logout");
+
+
+if (logoutBtn && logoutModal) {
+
+    logoutBtn.addEventListener("click", function(e) {
+
+        e.preventDefault();
+
+        logoutModal.classList.add("show");
+
+    });
+
+}
+
+
+if (cancelLogout) {
+
+    cancelLogout.addEventListener("click", function() {
+
+        logoutModal.classList.remove("show");
+
+    });
+
+}
+
+
+if (confirmLogout) {
+
+    confirmLogout.addEventListener("click", function() {
+
+        confirmLogout.disabled = true;
+        cancelLogout.disabled = true;
+
+        confirmLogout.innerHTML = `
+            <span class="spinner"></span>
+            Logging out...
+        `;
+
+        setTimeout(() => {
+
+            window.location.href =
+                "../backend/auth/logout.php";
+
+        }, 1200);
+
+    });
+
+}
+
     // --- FILTER ELEMENTS ---
     const dateFilter = document.getElementById('techDateFilter');
     const customRange = document.getElementById('techCustomRange');

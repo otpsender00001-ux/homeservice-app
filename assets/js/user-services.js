@@ -14,8 +14,6 @@ let finalPhone = ""; // DAGDAG: Para sa phone number
 
 document.addEventListener('DOMContentLoaded', () => {
     loadServices();
-    initAddressAPI();
-    setupValidationAndRestrictions();
 
     // 👉 FRONTEND FIX: Para hindi na ma-click ang nakalipas na araw sa kalendaryo
     const dateInput = document.getElementById("bookingDate");
@@ -29,100 +27,349 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =====================
-📍 ADDRESS API & LOGIC
+📍 BOOKING ADDRESS SELECTION
 ===================== */
-async function initAddressAPI() {
-    const citySelect = document.getElementById('addr_city');
-    const loader = document.getElementById('addr-loader');
 
-    if(loader) loader.style.display = 'inline';
-    try {
-        const response = await fetch(`${BASE_URL}/provinces/${ZAMBALES_CODE}/cities-municipalities/`);
-        const cities = await response.json();
-        cities.sort((a, b) => a.name.localeCompare(b.name));
-        cities.forEach(c => citySelect.add(new Option(c.name, c.code)));
-    } catch (e) { console.error("API Error", e); }
-    if(loader) loader.style.display = 'none';
+let bookingAddresses = [];
+
+
+async function openAddressSelectionModal() {
+
+    const modal =
+        document.getElementById("addressSelectionModal");
+
+    if (!modal) return;
+
+    modal.style.display = "flex";
+
+    await loadBookingAddresses();
+
 }
 
-document.getElementById('addr_city').onchange = async function() {
-    const brgySelect = document.getElementById('addr_brgy');
-    const loader = document.getElementById('addr-loader');
-    
-    brgySelect.innerHTML = '<option value="" selected disabled>Select Barangay</option>';
-    brgySelect.disabled = true;
-    if(loader) loader.style.display = 'inline';
-    
+
+function closeAddressSelectionModal() {
+
+    const modal =
+        document.getElementById("addressSelectionModal");
+
+    if (!modal) return;
+
+    modal.style.display = "none";
+
+}
+
+
+async function loadBookingAddresses() {
+
+    const container =
+        document.getElementById("bookingAddressList");
+
+    if (!container) return;
+
+
+    container.innerHTML = `
+        <div
+            style="
+                padding:35px 15px;
+                text-align:center;
+                color:#777;
+                font-size:14px;
+            "
+        >
+            Loading addresses...
+        </div>
+    `;
+
+
     try {
-        const response = await fetch(`${BASE_URL}/cities-municipalities/${this.value}/barangays/`);
-        const barangays = await response.json();
-        barangays.sort((a, b) => a.name.localeCompare(b.name));
-        barangays.forEach(b => brgySelect.add(new Option(b.name, b.code)));
-        brgySelect.disabled = false;
-    } catch (e) { console.error("API Error", e); }
-    
-    if(loader) loader.style.display = 'none';
-    validateAddressForm();
-};
 
-/* =====================
-🔒 VALIDATION & RESTRICTIONS
-===================== */
-function setupValidationAndRestrictions() {
-    const inputs = ['addr_name', 'addr_phone', 'addr_postal', 'addr_city', 'addr_brgy', 'addr_street'];
-    const numberInputs = ['addr_phone', 'addr_postal'];
-
-    numberInputs.forEach(id => {
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.addEventListener('keydown', (e) => {
-            if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 || (e.keyCode >= 35 && e.keyCode <= 39)) return;
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
+        const response = await fetch(
+            "../backend/users/get_address.php",
+            {
+                credentials: "same-origin"
             }
+        );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            container.innerHTML = `
+                <div
+                    style="
+                        padding:35px 15px;
+                        text-align:center;
+                        color:#777;
+                    "
+                >
+                    Unable to load your addresses.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        bookingAddresses =
+            result.addresses || [];
+
+
+        if (bookingAddresses.length === 0) {
+
+            container.innerHTML = `
+                <div
+                    style="
+                        padding:35px 15px;
+                        text-align:center;
+                        color:#777;
+                    "
+                >
+
+                    <strong>
+                        No saved addresses yet.
+                    </strong>
+
+                    <br><br>
+
+                    Please add an address first
+                    in My Profile.
+
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        bookingAddresses.forEach(address => {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "booking-address-card";
+
+
+            const defaultBadge =
+                Number(address.is_default) === 1
+                    ? `
+                        <span class="booking-default-badge">
+                            Default
+                        </span>
+                    `
+                    : "";
+
+
+            const fullAddress =
+                formatBookingAddress(address);
+
+
+            card.innerHTML = `
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:flex-start;
+                        gap:10px;
+                    "
+                >
+
+                    <div>
+
+                        <h4 class="booking-address-name">
+                            ${escapeBookingHtml(
+                                address.recipient_name
+                            )}
+                        </h4>
+
+                        <p class="booking-address-phone">
+                            ${escapeBookingHtml(
+                                address.phone
+                            )}
+                        </p>
+
+                    </div>
+
+                    ${defaultBadge}
+
+                </div>
+
+
+                <p class="booking-address-text">
+                    ${escapeBookingHtml(
+                        fullAddress
+                    )}
+                </p>
+
+
+                <button
+                    type="button"
+                    class="booking-select-btn"
+                    onclick="selectBookingAddress(${Number(address.id)})"
+                >
+                    Select This Address
+                </button>
+
+            `;
+
+
+            container.appendChild(card);
+
         });
-    });
 
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.addEventListener('input', validateAddressForm);
-        el.addEventListener('change', validateAddressForm);
-    });
-}
 
-function validateAddressForm() {
-    const name = document.getElementById('addr_name').value.trim();
-    const phone = document.getElementById('addr_phone').value.trim();
-    const postal = document.getElementById('addr_postal').value.trim();
-    const city = document.getElementById('addr_city').value;
-    const brgy = document.getElementById('addr_brgy').value;
-    const street = document.getElementById('addr_street').value.trim();
-    const btn = document.getElementById('addr_submit_btn');
+    } catch (error) {
 
-    if(!btn) return;
+        console.error(
+            "Address loading error:",
+            error
+        );
 
-    if (name && phone && postal && city && brgy && street) {
-        btn.classList.add('enabled');
-        btn.disabled = false;
-    } else {
-        btn.classList.remove('enabled');
-        btn.disabled = true;
+
+        container.innerHTML = `
+            <div
+                style="
+                    padding:35px 15px;
+                    text-align:center;
+                    color:#777;
+                "
+            >
+                Unable to load addresses.
+            </div>
+        `;
+
     }
+
 }
 
-function saveAddress() {
-    const street = document.getElementById('addr_street').value.trim();
-    const postal = document.getElementById('addr_postal').value.trim();
-    const cityText = document.getElementById('addr_city').options[document.getElementById('addr_city').selectedIndex].text;
-    const brgyText = document.getElementById('addr_brgy').options[document.getElementById('addr_brgy').selectedIndex].text;
-    
-    finalPhone = document.getElementById('addr_phone').value.trim(); 
 
-    finalAddress = `${street}, Brgy. ${brgyText}, ${cityText}, Zambales, ${postal}`;
-    document.getElementById("selectedAddress").innerText = finalAddress;
-    closeAddressModal();
+function selectBookingAddress(addressId) {
+
+    const address =
+        bookingAddresses.find(
+            item =>
+                Number(item.id) === Number(addressId)
+        );
+
+
+    if (!address) {
+
+        alert("Address not found.");
+
+        return;
+
+    }
+
+
+    finalPhone =
+        address.phone || "";
+
+
+    finalAddress =
+        formatBookingAddress(address);
+
+
+    const selectedAddress =
+        document.getElementById("selectedAddress");
+
+
+    selectedAddress.innerHTML = `
+
+        <strong
+            style="
+                display:block;
+                color:#333;
+                margin-bottom:3px;
+            "
+        >
+            ${escapeBookingHtml(
+                address.recipient_name
+            )}
+        </strong>
+
+        <span
+            style="
+                display:block;
+                margin-bottom:5px;
+            "
+        >
+            ${escapeBookingHtml(
+                address.phone
+            )}
+        </span>
+
+        <span>
+            ${escapeBookingHtml(
+                finalAddress
+            )}
+        </span>
+
+    `;
+
+
+    closeAddressSelectionModal();
+
 }
+
+
+function formatBookingAddress(address) {
+
+    const parts = [];
+
+
+    if (address.street) {
+        parts.push(address.street);
+    }
+
+
+    if (address.barangay) {
+        parts.push(
+            "Brgy. " + address.barangay
+        );
+    }
+
+
+    if (address.city) {
+        parts.push(address.city);
+    }
+
+
+    if (address.province) {
+        parts.push(address.province);
+    }
+
+
+    if (address.postal_code) {
+        parts.push(address.postal_code);
+    }
+
+
+    return parts.join(", ");
+
+}
+
+
+function escapeBookingHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
 
 /* =====================
 🚀 MODAL & BOOKING LOGIC
@@ -147,8 +394,13 @@ function bookService(serviceId, serviceName = "", price = 0) {
 }
 
 function closeModal() { document.getElementById("bookingModal").style.display = "none"; }
-function openAddressModal() { document.getElementById("addressModal").style.display = "flex"; }
-function closeAddressModal() { document.getElementById("addressModal").style.display = "none"; }
+function openAddressModal() {
+    openAddressSelectionModal();
+}
+
+function closeAddressModal() {
+    closeAddressSelectionModal();
+}
 
 function selectPayment(el) {
     document.querySelectorAll(".payment-card").forEach(card => card.classList.remove("active"));
@@ -231,32 +483,67 @@ async function loadServices() {
             const totalBooked = s.total_booked ? s.total_booked : 0;
 
             container.innerHTML += `
-                <div class="service-card" style="display: flex; flex-direction: column;">
-                    <img src="../uploads/services/${s.image ?? 'default.png'}" 
-                         style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;"
-                         onerror="this.src='../assets/images/default.png'">
-                    
-                    <h3>${s.service_name}</h3>
+    <div class="service-card service-card-modern">
 
-                    <!-- ✨ SHOPEE-STYLE SOLD/BOOKINGS BADGE -->
-                    <div style="font-size: 13px; color: #f97316; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;">
-                        🔥 ${totalBooked} ${totalBooked == 1 ? 'Booking' : 'Bookings'}
-                    </div>
+        <div class="service-image-wrapper">
 
-                    <p style="flex-grow: 1;">${s.description}</p>
-                    
-                    <div class="service-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f3f4f6; padding-top: 12px;">
-                        <span style="font-size: 18px; font-weight: bold;">₱${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
-                        
-                        <!-- ✨ PINAGANDANG BOOK BUTTON -->
-                        <button onclick="bookService(${s.id}, '${s.service_name}', ${price})" 
-                                style="background: linear-gradient(to right, #2563eb, #3b82f6); color: white; border: none; padding: 8px 20px; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);"
-                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px -1px rgba(37, 99, 235, 0.4)';"
-                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(37, 99, 235, 0.2)';">
-                            Book Now
-                        </button>
-                    </div>
-                </div>`;
+            <img
+                src="../uploads/services/${s.image ?? 'default.png'}"
+                class="service-image"
+                onerror="this.src='../assets/images/default.png'"
+            >
+
+        </div>
+
+
+        <div class="service-card-body">
+
+            <div class="service-title-row">
+
+                <h3 class="service-name">
+                    ${s.service_name}
+                </h3>
+
+            </div>
+
+
+            <div class="service-bookings">
+                ${totalBooked}
+                ${totalBooked == 1 ? 'Booking' : 'Bookings'}
+            </div>
+
+
+            <p class="service-description">
+                ${s.description}
+            </p>
+
+
+            <div class="service-footer">
+
+                <span class="service-price">
+                    ₱${price.toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    })}
+                </span>
+
+
+                <button
+                    class="service-book-btn"
+                    onclick="bookService(
+                        ${s.id},
+                        '${s.service_name}',
+                        ${price}
+                    )"
+                >
+                    Book Now
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+`;
         });
     } catch (e) { container.innerHTML = "Error loading services."; }
 }

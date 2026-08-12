@@ -6,6 +6,70 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDashboard();
     setInterval(loadDashboard, 3000);
 
+    // =======================
+// LOGOUT MODAL
+// =======================
+
+const logoutBtn =
+    document.getElementById("logout-btn");
+
+const logoutModal =
+    document.getElementById("logout-modal");
+
+const cancelLogout =
+    document.getElementById("cancel-logout");
+
+const confirmLogout =
+    document.getElementById("confirm-logout");
+
+
+if (logoutBtn && logoutModal) {
+
+    logoutBtn.addEventListener("click", function(e) {
+
+        e.preventDefault();
+
+        logoutModal.classList.add("show");
+
+    });
+
+}
+
+
+if (cancelLogout) {
+
+    cancelLogout.addEventListener("click", function() {
+
+        logoutModal.classList.remove("show");
+
+    });
+
+}
+
+
+if (confirmLogout) {
+
+    confirmLogout.addEventListener("click", function() {
+
+        confirmLogout.disabled = true;
+        cancelLogout.disabled = true;
+
+        confirmLogout.innerHTML = `
+            <span class="spinner"></span>
+            Logging out...
+        `;
+
+        setTimeout(() => {
+
+            window.location.href =
+                "../backend/auth/logout.php";
+
+        }, 1200);
+
+    });
+
+}
+
     // 🛠️ FIX: Inilagay natin sa loob ng DOMContentLoaded para siguradong babasahin ng browser!
     const adminChatForm = document.getElementById('adminChatForm');
     if (adminChatForm) {
