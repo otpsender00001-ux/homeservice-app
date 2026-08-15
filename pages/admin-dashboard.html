@@ -16,14 +16,15 @@
         .btn-add-slot:hover { background: #1e40af; }
         .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
         
-        /* Dashboard Controls Styling */
         .controls-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-        .control-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; min-width: 250px; }
+        .control-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; flex: 1; min-width: 280px; position: relative; z-index: 1; }
         .control-card label { font-weight: 700; color: #333; white-space: nowrap; }
-        .control-card input, .control-card select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-weight: bold; outline: none; flex: 1; min-width: 100px; }
+        .control-card select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-weight: bold; outline: none; flex: 1; min-width: 100px; }
         
         #custom-date-container { display: none; align-items: center; gap: 5px; margin-left: 10px; flex-wrap: wrap; width: 100%; margin-top: 10px; }
         #custom-date-container input { flex: 1; min-width: 120px; }
+
+        .mode-badge { background: #e0e7ff; color: #1d4ed8; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -34,7 +35,7 @@
             <span class="brand">ServiQuick</span>
             <p class="panel">Admin Panel</p>
         </div>
-      <nav class="menu" id="admin-menu">
+        <nav class="menu" id="admin-menu">
             <a href="admin-dashboard.html">📊 Dashboard</a> 
             <a href="bookings.html">📅 Bookings</a> 
             <a href="services.html">🛠 Services</a> 
@@ -44,8 +45,12 @@
             
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
             <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
+<<<<<<< HEAD
      Logout
 </a>
+=======
+                               🚪 Logout
+            </a>
         </nav>
 
         <script>
@@ -54,12 +59,10 @@
                 let links = document.querySelectorAll('#admin-menu a');
                 
                 links.forEach(link => {
-                    link.classList.remove('active'); // Alisin muna ang blue sa lahat
-                    // Kung walang nakuhang currentUrl, i-set as default ang admin dashboard
+                    link.classList.remove('active');
                     if (currentUrl === '') currentUrl = 'admin-dashboard.html';
-                    
                     if (link.getAttribute('href') === currentUrl) {
-                        link.classList.add('active'); // Ilagay ang blue kung nasaan kang page
+                        link.classList.add('active');
                     }
                 });
             });
@@ -73,12 +76,19 @@
         </div>
 
         <div class="controls-row">
+            <!-- Daily Salary Settings Card -->
             <div class="control-card">
-                <label for="labor-percentage">Labor Cost (%):</label>
-                <input type="number" id="labor-percentage" value="70" min="0" max="100" style="text-align: center;">
+                <div>
+                    <label>Arawan Rate:</label>
+                    <span id="activeModeBadge" class="mode-badge">Loading...</span>
+                </div>
+                <button type="button" id="btnOpenLaborModal" style="background: #2563eb; color: white; border: none; padding: 9px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap; z-index: 2; position: relative;">
+                    ⚙️ Set Daily Salary Rate
+                </button>
             </div>
 
-            <div class="control-card">
+            <!-- Date Filter Control -->
+            <div class="control-card" style="justify-content: flex-start;">
                 <label for="date-filter">📅 Filter:</label>
                 <select id="date-filter">
                     <option value="all">All Time</option>
@@ -186,28 +196,50 @@
     </main>
 </div>
 
-<!-- Logout Modal -->
-<div id="logout-modal" class="logout-modal">
-    <div class="logout-box">
+<!-- Modal 1: Daily Salary Rate Form -->
+<div id="laborCostSettingsModal" class="logout-modal" style="display: none;">
+    <div class="logout-box" style="max-width: 450px; text-align: left;">
+        <h2 style="margin-bottom: 5px; font-size: 1.25rem;">⚙️ Daily Salary Rate (Arawan)</h2>
+        <p style="color: #666; font-size: 0.85rem; margin-bottom: 15px;">Set the fixed daily salary rate for technicians:</p>
 
-
-        <h2>Logout</h2>
-
-        <p>
-            Are you sure you want to log out of your
-            <strong>ServiQuick</strong> account?
-        </p>
-
-        <div class="logout-buttons">
-            <button id="cancel-logout" class="btn-no">
-                No
-            </button>
-
-            <button id="confirm-logout" class="btn-yes">
-                Yes
-            </button>
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9rem;">Daily Salary Rate (₱):</label>
+            <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="font-weight: bold; font-size: 1.1rem; color: #333;">₱</span>
+                <input type="number" id="inputDailyRate" placeholder="e.g. 800" min="1" step="10" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-size: 1rem; font-weight: bold;">
+            </div>
         </div>
 
+        <div class="logout-buttons" style="justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-no" id="btnCancelLaborModal">Cancel</button>
+            <button type="button" class="btn-yes" id="btnProceedConfirmation" style="background: #2563eb;">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Confirmation Modal -->
+<div id="confirmSwitchModal" class="logout-modal" style="display: none;">
+    <div class="logout-box" style="max-width: 450px; text-align: left;">
+        <h2 style="margin-bottom: 10px; color: #0f172a; font-size: 1.2rem;">⚠️ Confirm Daily Rate Update</h2>
+        <p id="confirmEnglishMessage" style="color: #475569; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+            Are you sure you want to update the technician daily salary rate?
+        </p>
+        <div class="logout-buttons" style="justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-no" id="btnCancelConfirmModal">Cancel</button>
+            <button type="button" class="btn-yes" id="btnActivateNow" style="background: #10b981;">Confirm & Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal -->
+<div id="logout-modal" class="logout-modal" style="display: none;">
+    <div class="logout-box">
+        <h2>Logout</h2>
+        <p>Are you sure you want to log out of your <strong>ServiQuick</strong> account?</p>
+        <div class="logout-buttons">
+            <button id="cancel-logout" class="btn-no">No</button>
+            <button id="confirm-logout" class="btn-yes">Yes</button>
+        </div>
     </div>
 </div>
 
