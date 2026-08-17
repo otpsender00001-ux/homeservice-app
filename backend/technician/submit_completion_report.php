@@ -366,6 +366,162 @@ try {
 
 
     /* =====================================================
+       GET CURRENT EFFECTIVE DAILY RATE
+       
+       IMPORTANT:
+       The rate used here is the rate that is ACTIVE
+       for the current day.
+
+       A newly scheduled rate for tomorrow will NOT
+       affect today's completed job.
+    ===================================================== */
+
+    $daily_rate = 800;
+
+    $settings = [];
+
+    $settingsResult = $conn->query("
+        SELECT setting_key, setting_value
+        FROM system_settings
+        WHERE setting_key IN (
+            'cost_mode',
+            'daily_rate',
+            'pending_daily_rate',
+            'daily_rate_effective_date'
+        )
+    ");
+
+    if ($settingsResult) {
+
+        while ($settingRow = $settingsResult->fetch_assoc()) {
+
+            $settings[
+                $settingRow['setting_key']
+            ] = $settingRow['setting_value'];
+        }
+    }
+
+
+    /* =====================================================
+       CHECK IF A PENDING RATE IS NOW EFFECTIVE
+       
+       Example:
+       Aug 16 -> current rate ₱800
+       pending rate -> ₱1000
+       effective date -> Aug 17
+
+       On Aug 16:
+       ₱800 remains active.
+
+       On Aug 17:
+       ₱1000 becomes active.
+    ===================================================== */
+
+    $currentDate = date('Y-m-d');
+
+    $pendingRate =
+        isset($settings['pending_daily_rate'])
+        ? floatval($settings['pending_daily_rate'])
+        : 0;
+
+    $effectiveDate =
+        $settings['daily_rate_effective_date'] ?? '';
+
+
+    if (
+        $pendingRate > 0 &&
+        $effectiveDate !== '' &&
+        $effectiveDate <= $currentDate
+    ) {
+
+        /* ---------------------------------------------
+           ACTIVATE PENDING RATE
+        --------------------------------------------- */
+
+        $activateRate = $conn->prepare("
+            UPDATE system_settings
+            SET setting_value = ?
+            WHERE setting_key = 'daily_rate'
+        ");
+
+        if ($activateRate) {
+
+            $activateRate->bind_param(
+                "s",
+                $pendingRate
+            );
+
+            $activateRate->execute();
+
+            $activateRate->close();
+        }
+
+
+        /* ---------------------------------------------
+           REMOVE PENDING RATE
+        --------------------------------------------- */
+
+        $clearPendingRate = $conn->prepare("
+            DELETE FROM system_settings
+            WHERE setting_key IN (
+                'pending_daily_rate',
+                'daily_rate_effective_date'
+            )
+        ");
+
+        if ($clearPendingRate) {
+
+            $clearPendingRate->execute();
+
+            $clearPendingRate->close();
+        }
+
+
+        $daily_rate = $pendingRate;
+
+    } else {
+
+        /* ---------------------------------------------
+           USE CURRENT ACTIVE RATE
+        --------------------------------------------- */
+
+        $daily_rate =
+            isset($settings['daily_rate'])
+            ? floatval($settings['daily_rate'])
+            : 800;
+    }
+
+
+    /* =====================================================
+       ENSURE VALID DAILY RATE
+    ===================================================== */
+
+    if ($daily_rate <= 0) {
+        $daily_rate = 800;
+    }
+
+
+    /* =====================================================
+       LOCK TECHNICIAN LABOR COST FOR THIS JOB
+       
+       THIS IS THE IMPORTANT PART.
+
+       Once this job is completed:
+       
+       labor_cost_amount = today's active daily rate
+
+       Therefore:
+       
+       Aug 16 completed = ₱800
+
+       Even if admin changes tomorrow to ₱1000,
+       this booking remains ₱800.
+    ===================================================== */
+
+    $labor_cost_amount = $daily_rate;
+
+
+    /* =====================================================
        INSERT COMPLETION REPORT
     ===================================================== */
 
@@ -424,11 +580,15 @@ try {
 
     /* =====================================================
        UPDATE BOOKING STATUS
+       
+       ALSO LOCK THE DAILY LABOR COST HERE.
     ===================================================== */
 
     $updateBooking = $conn->prepare("
         UPDATE bookings
-        SET status = 'completed'
+        SET
+            status = 'completed',
+            labor_cost_amount = ?
         WHERE id = ?
     ");
 
@@ -443,7 +603,8 @@ try {
 
 
     $updateBooking->bind_param(
-        "i",
+        "di",
+        $labor_cost_amount,
         $booking_id
     );
 
@@ -451,7 +612,7 @@ try {
     if (!$updateBooking->execute()) {
 
         throw new Exception(
-            'Failed to update booking status: ' .
+            'Failed to update booking status and labor cost: ' .
             $updateBooking->error
         );
     }
@@ -482,7 +643,14 @@ try {
             $report_id,
 
         'repair_photo' =>
-            $repair_photo
+            $repair_photo,
+
+        /* Added information for debugging/UI if needed */
+        'labor_cost' =>
+            number_format($labor_cost_amount, 2),
+
+        'daily_rate_used' =>
+            number_format($daily_rate, 2)
     ]);
 
 

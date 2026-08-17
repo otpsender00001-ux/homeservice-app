@@ -90,23 +90,14 @@
             </select>
         </div>
 
-        <div class="table-box">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Service</th>
-                        <th>Date</th>
-                        <th>Technician</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="bookings-table-body">
-                    <tr><td colspan="6" style="text-align:center;">Loading bookings...</td></tr>
-                </tbody>
-            </table>
-        </div>
+       <div class="bookings-container" id="bookings-table-body">
+
+    <div class="booking-loading">
+        <div class="booking-loading-spinner"></div>
+        <span>Loading bookings...</span>
+    </div>
+
+</div>
     </main>
 </div>
 

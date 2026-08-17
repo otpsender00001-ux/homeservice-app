@@ -71,43 +71,259 @@ async function getSessionId() {
 }
 
 // ✨ DAGDAG NA FUNCTION PARA SA COUNTDOWN LOGIC ✨
-function getStartTravelButton(jobId, bookingDateStr) {
+/* =====================================================
+   ⏳ REAL-TIME START TRAVEL COUNTDOWN
+===================================================== */
+
+let startTravelCountdownTimers = {};
+
+function getStartTravelButton(jobId, bookingDateStr, timeStartStr) {
+
+    const buttonId = `start-travel-btn-${jobId}`;
+
+    /* ==========================================
+       KAPAG WALANG DATE
+    ========================================== */
+
     if (!bookingDateStr) {
-        return `<button class="action-btn btn-start" onclick="startTravel(${jobId})">📍 Start Travel</button>`;
+        return `
+            <button
+                id="${buttonId}"
+                class="action-btn btn-start"
+                onclick="startTravel(${jobId})"
+            >
+                📍 Start Travel
+            </button>
+        `;
     }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // I-reset ang oras para araw lang ang i-compare
+    /* ==========================================
+       SCHEDULE DATE + TIME
+    ========================================== */
 
-    const bookingDate = new Date(bookingDateStr);
-    bookingDate.setHours(0, 0, 0, 0);
+    let scheduledDateTime;
 
-    const timeDiff = bookingDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    try {
 
-    if (diffDays <= 0) {
-        // Ngayon na o nakalipas na ang araw, Pwede na i-start!
-        return `<button class="action-btn btn-start" onclick="startTravel(${jobId})">📍 Start Travel</button>`;
-    } else {
-        // Sa susunod na araw pa
-        let diffText = '';
-        if (diffDays === 1) {
-            diffText = '1 day to start';
-        } else if (diffDays < 7) {
-            diffText = `${diffDays} days to start`;
-        } else {
-            const weeks = Math.floor(diffDays / 7);
-            const extraDays = diffDays % 7;
-            if (extraDays === 0) {
-                diffText = `${weeks} week${weeks > 1 ? 's' : ''} to start`;
-            } else {
-                diffText = `${weeks} week${weeks > 1 ? 's' : ''} and ${extraDays} day${extraDays > 1 ? 's' : ''} to start`;
-            }
+        const datePart = bookingDateStr.split(' ')[0];
+
+        const timePart = timeStartStr
+            ? timeStartStr.substring(0, 8)
+            : '00:00:00';
+
+        scheduledDateTime =
+            new Date(`${datePart}T${timePart}`);
+
+    } catch (error) {
+
+        console.error(
+            'Invalid booking date/time:',
+            bookingDateStr,
+            timeStartStr
+        );
+
+        return `
+            <button
+                id="${buttonId}"
+                class="action-btn btn-start"
+                onclick="startTravel(${jobId})"
+            >
+                📍 Start Travel
+            </button>
+        `;
+    }
+
+
+    /* ==========================================
+       INITIAL BUTTON
+    ========================================== */
+
+    const now = new Date();
+
+    if (scheduledDateTime <= now) {
+
+        return `
+            <button
+                id="${buttonId}"
+                class="action-btn btn-start"
+                onclick="startTravel(${jobId})"
+            >
+                📍 Start Travel
+            </button>
+        `;
+
+    }
+
+
+    /* ==========================================
+       COUNTDOWN BUTTON
+    ========================================== */
+
+    const timer = startTravelCountdownTimers[jobId];
+
+    if (timer) {
+        clearInterval(timer);
+    }
+
+
+    /* ==========================================
+       FORMAT COUNTDOWN
+    ========================================== */
+
+    function updateCountdown() {
+
+        const button =
+            document.getElementById(buttonId);
+
+        if (!button) {
+
+            clearInterval(
+                startTravelCountdownTimers[jobId]
+            );
+
+            delete startTravelCountdownTimers[jobId];
+
+            return;
         }
-        
-        // I-return ang naka-disable na button
-        return `<button class="action-btn btn-start" style="background-color: #ccc; cursor: not-allowed; border: none; color: #666;" disabled>⏳ ${diffText}</button>`;
+
+
+        const currentTime = new Date();
+
+        const remaining =
+            scheduledDateTime.getTime() -
+            currentTime.getTime();
+
+
+        /* ==========================================
+           SCHEDULE REACHED
+        ========================================== */
+
+        if (remaining <= 0) {
+
+            clearInterval(
+                startTravelCountdownTimers[jobId]
+            );
+
+            delete startTravelCountdownTimers[jobId];
+
+
+            button.disabled = false;
+
+            button.style.backgroundColor = '#ff4500';
+            button.style.cursor = 'pointer';
+            button.style.border = 'none';
+            button.style.color = 'white';
+
+            button.innerHTML =
+                '📍 Start Travel';
+
+            button.onclick = function() {
+                startTravel(jobId);
+            };
+
+            return;
+        }
+
+
+        /* ==========================================
+           CALCULATE REMAINING TIME
+        ========================================== */
+
+        const totalSeconds =
+            Math.floor(remaining / 1000);
+
+        const days =
+            Math.floor(
+                totalSeconds / 86400
+            );
+
+        const hours =
+            Math.floor(
+                (totalSeconds % 86400) / 3600
+            );
+
+        const minutes =
+            Math.floor(
+                (totalSeconds % 3600) / 60
+            );
+
+        const seconds =
+            totalSeconds % 60;
+
+
+        /* ==========================================
+           COUNTDOWN TEXT
+        ========================================== */
+
+        let countdownText = '⏳ ';
+
+        if (days > 0) {
+            countdownText +=
+                `${days} day${days !== 1 ? 's' : ''} `;
+        }
+
+        countdownText +=
+            `${hours} hour${hours !== 1 ? 's' : ''} `;
+
+        countdownText +=
+            `${minutes} minute${minutes !== 1 ? 's' : ''} `;
+
+        countdownText +=
+            `${seconds} second${seconds !== 1 ? 's' : ''}`;
+
+
+        /* ==========================================
+           UPDATE BUTTON
+        ========================================== */
+
+        button.disabled = true;
+
+        button.style.backgroundColor = '#ccc';
+        button.style.cursor = 'not-allowed';
+        button.style.border = 'none';
+        button.style.color = '#666';
+
+        button.innerHTML = countdownText;
     }
+
+
+    /* ==========================================
+       FIRST UPDATE
+    ========================================== */
+
+    setTimeout(updateCountdown, 0);
+
+
+    /* ==========================================
+       UPDATE EVERY SECOND
+    ========================================== */
+
+    startTravelCountdownTimers[jobId] =
+        setInterval(
+            updateCountdown,
+            1000
+        );
+
+
+    /* ==========================================
+       INITIAL HTML
+    ========================================== */
+
+    return `
+        <button
+            id="${buttonId}"
+            class="action-btn btn-start"
+            disabled
+            style="
+                background-color:#ccc;
+                cursor:not-allowed;
+                border:none;
+                color:#666;
+            "
+        >
+            ⏳ Calculating...
+        </button>
+    `;
 }
 
 async function fetchJobs() {
@@ -137,7 +353,11 @@ async function fetchJobs() {
 
             if (job.status === 'accepted') {
                 // ✨ GINAMIT NATIN DITO YUNG BAGONG LOGIC ✨
-                const startBtn = getStartTravelButton(job.id, job.booking_date);
+               const startBtn = getStartTravelButton(
+    job.id,
+    job.booking_date,
+    job.time_start
+);
                 actionHtml = `${chatBtn} ${startBtn}`;
             } else if (job.status === 'in_progress') {
                 actionHtml = `${chatBtn} 

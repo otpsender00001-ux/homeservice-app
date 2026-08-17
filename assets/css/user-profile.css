@@ -1,8 +1,7 @@
 /* ===========================
    ADDRESS MANAGER CARD
 =========================== */
-
-.address-manager-card{
+.address-manager-card {
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -15,25 +14,23 @@
     background:#f9fafb;
 }
 
-.address-info h4{
+.address-info h4 {
     margin:0 0 8px;
     font-size:18px;
     color:#111827;
 }
 
-.address-info p{
+.address-info p {
     margin:0;
     color:#6b7280;
     font-size:14px;
     line-height:1.5;
 }
 
-
 /* ===========================
    ADDRESS FORM MODAL
 =========================== */
-
-.modal{
+.modal {
     display:none;
     position:fixed;
     inset:0;
@@ -44,71 +41,75 @@
     padding:20px;
 }
 
-.modal-content{
+.modal-content {
     width:100%;
-    max-width:850px;
+    max-width:750px; /* Paliitin ng kaunti para fit */
     background:#fff;
     border-radius:18px;
     overflow:hidden;
     box-shadow:0 20px 45px rgba(0,0,0,.18);
     animation:modalPop .25s ease;
+    
+    /* DINAGDAG: Para hindi lumampas sa screen height */
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh; 
 }
 
-@keyframes modalPop{
-    from{
+@keyframes modalPop {
+    from {
         opacity:0;
         transform:translateY(15px) scale(.98);
     }
-    to{
+    to {
         opacity:1;
         transform:translateY(0) scale(1);
     }
 }
 
-
 /* HEADER */
-
-.addr-header{
+.addr-header {
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:22px 28px;
+    padding:15px 25px; /* Pinababa for compactness */
     background:#fafafa;
     border-bottom:1px solid #ececec;
 }
 
-.addr-header h3{
+.addr-header h3 {
     margin:0;
-    font-size:22px;
+    font-size:20px; /* Pinababa for compactness */
     font-weight:800;
     color:#111827;
 }
 
-
 /* BODY */
-
-.addr-body{
+.addr-body {
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:30px;
-    padding:30px;
+    gap:20px; /* Pinababa from 30px */
+    padding:20px 25px; /* Pinababa from 30px */
+    
+    /* DINAGDAG: Scrollable para if maliit screen, scroll lang form, nakafix ang footer */
+    overflow-y: auto; 
 }
 
-.addr-section-title{
+.addr-section-title {
     display:block;
-    margin-bottom:18px;
+    margin-bottom:15px; /* Pinababa from 18px */
     font-size:15px;
     font-weight:700;
     color:#2563eb;
 }
 
-.addr-group{
-    margin-bottom:18px;
+.addr-group {
+    margin-bottom:12px; /* Pinababa from 18px para compact */
 }
 
-.addr-label{
+.addr-label {
     display:block;
-    margin-bottom:6px;
+    margin-bottom:5px; /* Pinababa */
     font-size:12px;
     font-weight:700;
     color:#6b7280;
@@ -116,27 +117,25 @@
 }
 
 .addr-input,
-.addr-select{
+.addr-select {
     width:100%;
-    padding:12px;
+    padding:8px 12px; /* Pinababa from 12px para compact height */
     border:1px solid #d1d5db;
-    border-radius:10px;
+    border-radius:8px; /* Adjusted */
     font-size:14px;
     box-sizing:border-box;
     transition:.25s;
 }
 
 .addr-input:focus,
-.addr-select:focus{
+.addr-select:focus {
     outline:none;
     border-color:#2563eb;
     box-shadow:0 0 0 3px rgba(37,99,235,.12);
 }
 
-
 /* REGION / PROVINCE BOX */
-
-.location-box{
+.location-box {
     display:flex;
     gap:15px;
     background:#f8fafc;
@@ -146,95 +145,84 @@
     margin-bottom:18px;
 }
 
-.location-box > div{
+.location-box > div {
     flex:1;
 }
 
-
 /* FOOTER */
-
-.addr-footer{
+.addr-footer {
     display:flex;
     justify-content:flex-end;
     gap:12px;
-    padding:20px 28px;
+    padding:15px 25px; /* Pinababa */
     background:#fafafa;
     border-top:1px solid #ececec;
 }
 
-.addr-btn{
-    padding:12px 22px;
+.addr-btn {
+    padding:10px 20px; /* Pinababa */
     border:none;
-    border-radius:10px;
+    border-radius:8px; /* Adjusted */
     cursor:pointer;
     font-weight:700;
     transition:.25s;
 }
 
-.btn-cancel{
+.btn-cancel {
     background:#e5e7eb;
     color:#374151;
 }
 
-.btn-cancel:hover{
+.btn-cancel:hover {
     background:#d1d5db;
 }
 
-.addr-submit{
+.addr-submit {
     background:#d1d5db;
     color:#fff;
 }
 
-.addr-submit.enabled{
+.addr-submit.enabled {
     background:#2563eb;
 }
 
-.addr-submit.enabled:hover{
+.addr-submit.enabled:hover {
     background:#1d4ed8;
 }
-
 
 /* ===========================
    RESPONSIVE
 =========================== */
-
-@media(max-width:768px){
-
-    .address-manager-card{
+@media(max-width:768px) {
+    .address-manager-card {
         flex-direction:column;
         align-items:flex-start;
     }
-
-    .address-manager-card button{
+    .address-manager-card button {
         width:100%;
     }
-
-    .addr-body{
+    .addr-body {
         grid-template-columns:1fr;
-        padding:20px;
-        gap:20px;
+        padding:15px;
+        gap:15px;
     }
-
-    .addr-footer{
+    .addr-footer {
         flex-direction:column;
     }
-
-    .addr-btn{
+    .addr-btn {
         width:100%;
     }
-
 }
 
 /* ==========================================
    ADDRESS MANAGER MODAL
 ========================================== */
-
-#addressManagerModal .modal-content{
+#addressManagerModal .modal-content {
     max-width:750px;
     width:95%;
 }
 
-#addressList{
+#addressList {
     padding:20px;
     max-height:450px;
     overflow-y:auto;
@@ -244,8 +232,7 @@
 /* ==========================================
    ADDRESS ITEM
 ========================================== */
-
-.address-item{
+.address-item {
     background:#fff;
     border:1px solid #e5e7eb;
     border-radius:12px;
@@ -254,17 +241,17 @@
     transition:.25s;
 }
 
-.address-item:hover{
+.address-item:hover {
     box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 
-.address-item h4{
+.address-item h4 {
     margin:0;
     color:#111827;
     font-size:17px;
 }
 
-.address-item p{
+.address-item p {
     margin:8px 0;
     color:#6b7280;
     line-height:1.6;
@@ -274,8 +261,7 @@
 /* ==========================================
    BADGES
 ========================================== */
-
-.address-badge{
+.address-badge {
     display:inline-block;
     margin-top:8px;
     padding:5px 12px;
@@ -289,15 +275,14 @@
 /* ==========================================
    BUTTONS
 ========================================== */
-
-.address-buttons{
+.address-buttons {
     display:flex;
     justify-content:flex-end;
     gap:10px;
     margin-top:15px;
 }
 
-.address-buttons button{
+.address-buttons button {
     border:none;
     border-radius:8px;
     padding:9px 18px;
@@ -306,29 +291,28 @@
     transition:.25s;
 }
 
-.edit-address-btn{
+.edit-address-btn {
     background:#2563eb;
     color:#fff;
 }
 
-.edit-address-btn:hover{
+.edit-address-btn:hover {
     background:#1d4ed8;
 }
 
-.delete-address-btn{
+.delete-address-btn {
     background:#ef4444;
     color:#fff;
 }
 
-.delete-address-btn:hover{
+.delete-address-btn:hover {
     background:#dc2626;
 }
 
 /* ==========================================
    EMPTY STATE
 ========================================== */
-
-.empty-address{
+.empty-address {
     text-align:center;
     padding:60px 20px;
     border:2px dashed #d1d5db;
@@ -337,169 +321,103 @@
     background:#fff;
 }
 
-.empty-address h3{
+.empty-address h3 {
     margin-bottom:10px;
     color:#111827;
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
 @media(max-width:768px){
-
-    .address-buttons{
+    .address-buttons {
         flex-direction:column;
     }
-
-    .address-buttons button{
+    .address-buttons button {
         width:100%;
     }
-
 }
 
 /* ===============================
    ADDRESS CARDS
 =================================*/
-
-.address-card{
-
+.address-card {
     background:#fff;
-
     border:1px solid #e5e7eb;
-
     border-radius:14px;
-
     padding:20px;
-
     margin-bottom:18px;
-
     transition:.25s;
-
 }
 
-.address-card:hover{
-
+.address-card:hover {
     box-shadow:0 10px 25px rgba(0,0,0,.08);
-
 }
 
-.address-top{
-
+.address-top {
     display:flex;
-
     justify-content:space-between;
-
     align-items:flex-start;
-
     margin-bottom:18px;
-
 }
 
-.address-top h3{
-
+.address-top h3 {
     margin:0;
-
     font-size:18px;
-
     color:#111827;
-
 }
 
-.address-top span{
-
+.address-top span {
     color:#6b7280;
-
     font-size:14px;
-
 }
 
-.default-badge{
-
+.default-badge {
     background:#2563eb;
-
     color:white;
-
     padding:5px 12px;
-
     border-radius:20px;
-
     font-size:12px;
-
     font-weight:600;
-
 }
 
-.address-body{
-
+.address-body {
     line-height:1.8;
-
     color:#374151;
-
     margin-bottom:20px;
-
 }
 
-.address-body p{
-
+.address-body p {
     margin:3px 0;
-
 }
 
-.address-footer{
-
+.address-footer {
     display:flex;
-
     justify-content:flex-end;
-
     gap:10px;
-
     border-top:1px solid #eee;
-
     padding-top:15px;
-
 }
 
-.edit-btn{
-
+.edit-btn {
     background:#2563eb;
-
     color:white;
-
     border:none;
-
     padding:9px 18px;
-
     border-radius:8px;
-
     cursor:pointer;
-
 }
 
-.delete-btn{
-
+.delete-btn {
     background:#ef4444;
-
     color:white;
-
     border:none;
-
     padding:9px 18px;
-
     border-radius:8px;
-
     cursor:pointer;
-
 }
 
-.edit-btn:hover{
-
+.edit-btn:hover {
     background:#1d4ed8;
-
 }
 
-.delete-btn:hover{
-
+.delete-btn:hover {
     background:#dc2626;
-
 }

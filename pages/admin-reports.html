@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | ServiQuick</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin-reports.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <span class="brand">ServiQuick</span>
+            <p class="panel">Admin Panel</p>
+        </div>
+
+        <nav class="menu" id="admin-menu">
+
+            <a href="admin-dashboard.html">
+                📊 Dashboard
+            </a>
+
+            <a href="bookings.html">
+                📅 Bookings
+            </a>
+
+            <a href="services.html">
+                🛠 Services
+            </a>
+
+            <a href="track-technicians.html">
+                📍 Track Tech
+            </a>
+
+            <a href="admin-users.html">
+                👥 Users
+            </a>
+
+            <a href="admin-messages.html">
+                💬 Inbox
+            </a>
+
+            <a href="admin-reports.html" class="active">
+                📈 Reports
+            </a>
+
+            <hr style="border:0;border-top:1px solid #ddd;margin:15px 0;">
+
+            <a
+                href="#"
+                id="logout-btn"
+                style="color:#ef4444;font-weight:bold;"
+            >
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main reports-main">
+
+        <!-- HEADER -->
+
+        <div class="reports-header">
+
+            <div>
+
+                <span class="reports-eyebrow">
+                    BUSINESS INTELLIGENCE
+                </span>
+
+                <h1>
+                    Reports
+                </h1>
+
+                <p>
+                    Analyze bookings, revenue, services, technicians,
+                    customers and business performance.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="print-report-btn"
+                class="print-report-btn"
+            >
+                🖨 Print Now
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             REPORT PERIOD
+        ================================================== -->
+
+        <section class="report-filter-card">
+
+            <div class="filter-top">
+
+                <div>
+
+                    <h3>
+                        Report Period
+                    </h3>
+
+                    <p>
+                        Select the period you want to analyze.
+                    </p>
+
+                </div>
+
+                <span
+                    id="report-period-label"
+                    class="period-badge"
+                >
+                    Today
+                </span>
+
+            </div>
+
+
+            <div class="period-tabs">
+
+                <button
+                    type="button"
+                    class="period-tab active"
+                    data-period="daily"
+                >
+                    Daily
+                </button>
+
+                <button
+                    type="button"
+                    class="period-tab"
+                    data-period="monthly"
+                >
+                    Monthly
+                </button>
+
+                <button
+                    type="button"
+                    class="period-tab"
+                    data-period="yearly"
+                >
+                    Yearly
+                </button>
+
+                <button
+                    type="button"
+                    class="period-tab"
+                    data-period="custom"
+                >
+                    Custom
+                </button>
+
+            </div>
+
+
+            <!-- DAILY -->
+
+            <div
+                id="daily-filter"
+                class="period-input-area"
+            >
+
+                <label for="daily-date">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="daily-date"
+                >
+
+            </div>
+
+
+            <!-- MONTHLY -->
+
+            <div
+                id="monthly-filter"
+                class="period-input-area"
+                style="display:none;"
+            >
+
+                <label for="monthly-date">
+                    Month
+                </label>
+
+                <input
+                    type="month"
+                    id="monthly-date"
+                >
+
+            </div>
+
+
+            <!-- YEARLY -->
+
+            <div
+                id="yearly-filter"
+                class="period-input-area"
+                style="display:none;"
+            >
+
+                <label for="yearly-date">
+                    Year
+                </label>
+
+                <input
+                    type="number"
+                    id="yearly-date"
+                    min="2000"
+                    max="2100"
+                >
+
+            </div>
+
+
+            <!-- CUSTOM -->
+
+            <div
+                id="custom-filter"
+                class="custom-date-grid"
+                style="display:none;"
+            >
+
+                <div>
+
+                    <label for="custom-start">
+                        Start Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="custom-start"
+                    >
+
+                </div>
+
+                <div>
+
+                    <label for="custom-end">
+                        End Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="custom-end"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-actions">
+
+                <button
+                    type="button"
+                    id="apply-report-btn"
+                    class="apply-report-btn"
+                >
+                    Apply Report
+                </button>
+
+                <button
+                    type="button"
+                    id="reset-report-btn"
+                    class="reset-report-btn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REPORT CONTENT
+        ================================================== -->
+
+        <div id="report-content">
+
+
+            <!-- =================================================
+                 KPI CARDS
+            ================================================== -->
+
+            <section class="kpi-grid">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon blue">
+                        📅
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Bookings
+                        </span>
+
+                        <strong id="total-bookings">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon green">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Completed Jobs
+                        </span>
+
+                        <strong id="completed-jobs">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon orange">
+                        ⏳
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Pending Jobs
+                        </span>
+
+                        <strong id="pending-jobs">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon red">
+                        ×
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Cancelled
+                        </span>
+
+                        <strong id="cancelled-jobs">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon purple">
+                        ₱
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Paid Revenue
+                        </span>
+
+                        <strong id="paid-revenue">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon teal">
+                        %
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Completion Rate
+                        </span>
+
+                        <strong id="completion-rate">
+                            0%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon dark">
+                        ₱
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Labor Cost
+                        </span>
+
+                        <strong id="labor-cost">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon gold">
+                        ★
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Average Rating
+                        </span>
+
+                        <strong id="average-rating">
+                            0.0 / 5
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 FINANCIAL SUMMARY
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            FINANCIAL PERFORMANCE
+                        </span>
+
+                        <h2>
+                            Revenue & Profitability
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="financial-grid">
+
+                    <div class="financial-card">
+
+                        <span>
+                            Gross Paid Revenue
+                        </span>
+
+                        <strong id="financial-revenue">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="financial-card">
+
+                        <span>
+                            Labor Cost
+                        </span>
+
+                        <strong id="financial-labor">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="financial-card">
+
+                        <span>
+                            Net Profit
+                        </span>
+
+                        <strong id="financial-profit">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="financial-card">
+
+                        <span>
+                            Average Booking Value
+                        </span>
+
+                        <strong id="average-booking">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="payment-summary">
+
+                    <div class="mini-stat">
+
+                        <span>
+                            Cash
+                        </span>
+
+                        <strong id="cash-total">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="mini-stat">
+
+                        <span>
+                            GCash
+                        </span>
+
+                        <strong id="gcash-total">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="mini-stat">
+
+                        <span>
+                            Card
+                        </span>
+
+                        <strong id="card-total">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="mini-stat">
+
+                        <span>
+                            Pending Payments
+                        </span>
+
+                        <strong id="pending-payments">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="mini-stat">
+
+                        <span>
+                            Failed Payments
+                        </span>
+
+                        <strong id="failed-payments">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 BOOKING STATUS
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            OPERATIONS
+                        </span>
+
+                        <h2>
+                            Booking Performance
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="analytics-grid">
+
+                    <div class="analytics-card">
+
+                        <h3>
+                            Booking Status
+                        </h3>
+
+                        <div
+                            id="booking-status-chart"
+                            class="status-bars"
+                        >
+                            <div class="empty-chart">
+                                Loading...
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="analytics-card">
+
+                        <h3>
+                            Booking Activity
+                        </h3>
+
+                        <div
+                            id="booking-trend"
+                            class="trend-list"
+                        >
+                            <div class="empty-chart">
+                                Loading...
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SERVICE PERFORMANCE
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            SERVICE ANALYTICS
+                        </span>
+
+                        <h2>
+                            Service Performance
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="professional-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Service
+                                </th>
+
+                                <th>
+                                    Bookings
+                                </th>
+
+                                <th>
+                                    Completed
+                                </th>
+
+                                <th>
+                                    Revenue
+                                </th>
+
+                                <th>
+                                    Avg. Rating
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="service-performance-body">
+
+                            <tr>
+
+                                <td colspan="5">
+                                    Loading...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TECHNICIAN PERFORMANCE
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            WORKFORCE ANALYTICS
+                        </span>
+
+                        <h2>
+                            Technician Performance
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="professional-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Technician
+                                </th>
+
+                                <th>
+                                    Assigned
+                                </th>
+
+                                <th>
+                                    Completed
+                                </th>
+
+                                <th>
+                                    Completion Rate
+                                </th>
+
+                                <th>
+                                    Avg. Rating
+                                </th>
+
+                                <th>
+                                    Labor Cost
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="technician-performance-body">
+
+                            <tr>
+
+                                <td colspan="6">
+                                    Loading...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CUSTOMER ANALYTICS
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            CUSTOMER ANALYTICS
+                        </span>
+
+                        <h2>
+                            Customer Overview
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="customer-stat-grid">
+
+                    <div class="customer-stat">
+
+                        <span>
+                            Active Customers
+                        </span>
+
+                        <strong id="total-customers">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="customer-stat">
+
+                        <span>
+                            New Customers
+                        </span>
+
+                        <strong id="new-customers">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="customer-stat">
+
+                        <span>
+                            Returning Customers
+                        </span>
+
+                        <strong id="returning-customers">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="customer-stat">
+
+                        <span>
+                            Total Reviews
+                        </span>
+
+                        <strong id="total-reviews">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 COMPLETION REPORTS
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            TECHNICAL OPERATIONS
+                        </span>
+
+                        <h2>
+                            Completion Report Summary
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="customer-stat-grid">
+
+                    <div class="customer-stat">
+
+                        <span>
+                            Completion Reports
+                        </span>
+
+                        <strong id="completion-reports">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="customer-stat">
+
+                        <span>
+                            Replacement Cost
+                        </span>
+
+                        <strong id="replacement-cost">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                    <div class="customer-stat">
+
+                        <span>
+                            Jobs With Replaced Parts
+                        </span>
+
+                        <strong id="replaced-parts-jobs">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DETAILED RECORDS
+            ================================================== -->
+
+            <section class="report-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            RECORDS
+                        </span>
+
+                        <h2>
+                            Detailed Booking Records
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="records-count"
+                        class="records-count"
+                    >
+                        0 records
+                    </span>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="professional-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Booking #
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Service
+                                </th>
+
+                                <th>
+                                    Technician
+                                </th>
+
+                                <th>
+                                    Amount
+                                </th>
+
+                                <th>
+                                    Payment
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="detailed-records-body">
+
+                            <tr>
+
+                                <td colspan="8">
+                                    Loading...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================================
+             LOADING
+        ================================================== -->
+
+        <div
+            id="report-loading"
+            class="report-loading"
+        >
+
+            <div class="loading-spinner"></div>
+
+            <span>
+                Generating report...
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             ERROR
+        ================================================== -->
+
+        <div
+            id="report-error"
+            class="report-error"
+            style="display:none;"
+        >
+            Unable to load the report. Please try again.
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     PRINT CONFIRMATION
+====================================================== -->
+
+<div
+    id="print-confirm-modal"
+    class="report-modal"
+>
+
+    <div class="report-modal-box">
+
+        <div class="modal-icon">
+            🖨
+        </div>
+
+        <h2>
+            Print Report?
+        </h2>
+
+        <p id="print-confirm-message">
+            This will print the currently selected report.
+        </p>
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                id="cancel-print"
+                class="modal-cancel"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="confirm-print"
+                class="modal-confirm"
+            >
+                Confirm & Print
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LOGOUT MODAL
+====================================================== -->
+
+<div
+    id="logout-modal"
+    class="logout-modal"
+>
+
+    <div class="logout-box">
+
+        <h2>
+            Logout
+        </h2>
+
+        <p>
+            Are you sure you want to log out of your
+            <strong>ServiQuick</strong> account?
+        </p>
+
+        <div class="logout-buttons">
+
+            <button
+                id="cancel-logout"
+                class="btn-no"
+            >
+                No
+            </button>
+
+            <button
+                id="confirm-logout"
+                class="btn-yes"
+            >
+                Yes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="../assets/js/admin-reports.js"></script>
+
+</body>
+</html>

@@ -1,177 +1,813 @@
-.table-controls { display: flex; gap: 15px; margin-bottom: 25px; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; flex-wrap: wrap; }
-        .search-input, .filter-select { padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; outline: none; box-sizing: border-box; }
-        .search-input { flex: 2; min-width: 200px; } .filter-select { flex: 1; cursor: pointer; min-width: 150px; }
-        .booking-card { background: #fff; border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; gap: 20px; transition: 0.3s; }
-        .info { flex: 1; }
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; display: inline-block; }
-        .badge.pending { background: #fff4e5; color: #ff9800; }
-        .badge.accepted { background: #e8f5e9; color: #4caf50; }
-        .badge.in_progress { background: #e3f2fd; color: #2196f3; }
-        .badge.completed { background: #f3e5f5; color: #9c27b0; }
-        .badge.cancelled { background: #ffebee; color: #f44336; }
-        
-        .booking-actions{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:8px;
-    min-width:170px;
+/* =========================================================
+   USER BOOKING CONTROLS
+========================================================= */
+
+.table-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+.search-input,
+.filter-select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.search-input {
+    flex: 2;
+    min-width: 200px;
+}
+
+.filter-select {
+    flex: 1;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+
+/* =========================================================
+   PROFESSIONAL BOOKING CARD
+========================================================= */
+
+.booking-card {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: 0.25s ease;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.booking-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   BOOKING HEADER
+========================================================= */
+
+.booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px 22px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+}
+
+.booking-service-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.booking-service-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 12px;
+    background: #fff3ef;
+    border: 1px solid #ffe1d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.booking-service-title {
+    min-width: 0;
+}
+
+.booking-service-title h3 {
+    margin: 0 0 5px;
+    color: #222;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.booking-number {
+    margin: 0;
+    color: #888;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.badge.pending {
+    background: #fff4e5;
+    color: #f59e0b;
+}
+
+.badge.accepted {
+    background: #e8f5e9;
+    color: #2e9d4d;
+}
+
+.badge.in_progress {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge.completed {
+    background: #f3e5f5;
+    color: #8e24aa;
+}
+
+.badge.cancelled {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+
+/* =========================================================
+   BOOKING BODY
+========================================================= */
+
+.booking-card-body {
+    padding: 20px 22px;
+}
+
+.booking-section {
+    margin-bottom: 20px;
+}
+
+.booking-section:last-child {
+    margin-bottom: 0;
+}
+
+.booking-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.booking-section-title span {
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   INFORMATION GRID
+========================================================= */
+
+.booking-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.booking-info-item {
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+    padding: 13px 14px;
+    min-width: 0;
+}
+
+.booking-info-label {
+    display: block;
+    color: #999;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 5px;
+}
+
+.booking-info-value {
+    display: block;
+    color: #333;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   ADDRESS
+========================================================= */
+
+.booking-address {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 14px;
+    color: #444;
+    font-size: 13px;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.booking-notes {
+    background: #fffaf7;
+    border: 1px solid #ffe8dc;
+    border-radius: 10px;
+    padding: 14px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.booking-no-notes {
+    color: #999;
+    font-style: italic;
+}
+
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+
+.booking-payment {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.payment-box {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 13px 14px;
+}
+
+.payment-total {
+    color: #ee4d2d;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.payment-label {
+    display: block;
+    color: #999;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   PAYMENT STATUS
+========================================================= */
+
+.payment-status {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.payment-status.pending {
+    background: #fff4e5;
+    color: #f59e0b;
+}
+
+.payment-status.paid {
+    background: #e8f5e9;
+    color: #2e9d4d;
+}
+
+.payment-status.failed {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.payment-status.unavailable {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+
+/* =========================================================
+   REQUESTED TIME
+========================================================= */
+
+.booking-requested {
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    color: #999;
+    font-size: 11px;
+}
+
+.booking-requested strong {
+    color: #666;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.booking-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 17px 22px;
+    border-top: 1px solid #eee;
+    background: #fcfcfc;
+}
+
+.booking-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .booking-actions .btn-chat,
 .booking-actions .btn-track,
 .booking-actions .btn-rate,
-.booking-actions .btn-cancel{
-    width:170px;
-    height:42px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:0;
-    font-size:14px;
-    font-weight:700;
-    box-sizing:border-box;
-}
-        
-        .btn-track { background: #ee4d2d; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; display: inline-block; margin-top: 5px; }
-        .btn-chat { background: #17a2b8; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.3s; }
-        .btn-chat:hover { background: #138496; }
-
-        .btn-cancel { background: #dc3545; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.3s; }
-        .btn-cancel:hover { background: #c82333; }
-
-        /* RATING MODAL STYLES */
-        .btn-rate { background: #ffc107; color: #000; text-decoration: none; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.3s; }
-        .btn-rate:hover { background: #ffb300; transform: translateY(-2px); }
-        .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; }
-        .modal-content { background:white; width:90%; max-width:400px; padding:25px; border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); box-sizing: border-box; }
-        .star-container { display: flex; justify-content: center; gap: 10px; margin: 15px 0; flex-direction: row-reverse; }
-        .star-container input { display: none; }
-        .star-container label { font-size: 40px; color: #ddd; cursor: pointer; transition: 0.2s; }
-        .star-container label:hover, .star-container label:hover ~ label, .star-container input:checked ~ label { color: #ffc107; }
-        .feedback-box { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; font-family: inherit; resize: none; outline: none; box-sizing: border-box; }
-        .feedback-box:focus { border-color: #ee4d2d; }
-
-        /* LIVE CHAT CSS (MESSENGER STYLE) */
-        .chat-content { display:flex; flex-direction:column; text-align: left; padding: 20px; }
-        .chat-box { height: 300px; overflow-y: auto; background: #ffffff; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; border: 1px solid #eee; }
-        .msg { max-width: 75%; padding: 10px 15px; font-size: 14px; line-height: 1.4; word-wrap: break-word; display: inline-block; }
-        .msg.mine { background: #0084ff; color: white; align-self: flex-end; border-radius: 18px 18px 2px 18px; margin-left: auto; }
-        .msg.theirs { background: #e4e6eb; color: black; align-self: flex-start; border-radius: 18px 18px 18px 2px; margin-right: auto; }
-        .chat-input-area { display: flex; gap: 10px; align-items: center; }
-        .chat-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; box-sizing: border-box; }
-        .chat-input:focus { border-color: #ee4d2d; }
-        .btn-send { background: #ee4d2d; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-
-        /* ✨ MOBILE RESPONSIVE FIX ✨ */
-        @media (max-width: 768px) {
-            .table-controls { flex-direction: column; gap: 10px; }
-            .search-input, .filter-select { width: 100%; box-sizing: border-box; }
-            .booking-card { flex-direction: column; align-items: flex-start; text-align: left; }
-            .booking-card .info { width: 100%; }
-            .btn-track, .btn-chat, .btn-rate { width: 100%; text-align: center; box-sizing: border-box; margin-top: 5px; }
-        }
-
-        .logout-modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    opacity:0;
-    visibility:hidden;
-    transition:.25s ease;
-    z-index:9999;
-    backdrop-filter:blur(5px);
+.booking-actions .btn-cancel {
+    min-width: 145px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    font-size: 13px;
+    font-weight: 700;
+    box-sizing: border-box;
 }
 
-.logout-modal.show{
-    opacity:1;
-    visibility:visible;
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-track {
+    background: #ee4d2d;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: 0.3s;
 }
 
-.logout-box{
-    width:420px;
-    max-width:90%;
-    background:#fff;
-    border-radius:18px;
-    padding:35px 30px;
-    text-align:center;
-    transform:scale(.9);
-    transition:.25s ease;
-    box-shadow:0 20px 50px rgba(0,0,0,.2);
+.btn-track:hover {
+    background: #d94327;
+    transform: translateY(-1px);
 }
 
-.logout-modal.show .logout-box{
-    transform:scale(1);
+.btn-chat {
+    background: #17a2b8;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: 0.3s;
 }
 
-.logout-icon{
-    width:80px;
-    height:80px;
-    margin:auto;
-    border-radius:50%;
-    background:#fee2e2;
-    color:#ef4444;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:40px;
-    margin-bottom:20px;
+.btn-chat:hover {
+    background: #138496;
+    transform: translateY(-1px);
 }
 
-.logout-box h2{
-    margin:0;
-    font-size:26px;
-    font-weight:800;
-    color:#222;
+.btn-cancel {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: 0.3s;
 }
 
-.logout-box p{
-    margin-top:12px;
-    color:#666;
-    line-height:1.6;
-    font-size:15px;
+.btn-cancel:hover {
+    background: #c82333;
+    transform: translateY(-1px);
 }
 
-.logout-buttons{
-    display:flex;
-    gap:15px;
-    margin-top:28px;
+.btn-rate {
+    background: #ffc107;
+    color: #000;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: 0.3s;
 }
 
-.logout-buttons button{
-    flex:1;
-    border:none;
-    padding:13px;
-    border-radius:10px;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.25s;
+.btn-rate:hover {
+    background: #ffb300;
+    transform: translateY(-1px);
 }
 
-/* NO button (Red) */
 
-.btn-no{
-    background:#2563eb;
-    color:white;
+/* =========================================================
+   RATING DISPLAY
+========================================================= */
+
+.rated-display {
+    color: #ffc107;
+    font-weight: 800;
+    font-size: 13px;
+    padding: 10px 15px;
 }
 
-.btn-no:hover{
-    background:#1d4ed8;
-    transform:translateY(-2px);
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.booking-empty {
+    text-align: center;
+    padding: 55px 20px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    color: #999;
 }
 
-/* YES button */
-
-.btn-yes{
-    background:#ef4444;
-    color:white;
+.booking-empty-icon {
+    font-size: 42px;
+    margin-bottom: 10px;
 }
 
-.btn-yes:hover{
-    background:#dc2626;
-    transform:translateY(-2px);
+.booking-empty-title {
+    color: #555;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   RATING MODAL STYLES
+========================================================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+}
+
+.star-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+    flex-direction: row-reverse;
+}
+
+.star-container input {
+    display: none;
+}
+
+.star-container label {
+    font-size: 40px;
+    color: #ddd;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.star-container label:hover,
+.star-container label:hover ~ label,
+.star-container input:checked ~ label {
+    color: #ffc107;
+}
+
+.feedback-box {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.feedback-box:focus {
+    border-color: #ee4d2d;
+}
+
+
+/* =========================================================
+   LIVE CHAT CSS
+========================================================= */
+
+.chat-content {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 20px;
+}
+
+.chat-box {
+    height: 300px;
+    overflow-y: auto;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid #eee;
+}
+
+.msg {
+    max-width: 75%;
+    padding: 10px 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    display: inline-block;
+}
+
+.msg.mine {
+    background: #0084ff;
+    color: white;
+    align-self: flex-end;
+    border-radius: 18px 18px 2px 18px;
+    margin-left: auto;
+}
+
+.msg.theirs {
+    background: #e4e6eb;
+    color: black;
+    align-self: flex-start;
+    border-radius: 18px 18px 18px 2px;
+    margin-right: auto;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.chat-input:focus {
+    border-color: #ee4d2d;
+}
+
+.btn-send {
+    background: #ee4d2d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   LOGOUT MODAL
+========================================================= */
+
+.logout-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s ease;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+}
+
+.logout-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.logout-box {
+    width: 420px;
+    max-width: 90%;
+    background: #fff;
+    border-radius: 18px;
+    padding: 35px 30px;
+    text-align: center;
+    transform: scale(.9);
+    transition: .25s ease;
+    box-shadow: 0 20px 50px rgba(0,0,0,.2);
+}
+
+.logout-modal.show .logout-box {
+    transform: scale(1);
+}
+
+.logout-icon {
+    width: 80px;
+    height: 80px;
+    margin: auto;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.logout-box h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: #222;
+}
+
+.logout-box p {
+    margin-top: 12px;
+    color: #666;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.logout-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 28px;
+}
+
+.logout-buttons button {
+    flex: 1;
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.btn-no {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-no:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.btn-yes {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-yes:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .table-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-input,
+    .filter-select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .booking-card-header {
+        padding: 17px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .booking-card-body {
+        padding: 17px;
+    }
+
+    .booking-info-grid,
+    .booking-payment {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-service-title h3 {
+        font-size: 16px;
+    }
+
+    .booking-card-footer {
+        padding: 15px 17px;
+    }
+
+    .booking-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .booking-actions .btn-chat,
+    .booking-actions .btn-track,
+    .booking-actions .btn-rate,
+    .booking-actions .btn-cancel {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .rated-display {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .chat-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .chat-input-area {
+        gap: 6px;
+    }
+
+    .btn-send {
+        padding: 10px 14px;
+    }
 }

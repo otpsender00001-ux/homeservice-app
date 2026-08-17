@@ -27,469 +27,247 @@
 <body>
 
     <div id="addressModal" class="modal">
-
-    <div class="modal-content">
-
-        <div class="addr-header">
-
-            <span onclick="closeAddressModal()"
-                  style="cursor:pointer;font-size:24px;color:#ee4d2d;margin-right:15px;">
-                &larr;
-            </span>
-
-            <h3>Add Service Address</h3>
-
-            <span id="addr-loader"
-                  style="display:none;margin-left:10px;">
-                Loading...
-            </span>
-
-        </div>
-
-
-        <div class="addr-body">
-
-            <!-- LEFT -->
-
-            <div class="addr-column">
-
-                <span class="addr-section-title">
-                    Contact Information
+        <div class="modal-content">
+            <div class="addr-header">
+                <span onclick="closeAddressModal()"
+                      style="cursor:pointer;font-size:24px;color:#ee4d2d;margin-right:15px;">
+                    &larr;
                 </span>
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Address Label (Optional)
-                    </span>
-
-                    <input
-                        type="text"
-                        id="addr_label"
-                        class="addr-input"
-                        placeholder="Example: Home">
-
-                </div>
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Full Name
-                    </span>
-
-                    <input
-                        type="text"
-                        id="addr_name"
-                        class="addr-input"
-                        placeholder="Juan Dela Cruz">
-
-                </div>
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Phone Number
-                    </span>
-
-                    <input
-                        type="text"
-                        id="addr_phone"
-                        class="addr-input"
-                        placeholder="09XXXXXXXXX">
-
-                </div>
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Postal Code
-                    </span>
-
-                    <input
-type="text"
-id="addr_postal"
-class="addr-input"
-placeholder="Postal Code (Optional)">
-
-                </div>
-
+                <h3>Add Service Address</h3>
+                <span id="addr-loader"
+                      style="display:none;margin-left:10px;">
+                    Loading...
+                </span>
             </div>
 
-
-            <!-- RIGHT -->
-
-            <div class="addr-column">
-
-                <span class="addr-section-title">
-                    Location Details
-                </span>
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Province
+            <div class="addr-body">
+                <!-- LEFT -->
+                <div class="addr-column">
+                    <span class="addr-section-title">
+                        Contact Information
                     </span>
-
-                    <select
-                        id="addr_province"
-                        class="addr-select">
-
-                        <option value="">
-                            Select Province
-                        </option>
-
-                    </select>
-
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Address Label (Optional)
+                        </span>
+                        <input type="text" id="addr_label" class="addr-input" placeholder="Example: Home">
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Full Name
+                        </span>
+                        <input type="text" id="addr_name" class="addr-input" placeholder="Juan Dela Cruz">
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Phone Number
+                        </span>
+                        <input type="text" id="addr_phone" class="addr-input" placeholder="09XXXXXXXXX">
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Postal Code
+                        </span>
+                        <input type="text" id="addr_postal" class="addr-input" placeholder="Postal Code (Optional)">
+                    </div>
                 </div>
 
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Region
+                <!-- RIGHT -->
+                <div class="addr-column">
+                    <span class="addr-section-title">
+                        Location Details
                     </span>
-
-                    <input
-                        type="text"
-                        id="addr_region"
-                        class="addr-input"
-                        readonly>
-
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Province
+                        </span>
+                        <select id="addr_province" class="addr-select">
+                            <option value="">Select Province</option>
+                        </select>
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Region
+                        </span>
+                        <input type="text" id="addr_region" class="addr-input" readonly>
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Municipality / City
+                        </span>
+                        <select id="addr_city" class="addr-select" disabled>
+                            <option value="">Select Municipality</option>
+                        </select>
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Barangay
+                        </span>
+                        <select id="addr_brgy" class="addr-select" disabled>
+                            <option value="">Select Barangay</option>
+                        </select>
+                    </div>
+                    <div class="addr-group">
+                        <span class="addr-label">
+                            Street / House No.
+                        </span>
+                        <input type="text" id="addr_street" class="addr-input" placeholder="House No., Street Name">
+                    </div>
                 </div>
-
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Municipality / City
-                    </span>
-
-                    <select
-                        id="addr_city"
-                        class="addr-select"
-                        disabled>
-
-                        <option value="">
-                            Select Municipality
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Barangay
-                    </span>
-
-                    <select
-                        id="addr_brgy"
-                        class="addr-select"
-                        disabled>
-
-                        <option value="">
-                            Select Barangay
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="addr-group">
-
-                    <span class="addr-label">
-                        Street / House No.
-                    </span>
-
-                    <input
-                        type="text"
-                        id="addr_street"
-                        class="addr-input"
-                        placeholder="House No., Street Name">
-
-                </div>
-
             </div>
 
+            <div class="addr-footer">
+                <button class="addr-btn btn-cancel" onclick="closeAddressModal()">
+                    Cancel
+                </button>
+                <button id="addr_submit_btn" class="addr-btn addr-submit" onclick="saveAddress()" disabled>
+                    Save Address
+                </button>
+            </div>
         </div>
-
-
-        <div class="addr-footer">
-
-            <button
-                class="addr-btn btn-cancel"
-                onclick="closeAddressModal()">
-
-                Cancel
-
-            </button>
-
-            <button
-                id="addr_submit_btn"
-                class="addr-btn addr-submit"
-                onclick="saveAddress()"
-                disabled>
-
-                Save Address
-
-            </button>
-
-        </div>
-
     </div>
 
-</div>
-
-<div id="addressManagerModal" class="modal">
-
-    <div class="modal-content">
-
-        <div class="addr-header">
-
-            <h3>My Saved Address</h3>
-
-            <button
-                type="button"
-                onclick="closeAddressManager()"
-                style="background:none;border:none;font-size:24px;cursor:pointer;">
-                ×
-            </button>
-
-        </div>
-
-        <div
-            id="addressList"
-            style="padding:20px;max-height:450px;overflow-y:auto;">
-
-            <div class="empty-address">
-
-                No saved address.
-
+    <div id="addressManagerModal" class="modal">
+        <div class="modal-content">
+            <div class="addr-header">
+                <h3>My Saved Address</h3>
+                <button type="button" onclick="closeAddressManager()"
+                        style="background:none;border:none;font-size:24px;cursor:pointer;">
+                    ×
+                </button>
             </div>
-
+            <div id="addressList" style="padding:20px;max-height:450px;overflow-y:auto;">
+                <div class="empty-address">
+                    No saved address.
+                </div>
+            </div>
+            <div class="addr-footer">
+                <button class="addr-btn btn-cancel" onclick="closeAddressManager()">
+                    Close
+                </button>
+                <button class="addr-btn addr-submit enabled" onclick="openAddAddressForm()">
+                    + Add New Address
+                </button>
+            </div>
         </div>
-
-        <div class="addr-footer">
-
-            <button
-                class="addr-btn btn-cancel"
-                onclick="closeAddressManager()">
-
-                Close
-
-            </button>
-
-            <button
-                class="addr-btn addr-submit enabled"
-                onclick="openAddAddressForm()">
-
-                + Add New Address
-
-            </button>
-
-        </div>
-
     </div>
 
-</div>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="brand">ServiQuick</span>
+                <p class="panel">Customer Portal</p>
+            </div>
 
-<div class="layout">
+            <nav class="menu" id="user-menu">
+                <a href="user-dashboard.html">🏠 Dashboard</a>
+                <a href="user-bookings.html">📅 My Bookings</a>
+                <a href="user-services.html">🛠 Book Service</a>
+                <a href="user-track-tech.html">📍 Track Tech</a>
+                <a href="user-profile.html" class="active">👤 My Profile</a>
 
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <span class="brand">ServiQuick</span>
-            <p class="panel">Customer Portal</p>
-        </div>
+                <hr style="border:0;border-top:1px solid #ddd;margin:15px 0;">
 
-        <nav class="menu" id="user-menu">
-            <a href="user-dashboard.html">🏠 Dashboard</a>
-            <a href="user-bookings.html">📅 My Bookings</a>
-            <a href="user-services.html">🛠 Book Service</a>
-            <a href="user-track-tech.html">📍 Track Tech</a>
-            <a href="user-profile.html" class="active">👤 My Profile</a>
+                <a href="../backend/auth/logout.php"
+                   onclick="return confirm('Are you sure you want to logout?');"
+                   style="color:#ef4444;font-weight:bold;">
+                     Logout
+                </a>
+            </nav>
+        </aside>
 
-            <hr style="border:0;border-top:1px solid #ddd;margin:15px 0;">
+        <main class="main">
+            <div class="header">
+                <h2>My Profile</h2>
+                <p>Manage your personal information.</p>
+            </div>
 
-            <a href="../backend/auth/logout.php"
-            onclick="return confirm('Are you sure you want to logout?');"
-            style="color:#ef4444;font-weight:bold;">
-                 Logout
-            </a>
-        </nav>
-    </aside>
+            <div class="profile-container">
+                <!-- LEFT CARD -->
+                <div class="profile-card avatar-section">
+                    <div class="avatar-large">
+                        <img id="avatar-preview-img"
+                             src="../assets/images/default-avatar.png"
+                             alt="Avatar"
+                             style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                    </div>
+                    <h3 id="display-name">Loading...</h3>
+                    <p id="display-email">Loading...</p>
 
-    <main class="main">
-
-        <div class="header">
-            <h2>My Profile</h2>
-            <p>Manage your personal information.</p>
-        </div>
-
-        <div class="profile-container">
-
-            <!-- LEFT CARD -->
-
-            <div class="profile-card avatar-section">
-
-                <div class="avatar-large">
-                    <img
-                        id="avatar-preview-img"
-                        src="../assets/images/default-avatar.png"
-                        alt="Avatar"
-                        style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                    <div style="text-align:left;margin-top:25px;border-top:1px solid #eee;padding-top:20px;">
+                        <p style="font-size:13px;color:#6b7280;margin-bottom:8px;">
+                            <strong>Email:</strong>
+                            <span id="display-email2">Loading...</span>
+                        </p>
+                        <p style="font-size:13px;color:#6b7280;margin-bottom:8px;">
+                            <strong>Phone:</strong>
+                            <span id="display-phone">Loading...</span>
+                        </p>
+                    </div>
                 </div>
 
-                <h3 id="display-name">
-                    Loading...
-                </h3>
+                <!-- RIGHT CARD -->
+                <div class="profile-card">
+                    <form id="profileForm" enctype="multipart/form-data">
+                        <div class="section-title">
+                            👤 Personal Information
+                        </div>
 
-                <p id="display-email">
-                    Loading...
-                </p>
+                        <div class="info-group" style="margin-bottom:15px;">
+                            <label>Upload Profile Picture</label>
+                            <input type="file" id="user_image" name="profile_image" accept="image/*" onchange="previewImage(event)">
+                        </div>
 
-                <div style="text-align:left;margin-top:25px;border-top:1px solid #eee;padding-top:20px;">
+                        <div class="personal-info-grid">
+                            <div class="info-group">
+                                <label>Full Name</label>
+                                <input type="text" id="full_name" name="full_name" required>
+                            </div>
+                            <div class="info-group">
+                                <label>Gender</label>
+                                <select id="gender" name="gender">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Prefer not to say">Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="info-group">
+                                <label>Birthday</label>
+                                <input type="date" id="birthday" name="bday">
+                            </div>
+                            <div class="info-group">
+                                <label>Phone Number</label>
+                                <input type="text" id="phone" name="phone">
+                            </div>
+                        </div>
 
-                    <p style="font-size:13px;color:#6b7280;margin-bottom:8px;">
-                        <strong>Email:</strong>
-                        <span id="display-email2">Loading...</span>
-                    </p>
+                        <div class="section-title">
+                            📍 Address
+                        </div>
 
-                    <p style="font-size:13px;color:#6b7280;margin-bottom:8px;">
-                        <strong>Phone:</strong>
-                        <span id="display-phone">Loading...</span>
-                    </p>
-
+                        <div class="address-manager-card">
+                            <div class="address-info">
+                                <h4>Manage Your Service Address</h4>
+                                <p>
+                                    Add multiple address and choose the one you want
+                                    whenever you book a service.
+                                </p>
+                            </div>
+                            <button type="button" class="btn-save" onclick="openAddressManager()">
+                                Manage Address
+                            </button>
+                        </div>
+                    </form>
                     
-
-                </div>
-
-            </div>
-
-            <!-- RIGHT CARD -->
-
-            <div class="profile-card">
-
-                <form id="profileForm" enctype="multipart/form-data">
-
-                    <div class="section-title">
-                        👤 Personal Information
-                    </div>
-
-                    <div class="info-group" style="margin-bottom:15px;">
-
-                        <label>Upload Profile Picture</label>
-
-                        <input
-                            type="file"
-                            id="user_image"
-                            name="profile_image"
-                            accept="image/*"
-                            onchange="previewImage(event)">
-
-                    </div>
-
-                    <div class="personal-info-grid">
-
-                        <div class="info-group">
-                            <label>Full Name</label>
-                            <input
-                                type="text"
-                                id="full_name"
-                                name="full_name"
-                                required>
-                        </div>
-
-                        <div class="info-group">
-                            <label>Gender</label>
-
-                            <select
-                                id="gender"
-                                name="gender">
-
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Prefer not to say">Prefer not to say</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="info-group">
-                            <label>Birthday</label>
-
-                            <input
-                                type="date"
-                                id="birthday"
-                                name="bday">
-                        </div>
-
-                        <div class="info-group">
-                            <label>Phone Number</label>
-
-                            <input
-                                type="text"
-                                id="phone"
-                                name="phone">
-                        </div>
-
-                    </div>
-
-                    <div class="section-title">
-    📍 Address
-</div>
-
-<div class="address-manager-card">
-
-    <div class="address-info">
-
-        <h4>Manage Your Service Address</h4>
-
-        <p>
-            Add multiple address and choose the one you want
-            whenever you book a service.
-        </p>
-
-    </div>
-
-    <button
-        type="button"
-        class="btn-save"
-        onclick="openAddressManager()">
-
-        Manage Address
-
-    </button>
-
-</div>
-
-</div>
-
-                    <button
-                        type="submit"
-                        id="saveBtn"
-                        class="btn-save">
-
+                    <button type="submit" form="profileForm" id="saveBtn" class="btn-save">
                         Save All Changes
-
                     </button>
 
-                </form>
-
+                </div>
             </div>
+        </main>
+    </div>
 
-        </div>
-
-    </main>
-
-</div>
-
-
-
-<script src="../assets/js/user-profile.js"></script>
-
-
+    <script src="../assets/js/user-profile.js"></script>
 </body>
 </html>

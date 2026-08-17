@@ -3,248 +3,889 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Admin Dashboard | ServiQuick</title>
+
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin-dashboard.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        .slot-manager-container { margin-top: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .slot-form { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; }
-        .slot-form div { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 120px; }
-        .slot-form input { padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%; }
-        .btn-add-slot { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; white-space: nowrap; }
-        .btn-add-slot:hover { background: #1e40af; }
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        
-        .controls-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-        .control-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; flex: 1; min-width: 280px; position: relative; z-index: 1; }
-        .control-card label { font-weight: 700; color: #333; white-space: nowrap; }
-        .control-card select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-weight: bold; outline: none; flex: 1; min-width: 100px; }
-        
-        #custom-date-container { display: none; align-items: center; gap: 5px; margin-left: 10px; flex-wrap: wrap; width: 100%; margin-top: 10px; }
-        #custom-date-container input { flex: 1; min-width: 120px; }
 
-        .mode-badge { background: #e0e7ff; color: #1d4ed8; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
 <div class="layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
     <aside class="sidebar">
+
         <div class="sidebar-header">
             <span class="brand">ServiQuick</span>
             <p class="panel">Admin Panel</p>
         </div>
+
         <nav class="menu" id="admin-menu">
-            <a href="admin-dashboard.html">📊 Dashboard</a> 
-            <a href="bookings.html">📅 Bookings</a> 
-            <a href="services.html">🛠 Services</a> 
-            <a href="track-technicians.html">📍 Track Tech</a> 
-            <a href="admin-users.html">👥 Users</a>
-            <a href="admin-messages.html">💬 Inbox</a>
-            
-            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
-<<<<<<< HEAD
-     Logout
-</a>
-=======
-                               🚪 Logout
+
+            <a href="admin-dashboard.html">
+                📊 Dashboard
             </a>
+
+            <a href="bookings.html">
+                📅 Bookings
+            </a>
+
+            <a href="services.html">
+                🛠 Services
+            </a>
+
+            <a href="track-technicians.html">
+                📍 Track Tech
+            </a>
+
+            <a href="admin-users.html">
+                👥 Users
+            </a>
+
+            <a href="admin-messages.html">
+                💬 Inbox
+            </a>
+            <a href="admin-reports.html">
+    📈 Reports
+</a>
+
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+
+            <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">
+                🚪 Logout
+            </a>
+
         </nav>
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
+
                 let currentUrl = window.location.pathname.split('/').pop();
+
                 let links = document.querySelectorAll('#admin-menu a');
-                
+
                 links.forEach(link => {
+
                     link.classList.remove('active');
-                    if (currentUrl === '') currentUrl = 'admin-dashboard.html';
+
+                    if (currentUrl === '') {
+                        currentUrl = 'admin-dashboard.html';
+                    }
+
                     if (link.getAttribute('href') === currentUrl) {
                         link.classList.add('active');
                     }
+
                 });
+
             });
         </script>
+
     </aside>
 
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
     <main class="main">
+
+        <!-- HEADER -->
+
         <div class="header">
+
             <h2>Overview</h2>
-            <p>Admin system statistics</p>
+
+            <p>
+                Admin system statistics
+            </p>
+
         </div>
+
+
+        <!-- =========================
+             CONTROLS
+        ========================== -->
 
         <div class="controls-row">
+
             <!-- Daily Salary Settings Card -->
+
             <div class="control-card">
+
                 <div>
-                    <label>Arawan Rate:</label>
-                    <span id="activeModeBadge" class="mode-badge">Loading...</span>
+
+                    <label>
+                        Arawan Rate:
+                    </label>
+
+                    <span
+                        id="activeModeBadge"
+                        class="mode-badge">
+                        Loading...
+                    </span>
+
                 </div>
-                <button type="button" id="btnOpenLaborModal" style="background: #2563eb; color: white; border: none; padding: 9px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap; z-index: 2; position: relative;">
+
+                <button
+                    type="button"
+                    id="btnOpenLaborModal"
+                    class="salary-settings-btn">
+
                     ⚙️ Set Daily Salary Rate
+
                 </button>
+
             </div>
+
 
             <!-- Date Filter Control -->
-            <div class="control-card" style="justify-content: flex-start;">
-                <label for="date-filter">📅 Filter:</label>
+
+            <div
+                class="control-card"
+                style="justify-content: flex-start;">
+
+                <label for="date-filter">
+                    📅 Filter:
+                </label>
+
                 <select id="date-filter">
-                    <option value="all">All Time</option>
-                    <option value="daily">Daily (Today)</option>
-                    <option value="weekly">Weekly (This Week)</option>
-                    <option value="monthly">Monthly (This Month)</option>
-                    <option value="custom">Custom Date</option>
+
+                    <option value="all">
+                        All Time
+                    </option>
+
+                    <option value="daily">
+                        Daily (Today)
+                    </option>
+
+                    <option value="weekly">
+                        Weekly (This Week)
+                    </option>
+
+                    <option value="monthly">
+                        Monthly (This Month)
+                    </option>
+
+                    <option value="custom">
+                        Custom Date
+                    </option>
+
                 </select>
 
+
                 <div id="custom-date-container">
-                    <input type="date" id="start-date">
-                    <span style="color: #666;">to</span>
-                    <input type="date" id="end-date">
-                    <button id="apply-filter-btn" style="background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold;">Apply</button>
+
+                    <input
+                        type="date"
+                        id="start-date">
+
+                    <span>
+                        to
+                    </span>
+
+                    <input
+                        type="date"
+                        id="end-date">
+
+                    <button
+                        id="apply-filter-btn">
+
+                        Apply
+
+                    </button>
+
                 </div>
+
             </div>
+
         </div>
-        
+
+
+        <!-- =========================
+             DASHBOARD CARDS
+        ========================== -->
+
         <div class="cards">
+
             <div class="card">
-                <p>Total Bookings</p>
-                <h3 id="total-bookings">0</h3>
+
+                <p>
+                    Total Bookings
+                </p>
+
+                <h3 id="total-bookings">
+                    0
+                </h3>
+
             </div>
+
+
             <div class="card">
-                <p>Total Revenue</p>
-                <h3 id="total-revenue">₱0.00</h3>
+
+                <p>
+                    Total Revenue
+                </p>
+
+                <h3 id="total-revenue">
+                    ₱0.00
+                </h3>
+
             </div>
+
+
             <div class="card">
-                <p>Pending Tasks</p>
-                <h3 id="pending-tasks">0</h3>
+
+                <p>
+                    Pending Tasks
+                </p>
+
+                <h3 id="pending-tasks">
+                    0
+                </h3>
+
             </div>
+
+
             <div class="card">
-                <p>Active Technicians</p>
-                <h3 id="active-techs">0</h3>
+
+                <p>
+                    Active Technicians
+                </p>
+
+                <h3 id="active-techs">
+                    0
+                </h3>
+
             </div>
-            <div class="card" style="border-left: 5px solid #2563eb;">
-                <p>Labor Cost</p>
-                <h3 id="labor-cost">₱0.00</h3>
+
+
+            <div
+                class="card"
+                style="border-left: 5px solid #2563eb;">
+
+                <p>
+                    Labor Cost
+                </p>
+
+                <h3 id="labor-cost">
+                    ₱0.00
+                </h3>
+
             </div>
-            <div class="card" style="border-left: 5px solid #10b981;">
-                <p>Net Profit</p>
-                <h3 id="net-profit">₱0.00</h3>
+
+
+            <div
+                class="card"
+                style="border-left: 5px solid #10b981;">
+
+                <p>
+                    Net Profit
+                </p>
+
+                <h3 id="net-profit">
+                    ₱0.00
+                </h3>
+
             </div>
+
         </div>
+
+
+        <!-- =========================
+             RECENT BOOKINGS
+        ========================== -->
 
         <div class="table-box">
+
             <div class="table-header">
-                <h3>Recent Bookings</h3>
+
+                <h3>
+                    Recent Bookings
+                </h3>
+
             </div>
+
             <table>
+
                 <thead>
+
                     <tr>
-                        <th>Customer</th>
-                        <th>Service</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Status</th>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Service
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
                     </tr>
+
                 </thead>
+
                 <tbody id="recent-bookings-table">
+
                     <tr>
-                        <td colspan="5" style="text-align:center;">Loading data...</td>
+
+                        <td
+                            colspan="5"
+                            style="text-align:center;">
+
+                            Loading data...
+
+                        </td>
+
                     </tr>
+
                 </tbody>
+
             </table>
+
         </div>
+
+
+        <!-- =================================================
+             MANAGE BOOKING TIME SLOTS
+        ================================================== -->
 
         <div class="slot-manager-container">
-            <div class="table-header">
-                <h3>🕒 Manage Booking Time Slots</h3>
-                <p style="font-size: 0.85rem; color: gray;">Control available times and limits for users</p>
+
+
+            <!-- SLOT HEADER -->
+
+            <div class="slot-manager-header">
+
+                <div class="slot-title-area">
+
+                    <div class="slot-icon">
+                        🕒
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Manage Booking Time Slots
+                        </h3>
+
+                        <p>
+                            Set the available booking times and
+                            maximum customers per time slot.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="slot-info-badge">
+                    👤 Customer capacity
+                </div>
+
             </div>
 
-            <div class="slot-form">
-                <div>
-                    <label>Start Time</label>
-                    <input type="time" id="start-time">
+
+            <!-- =========================
+                 ADD SLOT FORM
+            ========================== -->
+
+            <div class="slot-add-card">
+
+                <div class="slot-add-header">
+
+                    <div>
+
+                        <h4>
+                            Add New Time Slot
+                        </h4>
+
+                        <p>
+                            Create a reusable booking schedule
+                            for customers.
+                        </p>
+
+                    </div>
+
+                    <span class="required-note">
+                        * Required
+                    </span>
+
                 </div>
-                <div>
-                    <label>End Time</label>
-                    <input type="time" id="end-time">
+
+
+                <div class="slot-form">
+
+
+                    <!-- START TIME -->
+
+                    <div class="slot-input-group">
+
+                        <label for="start-time">
+
+                            Start Time
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="time-input-wrapper">
+
+                            <span class="input-icon">
+                                🕐
+                            </span>
+
+                            <input
+                                type="time"
+                                id="start-time"
+                                required>
+
+                        </div>
+
+                        <small>
+                            When the booking period begins
+                        </small>
+
+                    </div>
+
+
+                    <!-- END TIME -->
+
+                    <div class="slot-input-group">
+
+                        <label for="end-time">
+
+                            End Time
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="time-input-wrapper">
+
+                            <span class="input-icon">
+                                🕐
+                            </span>
+
+                            <input
+                                type="time"
+                                id="end-time"
+                                required>
+
+                        </div>
+
+                        <small>
+                            When the booking period ends
+                        </small>
+
+                    </div>
+
+
+                    <!-- CAPACITY -->
+
+                    <div class="slot-input-group">
+
+                        <label for="slot-capacity">
+
+                            Maximum Customers
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="capacity-input-wrapper">
+
+                            <span class="input-icon">
+                                👥
+                            </span>
+
+                            <input
+                                type="number"
+                                id="slot-capacity"
+                                value="5"
+                                min="1"
+                                max="999"
+                                required>
+
+                            <span class="capacity-label">
+                                customers
+                            </span>
+
+                        </div>
+
+                        <small>
+                            Maximum bookings allowed for this time
+                        </small>
+
+                    </div>
+
+
+                    <!-- ADD BUTTON -->
+
+                    <div class="slot-add-button-wrapper">
+
+                        <button
+                            type="button"
+                            class="btn-add-slot"
+                            onclick="addSlot()">
+
+                            <span class="add-icon">
+                                +
+                            </span>
+
+                            Add Time Slot
+
+                        </button>
+
+                    </div>
+
                 </div>
-                <div>
-                    <label>Max Slots</label>
-                    <input type="number" id="slot-capacity" value="5" min="1">
-                </div>
-                <button type="button" class="btn-add-slot" onclick="addSlot()">➕ Add Slot</button>
+
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Time Range</th>
-                        <th>Capacity</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="slot-table-body">
-                    <tr>
-                        <td colspan="3" style="text-align:center;">Loading slots...</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <!-- =========================
+                 EXISTING SLOTS
+            ========================== -->
+
+            <div class="existing-slots-section">
+
+
+                <div class="existing-slots-header">
+
+                    <div>
+
+                        <h4>
+                            Existing Time Slots
+                        </h4>
+
+                        <p>
+                            These are the booking times currently
+                            available to customers.
+                        </p>
+
+                    </div>
+
+                    <span class="slot-count-badge">
+                        Managed Slots
+                    </span>
+
+                </div>
+
+
+                <!-- DESKTOP TABLE -->
+
+                <div class="slot-table-wrapper">
+
+                    <table class="slot-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    <span>
+                                        🕐 Time Range
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        👥 Capacity
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        ⚙️ Action
+                                    </span>
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="slot-table-body">
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="slot-loading">
+
+                                    <div class="slot-loading-content">
+
+                                        <span class="loading-spinner">
+                                        </span>
+
+                                        <span>
+                                            Loading time slots...
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- HELPFUL NOTE -->
+
+                <div class="slot-help-box">
+
+                    <div class="slot-help-icon">
+                        💡
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            How it works
+                        </strong>
+
+                        <p>
+                            Customers will only see these time slots
+                            when they choose a booking date. When a
+                            slot reaches its maximum capacity, it will
+                            automatically appear as <strong>FULL</strong>
+                            and cannot be selected.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </main>
+
 </div>
 
-<!-- Modal 1: Daily Salary Rate Form -->
-<div id="laborCostSettingsModal" class="logout-modal" style="display: none;">
-    <div class="logout-box" style="max-width: 450px; text-align: left;">
-        <h2 style="margin-bottom: 5px; font-size: 1.25rem;">⚙️ Daily Salary Rate (Arawan)</h2>
-        <p style="color: #666; font-size: 0.85rem; margin-bottom: 15px;">Set the fixed daily salary rate for technicians:</p>
+
+<!-- =================================================
+     MODAL 1: DAILY SALARY RATE FORM
+================================================== -->
+
+<div
+    id="laborCostSettingsModal"
+    class="logout-modal"
+    style="display: none;">
+
+    <div
+        class="logout-box"
+        style="max-width: 450px; text-align: left;">
+
+        <h2
+            style="margin-bottom: 5px; font-size: 1.25rem;">
+
+            ⚙️ Daily Salary Rate (Arawan)
+
+        </h2>
+
+        <p
+            style="color: #666; font-size: 0.85rem; margin-bottom: 15px;">
+
+            Set the fixed daily salary rate for technicians:
+
+        </p>
+
 
         <div style="margin-bottom: 20px;">
-            <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9rem;">Daily Salary Rate (₱):</label>
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <span style="font-weight: bold; font-size: 1.1rem; color: #333;">₱</span>
-                <input type="number" id="inputDailyRate" placeholder="e.g. 800" min="1" step="10" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-size: 1rem; font-weight: bold;">
+
+            <label
+                style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9rem;">
+
+                Daily Salary Rate (₱):
+
+            </label>
+
+
+            <div
+                style="display: flex; align-items: center; gap: 5px;">
+
+                <span
+                    style="font-weight: bold; font-size: 1.1rem; color: #333;">
+
+                    ₱
+
+                </span>
+
+                <input
+                    type="number"
+                    id="inputDailyRate"
+                    placeholder="e.g. 800"
+                    min="1"
+                    step="10"
+                    style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-size: 1rem; font-weight: bold;">
+
             </div>
+
         </div>
 
-        <div class="logout-buttons" style="justify-content: flex-end; gap: 10px;">
-            <button type="button" class="btn-no" id="btnCancelLaborModal">Cancel</button>
-            <button type="button" class="btn-yes" id="btnProceedConfirmation" style="background: #2563eb;">Save Changes</button>
+
+        <div
+            class="logout-buttons"
+            style="justify-content: flex-end; gap: 10px;">
+
+            <button
+                type="button"
+                class="btn-no"
+                id="btnCancelLaborModal">
+
+                Cancel
+
+            </button>
+
+            <button
+                type="button"
+                class="btn-yes"
+                id="btnProceedConfirmation"
+                style="background: #2563eb;">
+
+                Save Changes
+
+            </button>
+
         </div>
+
     </div>
+
 </div>
 
-<!-- Modal 2: Confirmation Modal -->
-<div id="confirmSwitchModal" class="logout-modal" style="display: none;">
-    <div class="logout-box" style="max-width: 450px; text-align: left;">
-        <h2 style="margin-bottom: 10px; color: #0f172a; font-size: 1.2rem;">⚠️ Confirm Daily Rate Update</h2>
-        <p id="confirmEnglishMessage" style="color: #475569; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+
+<!-- =================================================
+     MODAL 2: CONFIRMATION MODAL
+================================================== -->
+
+<div
+    id="confirmSwitchModal"
+    class="logout-modal"
+    style="display: none;">
+
+    <div
+        class="logout-box"
+        style="max-width: 450px; text-align: left;">
+
+        <h2
+            style="margin-bottom: 10px; color: #0f172a; font-size: 1.2rem;">
+
+            ⚠️ Confirm Daily Rate Update
+
+        </h2>
+
+        <p
+            id="confirmEnglishMessage"
+            style="color: #475569; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+
             Are you sure you want to update the technician daily salary rate?
+
         </p>
-        <div class="logout-buttons" style="justify-content: flex-end; gap: 10px;">
-            <button type="button" class="btn-no" id="btnCancelConfirmModal">Cancel</button>
-            <button type="button" class="btn-yes" id="btnActivateNow" style="background: #10b981;">Confirm & Save</button>
+
+
+        <div
+            class="logout-buttons"
+            style="justify-content: flex-end; gap: 10px;">
+
+            <button
+                type="button"
+                class="btn-no"
+                id="btnCancelConfirmModal">
+
+                Cancel
+
+            </button>
+
+            <button
+                type="button"
+                class="btn-yes"
+                id="btnActivateNow"
+                style="background: #10b981;">
+
+                Confirm & Save
+
+            </button>
+
         </div>
+
     </div>
+
 </div>
 
-<!-- Logout Modal -->
-<div id="logout-modal" class="logout-modal" style="display: none;">
+
+<!-- =================================================
+     LOGOUT MODAL
+================================================== -->
+
+<div
+    id="logout-modal"
+    class="logout-modal"
+    style="display: none;">
+
     <div class="logout-box">
-        <h2>Logout</h2>
-        <p>Are you sure you want to log out of your <strong>ServiQuick</strong> account?</p>
+
+        <h2>
+            Logout
+        </h2>
+
+        <p>
+            Are you sure you want to log out of your
+            <strong>ServiQuick</strong> account?
+        </p>
+
         <div class="logout-buttons">
-            <button id="cancel-logout" class="btn-no">No</button>
-            <button id="confirm-logout" class="btn-yes">Yes</button>
+
+            <button
+                id="cancel-logout"
+                class="btn-no">
+
+                No
+
+            </button>
+
+            <button
+                id="confirm-logout"
+                class="btn-yes">
+
+                Yes
+
+            </button>
+
         </div>
+
     </div>
+
 </div>
+
+
+<!-- =================================================
+     EXISTING JAVASCRIPT
+================================================== -->
 
 <script src="../assets/js/dashboard.js"></script>
 <script src="../assets/js/bookings.js"></script>
+<script src="../assets/js/admin-slots.js"></script>
 
 </body>
 </html>

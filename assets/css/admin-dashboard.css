@@ -105,3 +105,1441 @@
     background:#dc2626;
     transform:translateY(-2px);
 }
+/* =========================================================
+   ADMIN DASHBOARD
+   ServiQuick
+========================================================= */
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls-row {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+
+.control-card {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 14px;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.05);
+
+    border: 1px solid #eef2f7;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+    flex-wrap: wrap;
+
+    flex: 1;
+    min-width: 280px;
+
+    position: relative;
+    z-index: 1;
+}
+
+
+.control-card label {
+    font-weight: 700;
+    color: #334155;
+    white-space: nowrap;
+}
+
+
+.control-card select {
+    padding: 9px 12px;
+
+    border: 1px solid #d8dee8;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    font-weight: 600;
+
+    outline: none;
+
+    flex: 1;
+    min-width: 120px;
+
+    color: #334155;
+
+    transition: 0.2s ease;
+}
+
+
+.control-card select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =========================================================
+   DAILY RATE
+========================================================= */
+
+.mode-badge {
+    display: inline-flex;
+    align-items: center;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-weight: 700;
+    font-size: 0.85rem;
+
+    margin-left: 5px;
+}
+
+
+.salary-settings-btn {
+    background: #2563eb;
+    color: white;
+
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    transition: 0.2s ease;
+}
+
+
+.salary-settings-btn:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.20);
+}
+
+
+/* =========================================================
+   CUSTOM DATE FILTER
+========================================================= */
+
+#custom-date-container {
+    display: none;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-left: 10px;
+
+    flex-wrap: wrap;
+
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+
+#custom-date-container input {
+    flex: 1;
+
+    min-width: 120px;
+
+    padding: 8px 10px;
+
+    border: 1px solid #d8dee8;
+
+    border-radius: 7px;
+
+    outline: none;
+}
+
+
+#custom-date-container input:focus {
+    border-color: #2563eb;
+}
+
+
+#apply-filter-btn {
+    background: #2563eb;
+
+    color: #ffffff;
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+
+#apply-filter-btn:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================================================
+   MANAGE BOOKING TIME SLOTS
+========================================================= */
+
+.slot-manager-container {
+
+    margin-top: 30px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    border: 1px solid #e8edf3;
+
+    box-shadow:
+        0 6px 20px rgba(15, 23, 42, 0.06);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   SLOT HEADER
+========================================================= */
+
+.slot-manager-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 24px 26px;
+
+    border-bottom: 1px solid #eef2f6;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #fafcff 100%
+        );
+}
+
+
+.slot-title-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+.slot-icon {
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #eff6ff;
+
+    font-size: 23px;
+
+    flex-shrink: 0;
+}
+
+
+.slot-title-area h3 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 1.2rem;
+
+    font-weight: 800;
+}
+
+
+.slot-title-area p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 0.88rem;
+
+    line-height: 1.5;
+}
+
+
+.slot-info-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ADD SLOT CARD
+========================================================= */
+
+.slot-add-card {
+
+    margin: 22px 26px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e6ebf1;
+
+    border-radius: 14px;
+}
+
+
+.slot-add-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+.slot-add-header h4 {
+
+    margin: 0;
+
+    color: #1e293b;
+
+    font-size: 1rem;
+
+    font-weight: 800;
+}
+
+
+.slot-add-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 0.82rem;
+}
+
+
+.required-note {
+
+    color: #94a3b8;
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SLOT FORM
+========================================================= */
+
+.slot-form {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(160px, 1fr)
+        minmax(160px, 1fr)
+        minmax(210px, 1.2fr)
+        auto;
+
+    gap: 15px;
+
+    align-items: end;
+
+    margin-bottom: 0;
+}
+
+
+.slot-input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    min-width: 0;
+}
+
+
+.slot-input-group label {
+
+    color: #334155;
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+}
+
+
+.slot-input-group label span {
+
+    color: #ef4444;
+}
+
+
+.slot-input-group small {
+
+    color: #94a3b8;
+
+    font-size: 0.7rem;
+
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   TIME INPUT
+========================================================= */
+
+.time-input-wrapper {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.time-input-wrapper .input-icon {
+
+    position: absolute;
+
+    left: 11px;
+
+    font-size: 15px;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+.time-input-wrapper input {
+
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 0 12px 0 37px;
+
+    border: 1px solid #d8dee8;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+.time-input-wrapper input:hover {
+
+    border-color: #b8c2d1;
+}
+
+
+.time-input-wrapper input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =========================================================
+   CAPACITY INPUT
+========================================================= */
+
+.capacity-input-wrapper {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.capacity-input-wrapper .input-icon {
+
+    position: absolute;
+
+    left: 11px;
+
+    font-size: 15px;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+.capacity-input-wrapper input {
+
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 0 85px 0 37px;
+
+    border: 1px solid #d8dee8;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-size: 0.9rem;
+
+    font-weight: 700;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+.capacity-input-wrapper input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+.capacity-label {
+
+    position: absolute;
+
+    right: 12px;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+
+    font-weight: 600;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.slot-add-button-wrapper {
+
+    display: flex;
+
+    align-items: flex-end;
+}
+
+
+.btn-add-slot {
+
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    border: none;
+
+    padding: 0 18px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 0.85rem;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    transition: 0.2s ease;
+
+    box-shadow:
+        0 3px 8px rgba(37, 99, 235, 0.15);
+}
+
+
+.btn-add-slot:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 14px rgba(37, 99, 235, 0.20);
+}
+
+
+.btn-add-slot:active {
+
+    transform: translateY(0);
+}
+
+
+.add-icon {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.18);
+
+    font-size: 16px;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   EXISTING SLOTS SECTION
+========================================================= */
+
+.existing-slots-section {
+
+    padding: 0 26px 26px;
+}
+
+
+.existing-slots-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 14px;
+}
+
+
+.existing-slots-header h4 {
+
+    margin: 0;
+
+    color: #1e293b;
+
+    font-size: 0.98rem;
+
+    font-weight: 800;
+}
+
+
+.existing-slots-header p {
+
+    margin: 4px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 0.78rem;
+}
+
+
+.slot-count-badge {
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SLOT TABLE
+========================================================= */
+
+.slot-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #e8edf3;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+
+.slot-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 600px;
+}
+
+
+.slot-table thead {
+
+    background: #f8fafc;
+}
+
+
+.slot-table th {
+
+    padding: 13px 16px;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.03em;
+
+    text-align: left;
+
+    border-bottom: 1px solid #e8edf3;
+}
+
+
+.slot-table td {
+
+    padding: 15px 16px;
+
+    color: #334155;
+
+    font-size: 0.86rem;
+
+    border-bottom: 1px solid #f0f3f7;
+
+    vertical-align: middle;
+}
+
+
+.slot-table tbody tr {
+
+    transition: background 0.15s ease;
+}
+
+
+.slot-table tbody tr:hover {
+
+    background: #f8fbff;
+}
+
+
+.slot-table tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   SLOT TIME DISPLAY
+========================================================= */
+
+.slot-table td:first-child strong {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    font-size: 0.82rem;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CAPACITY DISPLAY
+========================================================= */
+
+.slot-table td:nth-child(2) {
+
+    font-weight: 700;
+}
+
+
+.slot-table td:nth-child(2)::first-letter {
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.btn-delete {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    background: #fff1f2;
+
+    color: #dc2626;
+
+    border: 1px solid #fecdd3;
+
+    padding: 7px 11px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    transition: 0.2s ease;
+}
+
+
+.btn-delete::before {
+
+    content: "🗑";
+}
+
+
+.btn-delete:hover {
+
+    background: #fee2e2;
+
+    border-color: #fca5a5;
+
+    color: #b91c1c;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
+.slot-loading {
+
+    padding: 28px !important;
+
+    text-align: center;
+}
+
+
+.slot-loading-content {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    color: #64748b;
+
+    font-size: 0.82rem;
+
+    font-weight: 600;
+}
+
+
+.loading-spinner {
+
+    width: 17px;
+    height: 17px;
+
+    border: 2px solid #dbeafe;
+
+    border-top-color: #2563eb;
+
+    border-radius: 50%;
+
+    animation: slotSpinner 0.7s linear infinite;
+}
+
+
+@keyframes slotSpinner {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   HELP BOX
+========================================================= */
+
+.slot-help-box {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-top: 15px;
+
+    padding: 13px 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+}
+
+
+.slot-help-icon {
+
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border-radius: 8px;
+
+    flex-shrink: 0;
+
+    font-size: 15px;
+}
+
+
+.slot-help-box strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #334155;
+
+    font-size: 0.78rem;
+}
+
+
+.slot-help-box p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 0.73rem;
+
+    line-height: 1.55;
+}
+
+
+.slot-help-box p strong {
+
+    display: inline;
+
+    color: #475569;
+
+    font-size: inherit;
+}
+
+
+/* =========================================================
+   LOGOUT MODAL
+========================================================= */
+
+.logout-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: .25s ease;
+
+    z-index: 9999;
+
+    backdrop-filter: blur(5px);
+}
+
+
+.logout-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+}
+
+
+.logout-box {
+
+    width: 420px;
+
+    max-width: 90%;
+
+    background: #fff;
+
+    border-radius: 18px;
+
+    padding: 35px 30px;
+
+    text-align: center;
+
+    transform: scale(.9);
+
+    transition: .25s ease;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.2);
+}
+
+
+.logout-modal.show .logout-box {
+
+    transform: scale(1);
+}
+
+
+.logout-icon {
+
+    width: 80px;
+    height: 80px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    background: #fee2e2;
+
+    color: #ef4444;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 40px;
+
+    margin-bottom: 20px;
+}
+
+
+.logout-box h2 {
+
+    margin: 0;
+
+    font-size: 26px;
+
+    font-weight: 800;
+
+    color: #222;
+}
+
+
+.logout-box p {
+
+    margin-top: 12px;
+
+    color: #666;
+
+    line-height: 1.6;
+
+    font-size: 15px;
+}
+
+
+.logout-buttons {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 28px;
+}
+
+
+.logout-buttons button {
+
+    flex: 1;
+
+    border: none;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+
+/* NO BUTTON */
+
+.btn-no {
+
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.btn-no:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+}
+
+
+/* YES BUTTON */
+
+.btn-yes {
+
+    background: #ef4444;
+
+    color: white;
+}
+
+
+.btn-yes:hover {
+
+    background: #dc2626;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .slot-form {
+
+        grid-template-columns:
+            repeat(2, minmax(160px, 1fr));
+
+    }
+
+
+    .slot-add-button-wrapper {
+
+        grid-column: span 2;
+
+    }
+
+
+    .btn-add-slot {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .slot-manager-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        padding: 20px;
+
+    }
+
+
+    .slot-info-badge {
+
+        align-self: flex-start;
+
+    }
+
+
+    .slot-add-card {
+
+        margin: 18px 15px;
+
+        padding: 16px;
+
+    }
+
+
+    .slot-add-header {
+
+        flex-direction: column;
+
+    }
+
+
+    .existing-slots-section {
+
+        padding: 0 15px 18px;
+
+    }
+
+
+    .slot-form {
+
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+
+    }
+
+
+    .slot-add-button-wrapper {
+
+        grid-column: auto;
+
+        width: 100%;
+
+    }
+
+
+    .btn-add-slot {
+
+        width: 100%;
+
+    }
+
+
+    .existing-slots-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .slot-count-badge {
+
+        align-self: flex-start;
+
+    }
+
+
+    .slot-help-box {
+
+        padding: 12px;
+
+    }
+
+
+    .slot-title-area {
+
+        align-items: flex-start;
+
+    }
+
+
+    .slot-title-area h3 {
+
+        font-size: 1.05rem;
+
+    }
+
+
+    .slot-title-area p {
+
+        font-size: 0.78rem;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .slot-icon {
+
+        width: 42px;
+        height: 42px;
+
+        font-size: 20px;
+
+    }
+
+
+    .slot-manager-header {
+
+        padding: 17px;
+
+    }
+
+
+    .slot-add-card {
+
+        margin: 15px 12px;
+
+        padding: 14px;
+
+    }
+
+
+    .existing-slots-section {
+
+        padding: 0 12px 15px;
+
+    }
+
+
+    .slot-table th,
+    .slot-table td {
+
+        padding: 11px 12px;
+
+    }
+
+
+    .logout-box {
+
+        padding: 28px 22px;
+
+    }
+
+}

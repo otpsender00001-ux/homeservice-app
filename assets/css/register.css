@@ -269,3 +269,219 @@
     margin-bottom:4px;
     line-height:1.5;
 }
+/* =========================
+   PASSWORD STRENGTH
+========================= */
+
+.password-strength-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.password-strength-header strong{
+    margin:0;
+    color:#0d6efd;
+}
+
+#passwordStrengthText{
+    font-size:13px;
+    font-weight:800;
+    transition:.25s;
+}
+
+#passwordStrengthText.weak{
+    color:#dc3545;
+}
+
+#passwordStrengthText.medium{
+    color:#f59e0b;
+}
+
+#passwordStrengthText.strong{
+    color:#16a34a;
+}
+
+
+/* =========================
+   STRENGTH BAR
+========================= */
+
+.password-strength-bar{
+    display:flex;
+    align-items:center;
+    width:100%;
+    height:12px;
+    margin-bottom:15px;
+}
+
+.strength-dot{
+    width:11px;
+    height:11px;
+    min-width:11px;
+    border-radius:50%;
+    background:#d9dee5;
+    transition:.3s;
+}
+
+.strength-segment{
+    flex:1;
+    height:4px;
+    background:#d9dee5;
+    transition:.3s;
+}
+
+
+/* =========================
+   ACTIVE STATES
+========================= */
+
+.strength-dot.active.weak{
+    background:#dc3545;
+    box-shadow:0 0 0 3px rgba(220,53,69,.12);
+}
+
+.strength-dot.active.medium{
+    background:#f59e0b;
+    box-shadow:0 0 0 3px rgba(245,158,11,.12);
+}
+
+.strength-dot.active.strong{
+    background:#16a34a;
+    box-shadow:0 0 0 3px rgba(22,163,74,.12);
+}
+
+
+.strength-segment.active.weak{
+    background:#dc3545;
+}
+
+.strength-segment.active.medium{
+    background:#f59e0b;
+}
+
+.strength-segment.active.strong{
+    background:#16a34a;
+}
+
+
+/* =========================
+   REQUIREMENTS
+========================= */
+
+.password-requirements{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.password-requirement{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:#666;
+    font-size:13px;
+    line-height:1.4;
+    transition:.25s;
+}
+
+.password-requirement .requirement-icon{
+    width:17px;
+    min-width:17px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.password-requirement .requirement-icon i{
+    font-size:8px;
+    color:#b8bec7;
+    transition:.25s;
+}
+
+.password-requirement.met{
+    color:#16a34a;
+}
+
+.password-requirement.met .requirement-icon i{
+    font-size:14px;
+    color:#16a34a;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+    .password-strength-header{
+        margin-bottom:10px;
+    }
+
+    .password-strength-bar{
+        margin-bottom:13px;
+    }
+
+    .password-requirement{
+        font-size:12px;
+    }
+
+}
+/* =========================
+   PASSWORD ERROR MESSAGE
+========================= */
+
+.password-error-message{
+    display:none;
+
+    width:100%;
+    box-sizing:border-box;
+
+    margin-bottom:15px;
+    padding:11px 14px;
+
+    border:1px solid #f5b5b5;
+    border-radius:9px;
+
+    background:#fff1f1;
+    color:#dc2626;
+
+    font-size:13px;
+    font-weight:700;
+
+    text-align:left;
+
+    animation:passwordErrorIn .25s ease;
+}
+
+.password-error-message.show{
+    display:block;
+}
+
+@keyframes passwordErrorIn{
+
+    from{
+        opacity:0;
+        transform:translateY(-5px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+/* =========================
+   REGISTER BUTTON VISUAL STATE
+========================= */
+
+.btn.register-disabled{
+    opacity:.55;
+    cursor:pointer;
+}
+
+.btn.register-disabled:hover{
+    opacity:.55;
+}
