@@ -35,7 +35,9 @@ try {
     $admin_id = $admin_query->fetch_assoc()['id'];
 
     // I-insert ang chat. Pansinin na NULL ang booking_id dahil admin chat ito
-    $query = "INSERT INTO messages (booking_id, sender_id, receiver_id, message, image) VALUES (NULL, ?, ?, ?, ?)";
+    $query = "INSERT INTO messages 
+    (booking_id, sender_id, receiver_id, message, image, is_read) 
+    VALUES (NULL, ?, ?, ?, ?, 0)";
     $insert_stmt = $conn->prepare($query);
     $insert_stmt->bind_param("iiss", $user_id, $admin_id, $message, $imageName);
     

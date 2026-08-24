@@ -2,6 +2,7 @@ let currentChatUserId = null;
 let currentChatName = "";
 let chatInterval = null;
 let lastMessageCount = 0;
+let inboxNotificationInterval = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -52,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadContacts();
     // Auto refresh contacts list every 5 seconds
     setInterval(loadContacts, 5000); 
+
+    inboxNotificationInterval = setInterval(updateAdminInboxBadge, 5000);
 });
 
 async function loadContacts() {
@@ -67,16 +70,52 @@ async function loadContacts() {
 
         let html = '';
         contacts.forEach(c => {
-            const roleClass = c.role === 'user' ? 'role-user' : 'role-technician';
-            const activeClass = (currentChatUserId == c.id) ? 'active' : '';
-            
-            html += `
-                <div class="contact-card ${activeClass}" onclick="openChat(${c.id}, '${c.full_name}')">
-                    <span class="contact-name">${c.full_name}</span>
-                    <div><span class="contact-role ${roleClass}">${c.role}</span></div>
-                </div>
-            `;
-        });
+
+    const roleClass =
+        c.role === 'user'
+            ? 'role-user'
+            : 'role-technician';
+
+    const activeClass =
+        (currentChatUserId == c.id)
+            ? 'active'
+            : '';
+
+    const unreadCount =
+        parseInt(c.unread_count) || 0;
+
+    const unreadBadge =
+        unreadCount > 0
+            ? `<span class="contact-unread-badge">
+                    ${unreadCount > 99 ? '99+' : unreadCount}
+               </span>`
+            : '';
+
+    html += `
+        <div
+            class="contact-card ${activeClass}"
+            onclick="openChat(${c.id}, '${c.full_name}')"
+        >
+
+            <div class="contact-top-row">
+
+                <span class="contact-name">
+                    ${c.full_name}
+                </span>
+
+                ${unreadBadge}
+
+            </div>
+
+            <div>
+                <span class="contact-role ${roleClass}">
+                    ${c.role}
+                </span>
+            </div>
+
+        </div>
+    `;
+});
         list.innerHTML = html;
     } catch (e) { console.error("Error loading contacts:", e); }
 }
@@ -110,9 +149,15 @@ function openChat(userId, name) {
     // Attach submit event sa bagong form
     document.getElementById('adminChatForm').addEventListener('submit', sendAdminMessage);
 
-    loadMessages();
-    if(chatInterval) clearInterval(chatInterval);
-    chatInterval = setInterval(loadMessages, 2000); // Live poll per user
+    markMessagesAsRead(currentChatUserId);
+
+loadMessages();
+
+if (chatInterval) {
+    clearInterval(chatInterval);
+}
+
+chatInterval = setInterval(loadMessages, 2000);
 }
 
 async function loadMessages() {
@@ -171,4 +216,104 @@ async function sendAdminMessage(e) {
         await fetch('../backend/chat/admin_send_message.php', { method: 'POST', body: fd });
         loadMessages(); 
     } catch(e) { console.error(e); }
+}
+
+// =====================================================
+// UPDATE TOTAL ADMIN INBOX BADGE
+// =====================================================
+
+async function updateAdminInboxBadge() {
+
+    const badge = document.getElementById('admin-inbox-badge');
+
+    if (!badge) return;
+
+    try {
+
+        const response = await fetch(
+            '../backend/chat/get_admin_unread_count.php',
+            {
+                cache: 'no-store'
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+            badge.style.display = 'none';
+            return;
+        }
+
+        const count = parseInt(data.count) || 0;
+
+        if (count > 0) {
+
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'inline-flex';
+
+        } else {
+
+            badge.textContent = '0';
+            badge.style.display = 'none';
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Error loading Inbox notification:',
+            error
+        );
+
+    }
+}
+
+// =====================================================
+// MARK ADMIN CHAT MESSAGES AS READ
+// =====================================================
+
+async function markMessagesAsRead(userId) {
+
+    if (!userId) return;
+
+    try {
+
+        const formData = new FormData();
+
+        formData.append('user_id', userId);
+
+        const response = await fetch(
+            '../backend/chat/mark_admin_messages_read.php',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+
+            console.error(
+                'Failed to mark messages as read:',
+                data.message
+            );
+
+            return;
+        }
+
+        // Immediately update the total Inbox badge
+        updateAdminInboxBadge();
+
+        // Refresh contacts so the person's badge disappears
+        loadContacts();
+
+    } catch (error) {
+
+        console.error(
+            'Error marking messages as read:',
+            error
+        );
+
+    }
 }

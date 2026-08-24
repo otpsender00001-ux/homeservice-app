@@ -18,7 +18,9 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 if (empty($message) && !$imageName) { echo json_encode(["error" => "Empty"]); exit; }
 
 try {
-    $query = "INSERT INTO messages (booking_id, sender_id, receiver_id, message, image) VALUES (NULL, ?, ?, ?, ?)";
+    $query = "INSERT INTO messages 
+    (booking_id, sender_id, receiver_id, message, image, is_read) 
+    VALUES (NULL, ?, ?, ?, ?, 1)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iiss", $admin_id, $receiver_id, $message, $imageName);
     

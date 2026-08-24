@@ -1,8 +1,16 @@
 let currentDailyRate = 800;
 let pendingDailyRate = 800;
 
+let adminInboxInterval = null;
+
 document.addEventListener('DOMContentLoaded', function() {
+
+    
     fetchStats();
+
+    updateAdminInboxBadge();
+
+setInterval(updateAdminInboxBadge, 5000);
 
     // --- Modal Event Listeners ---
     const btnOpenLaborModal = document.getElementById('btnOpenLaborModal');
@@ -266,4 +274,58 @@ function formatDate(dateStr) {
 function capitalize(str) {
     if(!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1).replace('_', ' ');
+}
+
+// =====================================================
+// ADMIN INBOX UNREAD MESSAGE COUNT
+// =====================================================
+
+// =====================================================
+// ADMIN INBOX NOTIFICATION
+// =====================================================
+
+async function updateAdminInboxBadge() {
+
+    const badge = document.getElementById('admin-inbox-badge');
+
+    if (!badge) return;
+
+    try {
+
+        const response = await fetch(
+            '../backend/chat/get_admin_unread_count.php',
+            {
+                cache: 'no-store'
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+            badge.style.display = 'none';
+            return;
+        }
+
+        const count = parseInt(data.count) || 0;
+
+        if (count > 0) {
+
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'inline-flex';
+
+        } else {
+
+            badge.textContent = '0';
+            badge.style.display = 'none';
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Error loading admin Inbox notification:',
+            error
+        );
+
+    }
 }

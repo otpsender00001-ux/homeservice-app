@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support Inbox | ServiQuick Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/track-tech.css">
+    <link rel="stylesheet" href="../assets/css/admin-messages.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         .inbox-container { display: flex; height: 75vh; background: #fff; border-radius: 12px; border: 1px solid #eee; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
@@ -60,7 +60,10 @@
             <a href="services.html">🛠 Services</a> 
             <a href="track-technicians.html">📍 Track Tech</a> 
             <a href="admin-users.html">👥 Users</a>
-            <a href="admin-messages.html">💬 Inbox</a>
+            <a href="admin-messages.html" class="inbox-link">
+    💬 Inbox
+    <span id="admin-inbox-badge" class="inbox-badge" style="display: none;">0</span>
+</a>
             
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
             <a href="#" id="logout-btn" style="color: #ef4444; font-weight: bold;">

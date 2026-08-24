@@ -1,0 +1,192 @@
+.logout-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    visibility:hidden;
+    transition:.25s ease;
+    z-index:9999;
+    backdrop-filter:blur(5px);
+}
+
+.logout-modal.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.logout-box{
+    width:420px;
+    max-width:90%;
+    background:#fff;
+    border-radius:18px;
+    padding:35px 30px;
+    text-align:center;
+    transform:scale(.9);
+    transition:.25s ease;
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.logout-modal.show .logout-box{
+    transform:scale(1);
+}
+
+.logout-icon{
+    width:80px;
+    height:80px;
+    margin:auto;
+    border-radius:50%;
+    background:#fee2e2;
+    color:#ef4444;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+    margin-bottom:20px;
+}
+
+.logout-box h2{
+    margin:0;
+    font-size:26px;
+    font-weight:800;
+    color:#222;
+}
+
+.logout-box p{
+    margin-top:12px;
+    color:#666;
+    line-height:1.6;
+    font-size:15px;
+}
+
+.logout-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:28px;
+}
+
+.logout-buttons button{
+    flex:1;
+    border:none;
+    padding:13px;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.25s;
+}
+
+/* NO button (Red) */
+
+.btn-no{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-no:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+/* YES button */
+
+.btn-yes{
+    background:#ef4444;
+    color:white;
+}
+
+.btn-yes:hover{
+    background:#dc2626;
+    transform:translateY(-2px);
+}
+
+.contact-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.contact-unread-badge {
+    min-width: 21px;
+    height: 21px;
+    padding: 0 6px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   ADMIN INBOX NOTIFICATION BADGE
+===================================================== */
+
+.inbox-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inbox-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    box-sizing: border-box;
+    margin-left: auto;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+}
+
+/* =====================================================
+   CONTACT UNREAD NOTIFICATION
+===================================================== */
+
+.contact-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.contact-unread-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 20px;
+    height: 20px;
+
+    padding: 0 6px;
+
+    border-radius: 999px;
+
+    background: #ef4444;
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    box-shadow:
+        0 2px 6px rgba(239, 68, 68, 0.35);
+
+    flex-shrink: 0;
+}
