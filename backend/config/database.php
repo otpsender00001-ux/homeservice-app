@@ -1,17 +1,16 @@
 <?php
 
 if (getenv("MYSQLHOST")) {
-    // Railway
+    // Railway Deployment
     $host = getenv("MYSQLHOST");
     $user = getenv("MYSQLUSER");
     $pass = getenv("MYSQLPASSWORD");
     $db   = getenv("MYSQLDATABASE");
-    $port = getenv("MYSQLPORT");
+    $port = (int)getenv("MYSQLPORT"); // Cast port to integer
 
     $conn = new mysqli($host, $user, $pass, $db, $port);
-
 } else {
-    // XAMPP
+    // Local Development (XAMPP)
     $host = "localhost";
     $user = "root";
     $pass = "";

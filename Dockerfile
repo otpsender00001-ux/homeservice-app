@@ -1,16 +1,12 @@
 FROM php:8.2-apache
 
-# Remove ALL enabled MPM modules
-RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
-          /etc/apache2/mods-enabled/mpm_*.conf
-
-# Enable ONLY prefork and rewrite
-RUN a2enmod mpm_prefork rewrite
-
 # Install PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Copy project files
+# Enable URL rewriting
+RUN a2enmod rewrite
+
+# Copy project
 COPY . /var/www/html/
 
 # Permissions
