@@ -1,14 +1,19 @@
 <?php
 
-$host = getenv("MYSQLHOST");
-$user = getenv("MYSQLUSER");
-$pass = getenv("MYSQLPASSWORD");
-$db   = getenv("MYSQLDATABASE");
-$port = (int)getenv("MYSQLPORT");
+// Fetch environment variables with fallbacks
+$host = getenv("MYSQLHOST") ?: "mysql.railway.internal"; // Use '127.0.0.1' instead of 'localhost' to force TCP
+$user = getenv("MYSQLUSER") ?: "root";
+$pass = getenv("MYSQLPASSWORD") ?: "MRKHuwHytajhYrzTXuoBaddPRscjipBZ";
+$db   = getenv("MYSQLDATABASE") ?: "railway";
+$port = (int)(getenv("MYSQLPORT") ?: 3306);
 
-$conn = new mysqli($host, $user, $pass, $db, $port);
+// Enable error reporting for MySQLi
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+try {
+    $conn = new mysqli($host, $user, $pass, $db, $port);
+    $conn->set_charset("utf8mb4");
+} catch (mysqli_sql_exception $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 ?>
