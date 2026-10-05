@@ -1,11 +1,23 @@
 <?php
 
-// Fetch environment variables with fallbacks
-$host = getenv("MYSQLHOST") ?: "mysql.railway.internal"; // Use '127.0.0.1' instead of 'localhost' to force TCP
-$user = getenv("MYSQLUSER") ?: "root";
-$pass = getenv("MYSQLPASSWORD") ?: "MRKHuwHytajhYrzTXuoBaddPRscjipBZ";
-$db   = getenv("MYSQLDATABASE") ?: "railway";
-$port = (int)(getenv("MYSQLPORT") ?: 3306);
+// Auto-detect: Local o Railway?
+$isLocal = in_array($_SERVER['SERVER_NAME'] ?? '', ['localhost', '127.0.0.1']);
+
+if ($isLocal) {
+    // ===== LOCAL (XAMPP) =====
+    $host = "127.0.0.1";
+    $user = "root";
+    $pass = "";
+    $db   = "homeservice_db";
+    $port = 3306;
+} else {
+    // ===== PRODUCTION (Railway) =====
+    $host = getenv("MYSQLHOST")     ?: "mysql.railway.internal";
+    $user = getenv("MYSQLUSER")     ?: "root";
+    $pass = getenv("MYSQLPASSWORD") ?: "LMo5SxcN8hSEJ1Ygjy2W2WAyTDswraMBfK";
+    $db   = getenv("MYSQLDATABASE") ?: "railway";
+    $port = (int)(getenv("MYSQLPORT") ?: 3306);
+}
 
 // Enable error reporting for MySQLi
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

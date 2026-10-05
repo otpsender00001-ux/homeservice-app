@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -99,7 +100,7 @@ try {
     ===================================================== */
 
     $checkBooking = $conn->prepare("
-        SELECT id, technician_id, status
+        SELECT id, technician_id, status, total_amount
         FROM bookings
         WHERE id = ?
         LIMIT 1
@@ -131,6 +132,29 @@ try {
         echo json_encode([
             'success' => false,
             'message' => 'Booking not found.'
+        ]);
+
+        exit;
+    }
+
+
+    /* =====================================================
+       VALIDATE BOOKING AMOUNT
+
+       A completed service must have a valid sale amount.
+       This prevents an accounting record with labor cost but
+       no actual revenue amount.
+    ===================================================== */
+
+    $booking_amount = floatval(
+        $booking['total_amount'] ?? 0
+    );
+
+    if ($booking_amount <= 0) {
+
+        echo json_encode([
+            'success' => false,
+            'message' => 'This booking has no valid service amount and cannot be completed.'
         ]);
 
         exit;
@@ -622,6 +646,135 @@ try {
 
 
     /* =====================================================
+       ENSURE COMPLETED BOOKING HAS ONE VALID PAID REVENUE RECORD
+
+       The admin dashboard uses the payments table as its revenue
+       source. Therefore a completed booking must not be left without
+       a corresponding payment record.
+
+       Existing paid payments are preserved to avoid double revenue.
+       Pending/failed existing payments are marked paid for the
+       existing completion flow. If no payment exists, the system
+       creates the existing default CASH payment.
+    ===================================================== */
+
+    $payment_id = null;
+    $payment_status = null;
+
+    $checkPayment = $conn->prepare("
+        SELECT id, payment_status
+        FROM payments
+        WHERE booking_id = ?
+        ORDER BY id DESC
+        LIMIT 1
+        FOR UPDATE
+    ");
+
+    if (!$checkPayment) {
+        throw new Exception(
+            'Failed to prepare payment verification: ' .
+            $conn->error
+        );
+    }
+
+    $checkPayment->bind_param(
+        "i",
+        $booking_id
+    );
+
+    if (!$checkPayment->execute()) {
+        throw new Exception(
+            'Failed to verify payment record: ' .
+            $checkPayment->error
+        );
+    }
+
+    $paymentResult = $checkPayment->get_result();
+    $paymentRow = $paymentResult->fetch_assoc();
+    $checkPayment->close();
+
+    if ($paymentRow) {
+
+        $payment_id = intval($paymentRow['id']);
+        $payment_status = $paymentRow['payment_status'];
+
+        if ($payment_status !== 'paid') {
+
+            $updatePayment = $conn->prepare("
+                UPDATE payments
+                SET
+                    amount = ?,
+                    payment_status = 'paid'
+                WHERE id = ?
+            ");
+
+            if (!$updatePayment) {
+                throw new Exception(
+                    'Failed to prepare payment update: ' .
+                    $conn->error
+                );
+            }
+
+            $bookingAmount = $booking_amount;
+
+            $updatePayment->bind_param(
+                "di",
+                $bookingAmount,
+                $payment_id
+            );
+
+            if (!$updatePayment->execute()) {
+                throw new Exception(
+                    'Failed to update payment record: ' .
+                    $updatePayment->error
+                );
+            }
+
+            $updatePayment->close();
+        }
+
+    } else {
+
+        $bookingAmount = $booking_amount;
+
+        $insertPayment = $conn->prepare("
+            INSERT INTO payments (
+                booking_id,
+                amount,
+                payment_method,
+                payment_status
+            )
+            VALUES (?, ?, 'cash', 'paid')
+        ");
+
+        if (!$insertPayment) {
+            throw new Exception(
+                'Failed to prepare payment insert: ' .
+                $conn->error
+            );
+        }
+
+        $insertPayment->bind_param(
+            "id",
+            $booking_id,
+            $bookingAmount
+        );
+
+        if (!$insertPayment->execute()) {
+            throw new Exception(
+                'Failed to create payment record: ' .
+                $insertPayment->error
+            );
+        }
+
+        $payment_id = $conn->insert_id;
+        $payment_status = 'paid';
+
+        $insertPayment->close();
+    }
+
+
+    /* =====================================================
        COMMIT
     ===================================================== */
 
@@ -707,3 +860,4 @@ try {
 }
 
 ?>
+
